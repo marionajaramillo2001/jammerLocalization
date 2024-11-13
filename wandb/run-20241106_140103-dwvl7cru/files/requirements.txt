@@ -20,7 +20,7 @@ GitPython==3.1.43
 typing_extensions==4.11.0
 filelock==3.13.1
 parso==0.8.4
-tqdm==4.66.2
+tqdm==4.66.3
 contourpy==1.2.0
 requests==2.32.3
 pickleshare==0.7.5
