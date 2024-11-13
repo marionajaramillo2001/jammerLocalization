@@ -1,0 +1,722 @@
+{"time":"2024-11-06T14:01:03.273569-05:00","level":"INFO","msg":"using version","core version":"0.18.5"}
+{"time":"2024-11-06T14:01:03.273617-05:00","level":"INFO","msg":"created symlink","path":"/Users/marionajaramillocivill/Documents/GitHub/jammerLocalization/wandb/run-20241106_140103-dwvl7cru/logs/debug-core.log"}
+{"time":"2024-11-06T14:01:03.383077-05:00","level":"INFO","msg":"created new stream","id":"dwvl7cru"}
+{"time":"2024-11-06T14:01:03.383118-05:00","level":"INFO","msg":"stream: started","id":"dwvl7cru"}
+{"time":"2024-11-06T14:01:03.383153-05:00","level":"INFO","msg":"sender: started","stream_id":"dwvl7cru"}
+{"time":"2024-11-06T14:01:03.383137-05:00","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"dwvl7cru"}}
+{"time":"2024-11-06T14:01:03.383138-05:00","level":"INFO","msg":"handler: started","stream_id":{"value":"dwvl7cru"}}
+{"time":"2024-11-06T14:01:03.737546-05:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-11-06T14:01:03.77497-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:01:33.076059-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:01:33.07841-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:01:35.755156-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:01:35.756657-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:01:36.901618-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:01:36.903006-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:01:37.150389-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:01:37.152494-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:01:37.243392-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:01:37.245918-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:01:37.402265-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:01:37.404794-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:01:38.82111-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:01:38.824549-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:01:38.891964-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:01:38.89419-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:01:39.024642-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:01:39.027205-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:01:39.110844-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:01:39.112709-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:01:39.269832-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:01:39.272254-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:01:40.001673-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:01:40.003389-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:01:40.19347-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:01:40.195779-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:01:40.327813-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:01:40.330501-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:01:40.478874-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:01:40.481156-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:01:54.469161-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:01:54.473975-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:01:54.524006-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:01:54.526384-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:01:54.558356-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:01:54.560097-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:01:54.971038-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:01:54.974548-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:01:55.518855-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:01:55.534504-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:01:55.552254-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:01:55.553775-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:01:55.728802-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:01:55.730783-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:01:55.899837-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:01:55.901833-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:01:56.016478-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:01:56.020589-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:01:56.071644-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:01:56.073578-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:01:57.707364-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:01:57.709864-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:02:15.213632-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:02:15.216077-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:02:16.170494-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:02:16.172734-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:02:31.879438-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:02:31.880412-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:02:31.887436-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:02:31.889345-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:02:45.244619-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:02:45.246586-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:02:45.254754-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:02:45.256276-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:02:45.26162-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:02:45.262406-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:02:45.267409-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:02:45.267929-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:02:45.271658-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T14:02:45.272122-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T14:19:17.966149-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:57274->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-06T14:36:12.676607-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-06T14:36:14.735044-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-06T14:36:19.385146-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-06T14:38:16.433749-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-06T14:38:21.882307-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:57435->35.186.228.49:443: read: can't assign requested address"}
+{"time":"2024-11-06T14:39:14.389317-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-06T14:39:18.489259-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-06T14:40:19.811193-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-06T14:40:23.070561-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-06T14:41:09.631389-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-06T14:41:57.359173-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-06T14:45:58.684968-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-06T14:48:57.645144-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-06T15:22:51.15718-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 10.110.101.165:57805->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-06T15:22:54.435566-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 10.110.101.165:57755->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-06T15:53:03.531741-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 10.110.101.165:57828->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-06T16:22:48.146744-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 10.110.101.165:57933->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-06T16:45:25.561802-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 10.110.101.165:58060->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-06T16:48:29.1415-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-06T16:48:31.542259-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-06T16:48:36.346297-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-06T16:49:08.330034-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-06T16:49:10.380231-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-06T16:49:14.750446-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-06T16:49:24.118743-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-06T16:49:27.047755-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 10.110.101.165:58152->35.186.228.49:443: read: can't assign requested address"}
+{"time":"2024-11-06T16:50:10.519096-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-06T16:50:15.194475-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-06T17:05:53.977546-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-06T17:05:54.206127-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-06T17:53:30.409823-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-06T19:56:50.294875-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:56:50.298328-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:56:50.349658-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:56:50.350892-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:56:50.832712-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:56:50.835003-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:56:51.425498-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:56:51.429029-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:56:51.476811-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:56:51.478395-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:57:03.088226-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:57:03.089823-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:57:03.627844-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:57:03.629987-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:57:03.964045-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:57:03.966708-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:57:04.107797-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:57:04.109345-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:57:05.922616-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:57:05.924325-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:57:06.173462-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:57:06.175472-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:57:06.274437-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:57:06.276679-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:57:06.482908-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:57:06.485522-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:57:06.615885-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:57:06.617928-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:57:20.796491-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:57:20.800788-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:57:20.810727-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:57:20.812021-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:57:22.375659-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:57:22.379468-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:57:22.389325-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:57:22.390617-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:57:33.518807-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:57:33.520312-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:57:33.529706-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:57:33.530813-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:57:33.777697-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:57:33.779528-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:57:33.923044-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:57:33.92508-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:57:34.108862-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:57:34.110863-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:57:58.27482-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:57:58.276685-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:57:58.289056-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:57:58.290398-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:57:59.256005-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:57:59.258268-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:57:59.521683-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:57:59.524453-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:57:59.748501-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:57:59.750266-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:58:02.698076-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:58:02.701349-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:58:02.716291-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:58:02.71806-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:58:10.207688-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:58:10.209285-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:58:10.220041-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:58:10.22128-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:58:10.559633-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:58:10.574741-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:58:10.804-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:58:10.806756-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:58:11.815532-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:58:11.817239-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T19:58:11.826658-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T19:58:11.82789-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T20:08:05.41255-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 192.168.50.231:60281->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-06T21:38:05.771736-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 192.168.50.231:62105->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-06T21:38:07.880654-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 192.168.50.231:62106->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-06T21:49:16.541264-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:49:16.542812-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:49:17.838473-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:49:17.839962-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:49:17.962691-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:49:17.96425-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:49:20.333766-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:49:20.335316-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:49:21.247033-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:49:21.24946-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:49:21.379802-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:49:21.381251-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:49:21.784896-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:49:21.7872-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:49:30.945983-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:49:30.947219-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:49:31.147164-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:49:31.149195-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:49:31.270884-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:49:31.273085-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:49:51.239399-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:49:51.243074-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:49:51.25209-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:49:51.253194-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:49:51.675604-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:49:51.679592-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:49:52.029961-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:49:52.033759-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:49:53.999474-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:49:54.001143-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:49:54.012333-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:49:54.013527-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:50:12.318517-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:50:12.322342-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:50:12.332821-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:50:12.334218-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:50:12.985639-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:50:12.988312-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:50:13.14318-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:50:13.146193-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:50:13.441429-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:50:13.443224-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:50:22.955211-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:50:22.95657-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:50:24.100468-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:50:24.101968-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:50:24.297123-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:50:24.299411-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:50:24.400382-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:50:24.402284-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:50:24.736113-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:50:24.737788-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:50:24.873112-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:50:24.874855-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:50:25.059914-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:50:25.06125-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:50:25.651985-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:50:25.653983-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:50:25.878032-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:50:25.881586-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:50:26.027973-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:50:26.030112-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:50:26.197646-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:50:26.199973-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:50:26.328273-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:50:26.330452-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:50:42.426155-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:50:42.430331-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:50:42.440359-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:50:42.441732-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:50:44.596463-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:50:44.59807-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:50:44.608092-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:50:44.609204-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:51:49.91864-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:51:49.920489-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:51:50.252537-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:51:50.255299-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:51:50.976637-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:51:50.978553-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:51:50.990895-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:51:50.992146-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:51:51.244452-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:51:51.246324-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:51:51.306826-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:51:51.312739-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:51:51.901978-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:51:51.903569-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:51:53.778705-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:51:53.780449-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:52:17.979766-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:52:17.983806-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:52:18.029997-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:52:18.03225-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:52:18.450034-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:52:18.452975-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:52:19.039217-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:52:19.042377-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:52:19.088599-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:52:19.090695-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:52:19.579188-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:52:19.582225-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:52:19.635972-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:52:19.638301-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:52:19.831568-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:52:19.833804-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:52:20.023278-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:52:20.025456-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:52:20.173671-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:52:20.177383-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:52:20.225163-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:52:20.227527-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:52:20.958163-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:52:20.962089-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:52:24.089731-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:52:24.09408-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:52:24.146312-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:52:24.148472-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:52:25.023233-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:52:25.026452-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:52:25.683845-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:52:25.687337-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:52:26.380701-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:52:26.384385-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:52:26.430335-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:52:26.431924-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:52:27.167967-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:52:27.171091-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:52:52.45699-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:52:52.458851-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:52:52.471383-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:52:52.472757-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:52:52.592154-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:52:52.59415-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T21:52:52.757689-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T21:52:52.759873-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T22:05:08.272813-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T22:05:08.276599-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T22:05:08.287355-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T22:05:08.28856-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T22:05:08.471314-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T22:05:08.47318-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T22:05:08.655335-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T22:05:08.657171-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T22:05:09.325617-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T22:05:09.329093-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T22:05:26.876117-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T22:05:26.877808-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T22:05:27.646327-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T22:05:27.649037-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T22:05:28.494349-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T22:05:28.495947-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T22:09:48.165756-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T22:09:48.167613-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T22:09:48.179235-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T22:09:48.180425-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T22:09:48.688844-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T22:09:48.691304-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T22:09:49.196846-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T22:09:49.19991-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T22:09:51.262943-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T22:09:51.266655-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T22:09:51.27494-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T22:09:51.276135-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T22:09:59.836912-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-06T22:09:59.838289-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-06T23:13:51.536033-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:63360->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-06T23:47:09.187787-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:63575->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-07T00:39:02.101777-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:63834->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-07T01:17:33.517732-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:64020->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-07T01:43:47.154855-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:64225->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-07T02:30:37.866037-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:64336->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-07T03:18:38.550655-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:64603->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-07T03:53:08.575807-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:64870->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-07T04:41:09.515356-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:65168->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-07T04:57:42.41488-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:65427->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-07T05:54:23.57516-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:49206->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-07T06:46:49.465481-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:49484->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-07T07:16:03.771878-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:49821->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-07T07:32:02.137384-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:49945->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-07T07:32:33.558719-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T07:32:37.861216-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T07:33:34.750922-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T07:33:41.768275-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T07:33:44.0833-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T07:34:31.737784-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T07:34:34.830443-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T07:35:24.386634-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T07:36:13.576583-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T07:36:27.265126-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T07:36:47.488359-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T07:37:27.269261-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T07:37:47.491308-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T07:38:27.273206-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T07:38:47.495355-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T07:39:27.27744-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T07:39:47.499601-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T07:40:27.281641-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T07:40:47.503364-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T07:41:27.285358-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T07:41:47.507373-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T07:42:27.289083-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T07:42:47.511024-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T07:43:27.293577-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T07:43:47.514754-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T07:44:27.297483-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T07:44:47.517939-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T07:45:16.885745-05:00","level":"WARN","msg":"sender: taking a long time","seconds":600.00106875,"work":"WorkRecord(*service_go_proto.Request_StopStatus); Control(local:true mailbox_slot:\"r808wzrd2m1k\" connection_id:\"127.0.0.1:57270\")"}
+{"time":"2024-11-07T07:45:27.550557-05:00","level":"INFO","msg":"sender: succeeded after taking longer than expected","seconds":610.666566334,"work":"WorkRecord(*service_go_proto.Request_StopStatus); Control(local:true mailbox_slot:\"r808wzrd2m1k\" connection_id:\"127.0.0.1:57270\")"}
+{"time":"2024-11-07T08:21:27.820541-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T08:21:29.876319-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T08:22:18.497737-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T08:23:19.666739-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T08:23:19.683665-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded"}
+{"time":"2024-11-07T08:25:21.607429-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T08:25:34.989392-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": net/http: request canceled (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-07T08:26:11.654325-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T08:26:53.428597-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": net/http: request canceled (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-07T08:27:02.372974-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T08:28:49.547834-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T08:29:39.324501-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T08:30:17.074777-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T08:38:41.040092-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T08:43:40.506783-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T08:48:31.469114-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T08:48:33.884516-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T08:56:42.077352-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T08:56:44.535597-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T08:58:18.851077-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T09:07:37.999892-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-07T09:07:38.001213-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-07T09:07:46.063383-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-07T09:07:46.064621-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-07T09:20:16.067515-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-07T09:20:16.068907-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-07T09:20:16.325105-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-07T09:20:16.32705-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-07T09:20:16.668888-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-07T09:20:16.670803-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-07T09:20:17.017303-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-07T09:20:17.019423-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-07T09:20:30.615839-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-07T09:20:30.617521-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-07T09:20:37.026921-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-07T09:20:37.028231-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-07T09:57:09.564766-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 10.110.101.165:52902->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-07T10:03:21.114925-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 10.110.101.165:52690->35.186.228.49:443: read: can't assign requested address"}
+{"time":"2024-11-07T10:04:18.014225-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded"}
+{"time":"2024-11-07T10:04:50.272432-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded"}
+{"time":"2024-11-07T10:04:54.407402-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp [2607:7700:0:e:0:2:23ba:e431]:443: connect: operation timed out"}
+{"time":"2024-11-07T10:05:24.665287-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": net/http: request canceled (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-07T10:05:48.170896-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp [2607:fb90:5562:47f0:59:48eb:ac2f:d7d8]:53101->[2607:7700:0:e:0:2:23ba:e431]:443: read: no route to host"}
+{"time":"2024-11-07T10:06:11.581825-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp 35.186.228.49:443: connect: operation timed out"}
+{"time":"2024-11-07T10:06:36.006585-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded"}
+{"time":"2024-11-07T10:07:30.93464-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp 35.186.228.49:443: connect: operation timed out"}
+{"time":"2024-11-07T10:08:55.115988-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp 35.186.228.49:443: connect: operation timed out"}
+{"time":"2024-11-07T11:45:20.537983-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-07T11:50:35.725635-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded"}
+{"time":"2024-11-07T12:25:53.705817-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-07T12:25:53.70749-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-07T12:25:59.06899-05:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2024-11-07T12:25:59.070517-05:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2024-11-07T13:18:14.124554-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 10.110.101.165:55734->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-07T13:35:53.555661-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 10.110.101.165:56990->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-07T14:30:26.923693-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 10.110.101.165:58557->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-07T14:41:26.905546-05:00","level":"INFO","msg":"api: retrying HTTP error","status":502,"url":"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream"}
+{"time":"2024-11-07T16:42:46.000899-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T16:42:48.294204-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T16:43:42.936578-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T16:45:23.817231-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T16:46:49.672524-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T16:46:52.124722-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T16:46:56.709702-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T16:48:00.953844-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded"}
+{"time":"2024-11-07T16:48:02.765549-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": unexpected EOF"}
+{"time":"2024-11-07T16:49:09.020784-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T16:49:11.157869-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T16:49:53.190557-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T16:50:02.377632-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T17:05:42.528989-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 10.110.101.165:60919->35.186.228.49:443: read: operation timed out"}
+{"time":"2024-11-07T17:22:53.352104-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T17:38:46.165116-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T17:56:02.398572-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T17:56:05.707902-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T18:40:48.736608-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T19:15:39.488128-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T20:15:33.448044-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T21:29:33.821404-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-07T22:22:39.830052-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-08T00:06:14.470684-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:63546->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T00:22:26.819072-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:63728->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T01:35:49.652065-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:64067->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T02:24:52.714446-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:64802->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T03:15:09.311894-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 192.168.50.231:65164->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T03:15:09.403463-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:65165->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T04:05:26.335227-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:49489->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T04:37:13.624175-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:49847->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T05:17:23.526104-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:50213->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T05:52:24.800273-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:50598->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T06:36:04.186921-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:50979->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T07:01:13.420887-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:51370->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T07:45:29.649082-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:51753->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T09:14:00.96946-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 192.168.50.231:54056->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T09:22:31.023653-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 192.168.50.231:54377->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T09:35:00.90897-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 192.168.50.231:54804->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T09:36:01.03833-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 192.168.50.231:54812->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T09:36:03.476972-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 192.168.50.231:54814->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T09:36:31.123759-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 192.168.50.231:54817->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T09:36:33.565114-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 192.168.50.231:54818->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T09:46:01.254027-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 192.168.50.231:55027->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T09:46:03.456188-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 192.168.50.231:55032->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T10:05:05.26988-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:53858->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T10:36:11.089181-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:55268->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T10:53:27.304015-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:55757->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T11:44:08.05877-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:56082->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T12:11:45.007767-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:56626->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T12:37:07.582633-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:56856->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T13:05:55.441846-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:57376->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T13:39:12.928243-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:57649->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T14:31:10.355351-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:58111->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T15:13:26.226953-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:58998->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T15:44:53.300762-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:59303->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T15:57:33.248332-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:59850->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T16:29:41.978825-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:59880->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T17:08:32.835283-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:60439->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T17:31:11.857625-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:60795->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T17:59:23.943003-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:61156->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T18:33:16.759448-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:61293->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T18:52:20.739007-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:61759->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T19:29:21.173284-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:62017->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T19:56:04.488803-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:62502->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T19:57:04.779758-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 192.168.50.231:62501->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T20:14:13.596469-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:62758->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T20:32:24.27919-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 192.168.50.231:63419->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T20:39:53.925509-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 192.168.50.231:63484->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T20:45:54.117122-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 192.168.50.231:63743->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T21:08:24.11462-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 192.168.50.231:64191->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-08T21:14:24.125315-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 192.168.50.231:64500->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T00:26:24.616779-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 192.168.50.231:52980->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T00:58:54.598058-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 192.168.50.231:53996->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T01:38:24.667094-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 192.168.50.231:55689->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T02:17:24.969764-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 192.168.50.231:56991->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T02:51:13.641577-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:56975->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T03:04:29.429392-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:57616->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T03:19:33.044812-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:57644->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T03:34:43.153133-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:57916->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T04:06:18.108422-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:58489->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T05:11:31.037988-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:59218->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T05:37:12.904848-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:59646->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T06:22:24.802971-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:60098->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T06:40:45.627648-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:60554->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T06:58:22.127787-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:60856->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T07:23:23.337891-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:61143->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T07:54:55.295482-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:61454->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T08:29:27.534137-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:62198->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T09:01:15.091576-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:62647->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T09:25:28.411721-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:63243->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T10:01:35.06172-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 192.168.50.231:63872->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T10:01:35.954318-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:63713->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T10:18:40.468607-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:64173->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T10:58:54.521018-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:64503->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T11:19:01.031835-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:65039->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T12:18:42.115792-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:49281->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T13:05:38.875314-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:50079->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T13:55:53.277616-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:50791->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T14:22:15.51028-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:52056->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T14:40:31.382128-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:52403->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T15:07:38.088394-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:52762->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T15:28:20.666407-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:53098->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T16:08:35.177748-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:53681->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T16:41:48.600774-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:54116->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T17:09:39.874558-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:54766->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T17:57:49.784209-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:55114->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T18:10:42.538758-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:56123->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T18:49:16.393573-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:56422->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T19:09:40.556442-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:56850->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T19:26:53.102368-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:57212->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T19:59:26.100677-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:57478->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T20:27:45.567286-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:58268->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T21:13:35.024321-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:58808->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T21:47:41.528791-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:59371->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T22:03:46.436589-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:60075->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T22:14:35.568889-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:60444->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T22:14:38.399704-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:60481->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T22:46:10.088909-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:60655->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T23:02:30.026105-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:61272->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T23:06:40.936395-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:61559->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-09T23:39:16.713418-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:61596->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-10T00:06:44.215066-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:62332->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-10T00:33:11.461351-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:62705->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-10T01:05:26.314508-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:63083->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-10T01:49:58.709308-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:63806->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-10T02:18:38.967131-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:64546->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-10T02:52:43.042255-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:64942->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-10T03:26:39.825851-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:49295->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-10T04:15:58.728835-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:50390->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-10T05:06:28.709523-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:51187->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-10T05:06:30.443735-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 192.168.50.231:51142->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-10T05:46:09.331144-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:52284->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-10T06:12:58.905494-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:53060->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-10T06:58:50.895605-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:53458->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-10T07:07:45.09348-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 192.168.50.231:54709->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-10T07:11:41.320265-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 192.168.50.231:54748->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-10T07:20:03.184223-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 192.168.50.231:55212->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-10T07:27:48.012628-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 192.168.50.231:55304->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2024-11-10T07:56:18.209126-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T08:13:38.20505-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.50.231:54228->35.186.228.49:443: read: can't assign requested address"}
+{"time":"2024-11-10T08:13:39.130458-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T08:13:40.579207-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T08:28:51.828059-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T08:28:53.11561-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T09:01:41.38515-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T09:01:41.609173-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T09:13:10.246545-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T09:13:10.778213-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T09:14:55.636193-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T09:15:03.356407-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T09:18:18.89857-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T09:18:34.575982-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T09:20:29.216813-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T09:20:35.641114-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T09:22:31.319889-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T09:22:37.755154-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T09:25:19.914923-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T09:25:28.346837-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T09:33:28.034996-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T09:35:15.97474-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T09:40:49.171927-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T09:40:55.616558-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T09:47:40.978922-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T09:47:47.839304-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T09:55:03.460491-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T09:57:40.680899-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T10:07:35.881693-05:00","level":"WARN","msg":"sender: taking a long time","seconds":600.00202475,"work":"WorkRecord(*service_go_proto.Request_StopStatus); Control(local:true mailbox_slot:\"w2maafpnknra\" connection_id:\"127.0.0.1:57270\")"}
+{"time":"2024-11-10T10:09:11.599882-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T10:09:17.98921-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T10:13:13.471891-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T10:13:19.859061-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T10:14:21.249954-05:00","level":"INFO","msg":"sender: succeeded after taking longer than expected","seconds":736.975855375,"work":"WorkRecord(*service_go_proto.Request_StopStatus); Control(local:true mailbox_slot:\"w2maafpnknra\" connection_id:\"127.0.0.1:57270\")"}
+{"time":"2024-11-10T10:24:30.329651-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": unexpected EOF"}
+{"time":"2024-11-10T10:24:54.710924-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": net/http: request canceled (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-10T10:24:59.52725-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": unexpected EOF"}
+{"time":"2024-11-10T10:25:13.730691-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": EOF"}
+{"time":"2024-11-10T10:25:27.212763-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": net/http: request canceled (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-10T10:25:29.432407-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": EOF"}
+{"time":"2024-11-10T10:25:50.999333-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": EOF"}
+{"time":"2024-11-10T10:26:01.466064-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-10T10:26:22.699743-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": unexpected EOF"}
+{"time":"2024-11-10T10:26:39.968652-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": net/http: request canceled (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-10T10:26:53.607117-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": EOF"}
+{"time":"2024-11-10T10:27:28.950701-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": net/http: request canceled (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-10T10:38:26.12943-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded"}
+{"time":"2024-11-10T10:38:33.940415-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 172.20.10.4:58020->35.186.228.49:443: read: operation timed out"}
+{"time":"2024-11-10T10:46:35.105556-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T10:46:37.553783-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T10:46:42.220711-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T10:46:52.994383-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-10T10:47:25.309422-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": net/http: request canceled (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-10T10:48:00.275783-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-10T10:57:17.047908-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": EOF"}
+{"time":"2024-11-10T10:57:38.47874-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-10T10:58:10.77834-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded"}
+{"time":"2024-11-10T11:00:02.857439-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp 172.20.10.4:60666->35.186.228.49:443: read: operation timed out"}
+{"time":"2024-11-10T11:25:18.873029-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": unexpected EOF"}
+{"time":"2024-11-10T11:25:32.177242-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": EOF"}
+{"time":"2024-11-10T11:40:09.161165-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T11:40:11.338471-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T11:40:16.066409-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T11:40:24.260341-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded"}
+{"time":"2024-11-10T11:40:25.047982-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T11:40:44.994465-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T11:40:56.586992-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": net/http: request canceled (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-10T11:41:30.75135-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": net/http: request canceled (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-10T11:42:54.631039-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-10T11:43:27.085829-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": net/http: request canceled (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-10T11:44:01.74565-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded"}
+{"time":"2024-11-10T11:44:07.452433-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp [2607:7700:0:e:0:2:23ba:e431]:443: connect: operation timed out"}
+{"time":"2024-11-10T11:44:40.612407-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": net/http: request canceled (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-10T11:46:40.180358-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-10T11:47:12.241686-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": net/http: request canceled (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-10T12:02:38.112817-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": unexpected EOF"}
+{"time":"2024-11-10T12:02:53.575445-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": EOF"}
+{"time":"2024-11-10T12:03:09.406071-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": EOF"}
+{"time":"2024-11-10T12:03:10.818524-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded"}
+{"time":"2024-11-10T12:09:56.168733-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded"}
+{"time":"2024-11-10T12:10:28.282694-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": net/http: request canceled (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-10T12:11:02.582856-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": net/http: request canceled (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-10T12:11:21.012223-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp [2607:fb91:21e6:81bd:4134:946a:236c:b483]:62866->[2607:7700:0:e:0:2:23ba:e431]:443: read: operation timed out"}
+{"time":"2024-11-10T12:16:33.242724-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": EOF"}
+{"time":"2024-11-10T12:16:45.442364-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": read tcp [2607:fb91:ee4:8f9e:c051:d862:fc21:d994]:64422->[2607:7700:0:11:0:2:23ba:e431]:443: read: connection reset by peer"}
+{"time":"2024-11-10T12:23:11.979303-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-10T12:23:44.160053-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-10T12:24:18.827907-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": net/http: request canceled (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-10T12:24:57.738305-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": net/http: request canceled (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-10T12:40:57.842695-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded"}
+{"time":"2024-11-10T12:41:30.024703-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": net/http: request canceled (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-10T12:42:04.765269-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": net/http: request canceled (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-10T12:42:07.223-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp [2607:7700:0:b:0:2:23ba:e431]:443: connect: operation timed out"}
+{"time":"2024-11-10T12:42:28.939879-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp [2607:fb91:de0:a6d4:e42f:3215:8119:86db]:65173->[64:ff9b::23ba:e431]:443: read: operation timed out"}
+{"time":"2024-11-10T12:59:07.633442-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp [2607:7700:0:b:0:2:23ba:e431]:443: connect: operation timed out"}
+{"time":"2024-11-10T13:31:34.86751-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp [2607:7700:0:b:0:2:23ba:e431]:443: connect: operation timed out"}
+{"time":"2024-11-10T13:47:34.986132-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T14:19:38.069529-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T14:44:01.611545-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T15:16:23.462471-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T16:17:17.180952-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T16:46:03.275563-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T18:48:02.571146-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T20:04:14.455824-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T22:05:59.913797-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-10T22:51:37.054857-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-11T00:53:36.596199-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-11T01:27:06.596087-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-11T04:13:37.760975-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-11T04:46:22.653558-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-11T06:47:26.063754-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-11T07:20:25.218724-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-11T09:21:36.635379-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-11T09:38:47.317827-05:00","level":"WARN","msg":"sender: taking a long time","seconds":600.000134958,"work":"WorkRecord(*service_go_proto.Request_StopStatus); Control(local:true mailbox_slot:\"5axz1bfcjnrw\" connection_id:\"127.0.0.1:57270\")"}
+{"time":"2024-11-11T10:11:22.459269-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-11T12:15:39.943632-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-11T12:43:07.053229-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-11T14:46:58.184699-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-11T15:16:38.141723-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-11T17:19:47.274102-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-11T17:20:01.880608-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-11T19:04:34.701201-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-11T19:53:34.949092-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-11T20:02:44.718953-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-11T20:02:59.32312-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-11T20:03:44.724521-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/marionajaramillocivill/APBM/dwvl7cru/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2024-11-11T20:03:56.796094-05:00","level":"INFO","msg":"sender: succeeded after taking longer than expected","seconds":974.007505458,"work":"WorkRecord(*service_go_proto.Request_StopStatus); Control(local:true mailbox_slot:\"5axz1bfcjnrw\" connection_id:\"127.0.0.1:57270\")"}
+{"time":"2024-11-11T20:04:50.163095-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded"}
+{"time":"2024-11-11T20:05:22.361557-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": net/http: request canceled (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-11T20:05:57.33637-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": net/http: request canceled (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-11-11T20:06:21.310175-05:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 10.0.15.241:51901->35.186.228.49:443: read: can't assign requested address"}
