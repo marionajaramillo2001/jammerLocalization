@@ -7,10 +7,13 @@ from torch.utils.data import DataLoader
 import datetime as date
 from apbm.data_loader_APBM import data_process
 from apbm.crossval import CrossVal
-from apbm.model import Net_augmented
 from functools import partial
 import random
 from apbm.plots import *
+from ray import tune, train
+from ray.tune import loguniform, uniform
+from apbm.model import Net_augmented
+
 
 # Set random seed for reproducibility
 seed_value = 0
@@ -22,41 +25,77 @@ random.seed(seed_value)
 # Set the current path as the working directory
 os.chdir(os.getcwd())
 
-def main(data_args, model_args, alg_args, theta_init):
+def prepare_data(config):
+    data_args = {
+        'path': config['path'],
+        'time_t': config['time_t'],
+        'test_ratio': config['test_ratio'],
+        'data_preprocesing': config['data_preprocesing'],
+        'batch_size': config['batch_size'],
+        'bins_num': config['bins_num']
+    }
+    
+    alg_args = {
+        'max_epochs': config['max_epochs'],
+        'patience': config['patience'],
+        'early_stopping': config['early_stopping'],
+        'batch_size': config['batch_size'],
+        'mu': config['mu'],
+        'betas': config['betas']
+    }
+    
+    model_args = {
+        'input_dim': config['input_dim'],
+        'layer_wid': config['layer_wid'],
+        'nonlinearity': config['nonlinearity'],
+        'gamma': config['gamma'],
+        'model_mode': config['model_mode'],  # Options: 'NN', 'PL', 'both'
+    }
+    
     # Data processing step to load and split the dataset
     d_p = data_process(**data_args)
     indices_folds, crossval_dataset, test_loader = d_p.split_dataset()
 
-    # Identify the position with the highest y (received signal strength) for 'max_loc' initialization
-    if theta_init == 'max_loc':
-        data_loader = DataLoader(crossval_dataset, batch_size=len(crossval_dataset))
-        for data, target in data_loader:
-            max_index = torch.argmax(target)  # Find the index of the max signal strength
-            max_position = data[max_index]    # Get the corresponding position
-            break  # Only need one pass over the data
-
-        model = Net_augmented(**model_args, theta0=max_position + torch.randn(2))  # Optionally add noise
-
-    elif theta_init == 'None':
-        # Initialize the model without a specific theta0
-        model = Net_augmented(**model_args)
-    elif theta_init == 'random':
-        # Random initialization of theta0 within a range
-        model = Net_augmented(**model_args, theta0=99 * torch.rand(2))
-    elif theta_init == 'fix':
-        # Fixed theta0 initialization at a specific point
-        model = Net_augmented(**model_args, theta0=torch.tensor([50.0, 50.0]))
-
+    # Define partial optimizers for NN and theta
+    optimizer_nn = partial(optim.Adam, lr=config['lr_optimizer_nn'], weight_decay=config['weight_decay_optimizer_nn'])
+    optimizer_theta = partial(optim.Adam, lr=config['lr_optimizer_theta'], weight_decay=config['weight_decay_optimizer_theta'])
+    
+    model = Net_augmented(**model_args)
+    
+    return model, optimizer_nn, optimizer_theta, d_p, indices_folds, crossval_dataset, test_loader, alg_args
+    
+def hypermarameter_tuning(config):
+    model, optimizer_nn, optimizer_theta, d_p, indices_folds, crossval_dataset, test_loader, alg_args = prepare_data(config)
+    
     # Create CrossVal instance and train the model
-    crossval = CrossVal(model, **alg_args)
-    all_train_losses_per_fold, all_val_losses_per_fold, global_test_loss, jam_loc_error = crossval.train(
-        indices_folds, crossval_dataset, test_loader, d_p.trueJloc
-    )
+    crossval = CrossVal(model, config['theta_init'], optimizer_nn=optimizer_nn, optimizer_theta=optimizer_theta, **alg_args)
+    _, _, last_val_loss_mean_across_folds, _, _, _ = crossval.train_crossval(indices_folds, crossval_dataset, test_loader, d_p.trueJloc)
+    
+    return {"last_val_loss_mean_across_folds": last_val_loss_mean_across_folds}
 
+def crossval(config):
+    model, optimizer_nn, optimizer_theta, d_p, indices_folds, crossval_dataset, test_loader, alg_args = prepare_data(config)
+    
+    # Create CrossVal instance and train the model
+    crossval = CrossVal(model, config['theta_init'], optimizer_nn=optimizer_nn, optimizer_theta=optimizer_theta, **alg_args)
+    all_train_losses_per_fold, all_val_losses_per_fold, last_val_loss_mean_across_folds, mean_best_epoch = crossval.train_crossval(indices_folds, crossval_dataset)
+    
     # Plot average training and validation losses for visual analysis
-    plot_average_losses(all_train_losses_per_fold, all_val_losses_per_fold)
-
-    return all_train_losses_per_fold, all_val_losses_per_fold, global_test_loss, jam_loc_error
+    plot_average_train_val_loss(all_train_losses_per_fold, all_val_losses_per_fold)
+    return all_train_losses_per_fold, all_val_losses_per_fold, last_val_loss_mean_across_folds, mean_best_epoch
+    
+def train_test(config):
+    model, optimizer_nn, optimizer_theta, d_p, _, train_dataset, test_loader, alg_args = prepare_data(config)
+    
+    trueJammerLocation = d_p.trueJloc
+    # Create CrossVal instance and train the model
+    train = CrossVal(model, config['theta_init'], optimizer_nn=optimizer_nn, optimizer_theta=optimizer_theta, **alg_args)
+    train_losses_per_epoch, global_test_loss, jam_loc_error = train.train_test(train_dataset, test_loader, trueJammerLocation)
+    
+    plot_train_test_loss(train_losses_per_epoch, global_test_loss)
+    
+    return global_test_loss, jam_loc_error
+    
 
 if __name__ == '__main__':
     # Set data path based on the data_name variable
@@ -73,47 +112,91 @@ if __name__ == '__main__':
         path = 'datasets/dataPLANS/4.definitive/RT12/'
     elif data_name == 'RT13':
         path = 'datasets/dataPLANS/4.definitive/RT13/'
-
+        
+    
+    best_config_PL2 = {
+        'path': os.getcwd() + '/' + path,
+        'time_t': 0,
+        'test_ratio': 0.2,
+        'data_preprocesing': 1,
+        'bins_num': 10,
+        'theta_init': 'max_loc',
+        'runs': 1,
+        'monte_carlo_runs': 1,
+        'betas': True,
+        'input_dim': 2,
+        'layer_wid': [500, 1],
+        'nonlinearity': 'relu',
+        'gamma': 2,
+        'model_mode': 'NN',
+        'max_epochs': 150,
+        'batch_size': 4,
+        'lr_optimizer_nn': 0.001,
+        'lr_optimizer_theta': 0.1,
+        'weight_decay_optimizer_nn': 1e-07,
+        'weight_decay_optimizer_theta': 1e-08,
+        'mu': 0.1,
+        'patience': 40,
+        'early_stopping': True,
+        'hyperparameter_tuning': False
+    }
+    
+    best_config_RT2 = {
+        'path': '/Users/marionajaramillocivill/Documents/GitHub/jammerLocalization/datasets/dataPLANS/4.definitive/RT2/',
+        'time_t': 0,
+        'test_ratio': 0.2,
+        'data_preprocesing': 1,
+        'bins_num': 10,
+        'theta_init': 'max_loc',
+        'runs': 1,
+        'monte_carlo_runs': 1,
+        'betas': True,
+        'input_dim': 2,
+        'layer_wid': [500, 1],
+        'nonlinearity': 'tanh',
+        'gamma': 2,
+        'model_mode': 'both',
+        'max_epochs': 150,
+        'batch_size': 16,
+        'lr_optimizer_nn': 0.01,
+        'lr_optimizer_theta': 0.1,
+        'weight_decay_optimizer_nn': 1e-07,
+        'weight_decay_optimizer_theta': 1e-08,
+        'mu': 0.1,
+        'patience': 40,
+        'early_stopping': True,
+        'hyperparameter_tuning': False
+    }
+        
     # Configuration dictionary
-    config = {
-        "theta_init": 'max_loc',  # Options: 'fix', 'random', 'max_loc', 'None'
+    search_space = {
+        'path': os.getcwd() + '/' + path,
+        'time_t': None,
+        'test_ratio': 0.2,
+        'data_preprocesing': 1,
+        'bins_num': 10,
+        "theta_init": tune.choice(['fix', 'random', 'max_loc']),  # Initialization method for theta
         "runs": 1,  # Number of complete training runs
         "monte_carlo_runs": 1,  # Number of Monte Carlo simulations per run
         "betas": True,  # Whether to use betas for training
-        "model_args": {
-            'input_dim': 2,
-            'layer_wid': [500, 1],
-            'nonlinearity': 'relu',
-            'gamma': 2,
-            'model_mode': 'NN',  # Options: 'NN', 'PL', 'both'
-        },
-        "max_epochs": 200,  # Maximum number of training epochs
-        "batch_size": 8,  # Batch size for training
-        "lr_optimizer_nn": 0.01,  # Learning rate for NN optimizer
-        "lr_optimizer_theta": 0.01,  # Learning rate for theta optimizer
-        "weight_decay_optimizer_nn": 1e-10,  # Weight decay for regularization (NN)
-        "weight_decay_optimizer_theta": 1e-10,  # Weight decay for regularization (theta)
+        'input_dim': 2,
+        'layer_wid': [500, 1],
+        'nonlinearity': tune.choice(['relu', 'tanh', 'sigmoid', 'leaky_relu', 'softplus']),
+        'gamma': 2,
+        'model_mode': 'both',  # Options: 'NN', 'PL', 'both'
+        "max_epochs": 150,  # Maximum number of training epochs
+        "batch_size": tune.choice([4, 8, 16, 32]),  # Batch size for training
+        "lr_optimizer_nn": tune.grid_search([0.001, 0.01, 0.1]),
+        "lr_optimizer_theta": tune.grid_search([0.001, 0.01, 0.1]),  # Learning rate for theta optimizer
+        "weight_decay_optimizer_nn": tune.grid_search([1e-10, 1e-9, 1e-8, 1e-7, 1e-6, 1e-5]),  # Weight decay for regularization (NN)
+        "weight_decay_optimizer_theta": tune.grid_search([1e-10, 1e-9, 1e-8, 1e-7, 1e-6, 1e-5]),  # Weight decay for regularization (theta)
         "mu": 0.1,  # Additional hyperparameter
-        "patience": 30,  # Patience for early stopping
+        "patience": tune.choice([10, 20, 30, 40]),  # Patience for early stopping
         "early_stopping": True,  # Whether to enable early stopping
+        'hyperparameter_tuning': True
     }
-
-    # Define partial optimizers for NN and theta
-    optimizer_nn = partial(optim.Adam, lr=config['lr_optimizer_nn'], weight_decay=config['weight_decay_optimizer_nn'])
-    optimizer_theta = partial(optim.Adam, lr=config['lr_optimizer_theta'], weight_decay=config['weight_decay_optimizer_theta'])
-
-    # Algorithm arguments passed to CrossVal
-    alg_args = {
-        'max_epochs': config['max_epochs'],
-        'patience': config['patience'],
-        'early_stopping': config['early_stopping'],
-        'batch_size': config['batch_size'],
-        'optimizer_nn': optimizer_nn,
-        'optimizer_theta': optimizer_theta,
-        'mu': config['mu'],
-        'betas': config['betas']
-    }
-    model_args = config['model_args']
+    
+    config = best_config_PL2
 
     # Initialize accumulators for overall averages across runs
     total_test_loss = 0
@@ -121,16 +204,8 @@ if __name__ == '__main__':
 
     # Run experiments and print results
     for r in range(config['runs']):
-        data_args = {
-            'path': path,
-            'time_t': r,
-            'test_ratio': 0.2,
-            'data_preprocesing': 1,
-            'batch_size': config['batch_size'],
-            'bins_num': 10
-        }
-
         # Initialize accumulators for this run
+        config['time_t'] = r
         r_mc_test_loss = 0
         r_mc_jam_loc_error = 0
 
@@ -139,10 +214,21 @@ if __name__ == '__main__':
         for m in range(config['monte_carlo_runs']):
             print(f"  Monte Carlo run {m + 1}/{config['monte_carlo_runs']}...")
             
-            all_train_losses_per_fold, all_val_losses_per_fold, global_test_loss, jam_loc_error = main(
-                data_args, model_args, alg_args, config['theta_init']
-            )
+            if config['hyperparameter_tuning']:
+                # Perform hyperparameter tuning using Ray Tune; config changes to the best config found
+                tuner = tune.Tuner(hypermarameter_tuning, param_space=config)
 
+                results = tuner.fit()
+                config = results.get_best_result(metric="last_val_loss_mean_across_folds", mode="min").config
+                print(config)
+            
+            all_train_losses_per_fold, all_val_losses_per_fold, last_val_loss_mean_across_folds, mean_best_epoch = crossval(config)
+
+            # Change max_epochs to the mean of the best epochs across folds
+            config['max_epochs'] = mean_best_epoch
+            
+            global_test_loss, jam_loc_error = train_test(config)
+            
             # Accumulate results for this run
             r_mc_test_loss += global_test_loss
             r_mc_jam_loc_error += jam_loc_error
@@ -153,6 +239,7 @@ if __name__ == '__main__':
 
         # Print averaged results for this run
         print(f"Run {r + 1} results:")
+        print(f"  Average last validation loss across folds: {last_val_loss_mean_across_folds:.4f}")
         print(f"  Average global test loss: {r_mc_test_loss:.4f}")
         print(f"  Average jammer localization error: {r_mc_jam_loc_error:.4f}\n")
 

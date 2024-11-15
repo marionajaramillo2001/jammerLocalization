@@ -1,4 +1,6 @@
 import numpy as np
+import torch
+import torch.nn as nn
 import os
 import plotly.graph_objects as go
 
@@ -16,7 +18,7 @@ def pad_lists_with_nan(list_of_lists):
     padded_lists = [lst + [np.nan] * (max_length - len(lst)) for lst in list_of_lists]  # Pad with np.nan
     return np.array(padded_lists)
 
-def plot_average_losses(all_train_losses_per_fold, all_val_losses_per_fold):
+def plot_average_train_val_loss(all_train_losses_per_fold, all_val_losses_per_fold):
     """
     Plots and saves the average training and validation losses across all folds.
 
@@ -78,3 +80,68 @@ def plot_average_losses(all_train_losses_per_fold, all_val_losses_per_fold):
 
     # Display the plot in the browser
     fig.show()
+    
+def plot_train_test_loss(train_losses_per_epoch, global_test_loss):
+        """
+        Plots the training losses per epoch and the global test loss.
+
+        Parameters:
+        - train_losses_per_epoch (list): A list containing training losses for each epoch.
+        - global_test_loss (float): The global test loss value.
+
+        Output:
+        - Displays the plot using matplotlib's interactive visualization.
+        """
+        import matplotlib.pyplot as plt
+
+        # Plot training losses per epoch
+        plt.figure(figsize=(10, 6))
+        plt.plot(train_losses_per_epoch, label='Training Loss per Epoch')
+
+        # Plot global test loss as a horizontal line
+        plt.axhline(y=global_test_loss, color='r', linestyle='--', label='Global Test Loss')
+
+        # Add labels and title
+        plt.xlabel('Epoch')
+        plt.ylabel('Loss')
+        plt.title('Training Loss per Epoch and Global Test Loss')
+        plt.legend()
+        plt.grid(True)
+        plt.show()
+    
+def test_field(model, t):
+    """
+    Generates and saves a 3D field visualization of the model's output.
+
+    Parameters:
+    - model (nn.Module): The trained model to be visualized.
+    - t (int or str): Identifier for the output file (e.g., an index or timestamp).
+
+    Output:
+    - Saves an HTML file containing a 3D plot of the model's output surface.
+    """
+    model.eval()  # Set the model to evaluation mode
+    x = np.linspace(0, 100, 100)  # Define a grid range for x-axis
+    y = np.linspace(0, 100, 100)  # Define a grid range for y-axis
+    X, Y = np.meshgrid(x, y)  # Create a mesh grid for plotting
+    Z = np.zeros(X.shape)  # Initialize Z (output values) with zeros
+
+    # Disable gradient computation for visualization
+    with torch.no_grad():
+        for i in range(len(X)):
+            for j in range(len(Y)):
+                # Predict the model's output for each (x, y) point
+                Z[i, j] = model(torch.tensor([[X[i, j], Y[i, j]]]).float()).item()
+
+    # Create a 3D plot using Plotly
+    fig = go.Figure(data=[go.Surface(z=Z, x=X, y=Y)])
+    fig.update_layout(
+        title='3D Surface Plot',
+        autosize=False,
+        width=500,
+        height=500,
+        margin=dict(l=65, r=50, b=65, t=90)
+    )
+
+    # Save the 3D plot as an HTML file
+    fig.write_html(f'figs/field_{t}.html')
