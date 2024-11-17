@@ -69,7 +69,7 @@ def hypermarameter_tuning(config):
     
     # Create CrossVal instance and train the model
     crossval = CrossVal(model, config['theta_init'], optimizer_nn=optimizer_nn, optimizer_theta=optimizer_theta, **alg_args)
-    _, _, last_val_loss_mean_across_folds, _, _, _ = crossval.train_crossval(indices_folds, crossval_dataset, test_loader, d_p.trueJloc)
+    _, _, last_val_loss_mean_across_folds, _ = crossval.train_crossval(indices_folds, crossval_dataset)
     
     return {"last_val_loss_mean_across_folds": last_val_loss_mean_across_folds}
 
@@ -87,35 +87,38 @@ def crossval(config):
 def train_test(config):
     model, optimizer_nn, optimizer_theta, d_p, _, train_dataset, test_loader, alg_args = prepare_data(config)
     
-    trueJammerLocation = d_p.trueJloc
+    true_jam_loc = d_p.trueJloc
     # Create CrossVal instance and train the model
     train = CrossVal(model, config['theta_init'], optimizer_nn=optimizer_nn, optimizer_theta=optimizer_theta, **alg_args)
-    train_losses_per_epoch, global_test_loss, jam_loc_error = train.train_test(train_dataset, test_loader, trueJammerLocation)
+    train_losses_per_epoch, global_test_loss, jam_loc_error, predicted_jam_loc, trained_model = train.train_test(train_dataset, test_loader, true_jam_loc)
     
     plot_train_test_loss(train_losses_per_epoch, global_test_loss)
     
-    return global_test_loss, jam_loc_error
+    train_loader = DataLoader(train_dataset, batch_size=config['batch_size'], shuffle=True)
+    visualize_3d_model_output(trained_model, train_loader, test_loader, true_jam_loc, predicted_jam_loc, None)
     
+    return global_test_loss, jam_loc_error, true_jam_loc, predicted_jam_loc
+
 
 if __name__ == '__main__':
     # Set data path based on the data_name variable
-    data_name = 'RT2'
-    if data_name == 'RT2':  # Smaller dataset (e.g., 100 samples)
+    data_name = 'RT12'
+    if data_name == 'RT2':  # 100 samples
         path = 'datasets/dataPLANS/4.definitive/RT2/'
-    elif data_name == 'PL2':  # Larger dataset (e.g., 10000 samples)
+    elif data_name == 'PL2':  # 10000 samples
         path = 'datasets/dataPLANS/4.definitive/PL2/'
-    elif data_name == 'R11':
+    elif data_name == 'R11': # 100 samples
         path = 'datasets/dataPLANS/4.definitive/RT11/'
-    elif data_name == 'PL11':
+    elif data_name == 'PL11': # 10000 samples
         path = 'datasets/dataPLANS/4.definitive/PL11/'
-    elif data_name == 'RT12':
+    elif data_name == 'RT12': # 10000 samples
         path = 'datasets/dataPLANS/4.definitive/RT12/'
-    elif data_name == 'RT13':
+    elif data_name == 'RT13': # 10000 samples
         path = 'datasets/dataPLANS/4.definitive/RT13/'
         
     
-    best_config_PL2 = {
-        'path': os.getcwd() + '/' + path,
+    best_config_PL2_0 = {
+        'path': '/Users/marionajaramillocivill/Documents/GitHub/jammerLocalization/datasets/dataPLANS/4.definitive/PL2/',
         'time_t': 0,
         'test_ratio': 0.2,
         'data_preprocesing': 1,
@@ -128,20 +131,20 @@ if __name__ == '__main__':
         'layer_wid': [500, 1],
         'nonlinearity': 'relu',
         'gamma': 2,
-        'model_mode': 'NN',
+        'model_mode': 'both',
         'max_epochs': 150,
-        'batch_size': 4,
-        'lr_optimizer_nn': 0.001,
-        'lr_optimizer_theta': 0.1,
+        'batch_size': 8,
+        'lr_optimizer_nn': 0.01,
+        'lr_optimizer_theta': 0.001,
         'weight_decay_optimizer_nn': 1e-07,
-        'weight_decay_optimizer_theta': 1e-08,
+        'weight_decay_optimizer_theta': 1e-10,
         'mu': 0.1,
-        'patience': 40,
+        'patience': 30,
         'early_stopping': True,
-        'hyperparameter_tuning': False
+        'hyperparameter_tuning': True
     }
     
-    best_config_RT2 = {
+    best_config_RT2_0 = {
         'path': '/Users/marionajaramillocivill/Documents/GitHub/jammerLocalization/datasets/dataPLANS/4.definitive/RT2/',
         'time_t': 0,
         'test_ratio': 0.2,
@@ -157,15 +160,69 @@ if __name__ == '__main__':
         'gamma': 2,
         'model_mode': 'both',
         'max_epochs': 150,
-        'batch_size': 16,
-        'lr_optimizer_nn': 0.01,
-        'lr_optimizer_theta': 0.1,
+        'batch_size': 4,
+        'lr_optimizer_nn': 0.001,
+        'lr_optimizer_theta': 0.001,
         'weight_decay_optimizer_nn': 1e-07,
         'weight_decay_optimizer_theta': 1e-08,
         'mu': 0.1,
         'patience': 40,
         'early_stopping': True,
-        'hyperparameter_tuning': False
+        'hyperparameter_tuning': True
+    }
+    
+    best_config_RT2_1 = {
+        'path': '/Users/marionajaramillocivill/Documents/GitHub/jammerLocalization/datasets/dataPLANS/4.definitive/RT2/',
+        'time_t': 0,
+        'test_ratio': 0.2,
+        'data_preprocesing': 1,
+        'bins_num': 10,
+        'theta_init': 'random',
+        'runs': 1,
+        'monte_carlo_runs': 1,
+        'betas': True,
+        'input_dim': 2,
+        'layer_wid': [500, 1],
+        'nonlinearity': 'softplus',
+        'gamma': 2,
+        'model_mode': 'NN',
+        'max_epochs': 150,
+        'batch_size': 4,
+        'lr_optimizer_nn': 0.001,
+        'lr_optimizer_theta': 0.01,
+        'weight_decay_optimizer_nn': 1e-05,
+        'weight_decay_optimizer_theta': 1e-07,
+        'mu': 0.1,
+        'patience': 30,
+        'early_stopping': True,
+        'hyperparameter_tuning': True
+    }
+    
+    best_config_RT12_0 = {
+        'path': '/Users/marionajaramillocivill/Documents/GitHub/jammerLocalization/datasets/dataPLANS/4.definitive/RT12/',
+        'time_t': 0,
+        'test_ratio': 0.2,
+        'data_preprocesing': 1,
+        'bins_num': 10,
+        'theta_init': 'max_loc',
+        'runs': 1,
+        'monte_carlo_runs': 1,
+        'betas': True,
+        'input_dim': 2,
+        'layer_wid': [500, 1],
+        'nonlinearity': 'softplus',
+        'gamma': 2,
+        'model_mode': 'both',
+        'max_epochs': 150,
+        'batch_size': 8,
+        'lr_optimizer_nn': 0.001,
+        'lr_optimizer_theta': 0.01,
+        'weight_decay_optimizer_nn': 1e-08,
+        'weight_decay_optimizer_theta': 1e-10,
+        'mu': 0.1,
+        'patience': 30,
+        'early_stopping': True,
+        'hyperparameter_tuning': True
     }
         
     # Configuration dictionary
@@ -175,7 +232,7 @@ if __name__ == '__main__':
         'test_ratio': 0.2,
         'data_preprocesing': 1,
         'bins_num': 10,
-        "theta_init": tune.choice(['fix', 'random', 'max_loc']),  # Initialization method for theta
+        "theta_init": tune.choice(['random', 'max_loc']),  # Initialization method for theta
         "runs": 1,  # Number of complete training runs
         "monte_carlo_runs": 1,  # Number of Monte Carlo simulations per run
         "betas": True,  # Whether to use betas for training
@@ -183,7 +240,7 @@ if __name__ == '__main__':
         'layer_wid': [500, 1],
         'nonlinearity': tune.choice(['relu', 'tanh', 'sigmoid', 'leaky_relu', 'softplus']),
         'gamma': 2,
-        'model_mode': 'both',  # Options: 'NN', 'PL', 'both'
+        'model_mode': 'NN',  # Options: 'NN', 'PL', 'both'
         "max_epochs": 150,  # Maximum number of training epochs
         "batch_size": tune.choice([4, 8, 16, 32]),  # Batch size for training
         "lr_optimizer_nn": tune.grid_search([0.001, 0.01, 0.1]),
@@ -196,7 +253,7 @@ if __name__ == '__main__':
         'hyperparameter_tuning': True
     }
     
-    config = best_config_PL2
+    config = search_space
 
     # Initialize accumulators for overall averages across runs
     total_test_loss = 0
@@ -227,7 +284,7 @@ if __name__ == '__main__':
             # Change max_epochs to the mean of the best epochs across folds
             config['max_epochs'] = mean_best_epoch
             
-            global_test_loss, jam_loc_error = train_test(config)
+            global_test_loss, jam_loc_error, true_jam_loc, predicted_jam_loc = train_test(config)
             
             # Accumulate results for this run
             r_mc_test_loss += global_test_loss
@@ -241,7 +298,9 @@ if __name__ == '__main__':
         print(f"Run {r + 1} results:")
         print(f"  Average last validation loss across folds: {last_val_loss_mean_across_folds:.4f}")
         print(f"  Average global test loss: {r_mc_test_loss:.4f}")
-        print(f"  Average jammer localization error: {r_mc_jam_loc_error:.4f}\n")
+        print(f"  Jammer localization error: {r_mc_jam_loc_error:.4f}\n")
+        print(f"  Predicted jammer location: {predicted_jam_loc}")
+        print(f"  Real jammer location: {true_jam_loc}")
 
         # Accumulate for final average across all runs
         total_test_loss += r_mc_test_loss

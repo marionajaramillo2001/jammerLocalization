@@ -142,12 +142,12 @@ class CrossVal(object):
                     max_position = data[max_index]    # Get the corresponding position
                     break  # Only need one pass over the data
                 model.model_PL.theta = nn.Parameter(max_position + torch.randn(2))
-            elif self.config['theta_init'] == 'random':
+            elif self.theta_init == 'random':
                 # Random initialization of theta0 within a range
-                model.model_PL.theta = 99 * torch.rand(2)
-            elif self.config['theta_init'] == 'fix':
+                model.model_PL.theta = nn.Parameter(99 * torch.rand(2))
+            elif self.theta_init == 'fix':
                 # Fixed theta0 initialization at a specific point
-                model.model_PL.theta = [50.0, 50.0]
+                model.model_PL.theta = nn.Parameter(torch.tensor([50.0, 50.0]))
 
             # Create data loaders for the current fold
             train_loader = DataLoader(
@@ -198,7 +198,7 @@ class CrossVal(object):
                             break
 
             # Load the best model if early stopping was triggered
-            if self.early_stopping and epochs_no_improve >= self.patience:
+            if (self.early_stopping and epochs_no_improve >= self.patience) or (epoch_idx == self.max_epochs - 1):
                 model.load_state_dict(best_model_state)
                 best_epochs_per_fold.append(best_epoch)
                 print(f"Best model was found at epoch {best_epoch}")
@@ -219,7 +219,8 @@ class CrossVal(object):
     
     def train_test(self, train_dataset, test_loader, real_loc):        
         model = copy.deepcopy(self.initial_model)
-            
+        train_loader = DataLoader(train_dataset, batch_size=self.batch_size, shuffle=True)
+
         # Identify the position with the highest y (received signal strength) for 'max_loc' initialization
         if self.theta_init == 'max_loc':
             data_loader = DataLoader(train_dataset, batch_size=len(train_dataset))
@@ -228,15 +229,13 @@ class CrossVal(object):
                 max_position = data[max_index]    # Get the corresponding position
                 break  # Only need one pass over the data
             model.model_PL.theta = nn.Parameter(max_position + torch.randn(2))
-        elif self.config['theta_init'] == 'random':
+        elif self.theta_init == 'random':
             # Random initialization of theta0 within a range
-            model.model_PL.theta = 99 * torch.rand(2)
-        elif self.config['theta_init'] == 'fix':
+            model.model_PL.theta = nn.Parameter(99 * torch.rand(2))
+        elif self.theta_init == 'fix':
             # Fixed theta0 initialization at a specific point
-            model.model_PL.theta = [50.0, 50.0]
-            
-        train_loader = DataLoader(train_dataset, batch_size=self.batch_size, shuffle=True)
-        
+            model.model_PL.theta = nn.Parameter(torch.tensor([50.0, 50.0]))
+                    
         # Move the model to the selected device (GPU/CPU)
         model.to(self.device)
 
@@ -253,10 +252,10 @@ class CrossVal(object):
 
         # Evaluate on the global test set
         global_test_loss = self.test_reg(model, test_loader)
-        jam_loc_error = self.test_loc(model, real_loc)
+        jam_loc_error, predicted_jam_loc = self.test_loc(model, real_loc)
 
         
-        return train_losses_per_epoch, global_test_loss, jam_loc_error
+        return train_losses_per_epoch, global_test_loss, jam_loc_error, predicted_jam_loc, model
 
 
     def test_reg(self, model, test_loader):
@@ -293,5 +292,7 @@ class CrossVal(object):
         Output:
         - result (float): The computed localization error.
         """
-        result = np.sqrt(np.mean((real_loc - model.get_theta().detach().numpy())**2))
-        return result
+        predicted_jam_loc = model.get_theta().detach().numpy()
+        jam_loc_error = np.sqrt(np.mean((real_loc - predicted_jam_loc)**2))
+        
+        return jam_loc_error, predicted_jam_loc

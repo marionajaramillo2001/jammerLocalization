@@ -270,6 +270,7 @@ class FedAvg(object):
                         margin=dict(l=65, r=50, b=65, t=90))
         fig.write_html(f'figs/field_{t}.html')
         
+        
 
         
             
