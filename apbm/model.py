@@ -97,7 +97,7 @@ class Polynomial3(nn.Module):
     A class representing a pathloss model for predicting signal strength based on position.
 
     Attributes:
-    - gamma (float): The path loss exponent.
+    - gamma (float): A learnable parameter representing the path loss exponent.
     - theta (Parameter): A learnable parameter representing the jammer's position.
     - P0 (Parameter): The transmit power to be learned.
     - data_max (float, optional): Maximum value for data normalization.
@@ -118,8 +118,9 @@ class Polynomial3(nn.Module):
         """
         super().__init__()
         self.theta = nn.Parameter(torch.zeros((2))) if theta0 is None else nn.Parameter(torch.tensor(theta0))
-        self.gamma = gamma
-        self.P0 = nn.Parameter(torch.randn(()))  # Transmit power parameter
+        self.gamma = nn.Parameter(torch.tensor(gamma, dtype=torch.float32))
+        self.P0 = nn.Parameter(torch.tensor(10, dtype=torch.float32))
+        # self.P0 = nn.Parameter(torch.randn(()))  # Transmit power parameter
         self.data_max = data_max
         self.data_min = data_min
 
@@ -152,6 +153,24 @@ class Polynomial3(nn.Module):
         - (Tensor): The learned theta.
         """
         return self.theta
+    
+    def get_P0(self):
+        """
+        Retrieves the learned theta P0 (transmit power).
+
+        Outputs:
+        - (Tensor): The learned P0.
+        """
+        return self.P0
+    
+    def get_gamma(self):
+        """
+        Retrieves the learned gamma (path loss exponent).
+
+        Outputs:
+        - (Tensor): The learned gamma.
+        """
+        return self.gamma
 
 
 class Net_augmented(nn.Module):
@@ -221,6 +240,24 @@ class Net_augmented(nn.Module):
         - (Tensor): The learned theta.
         """
         return self.model_PL.get_theta()
+    
+    def get_P0(self):
+        """
+        Retrieves the learned P0 from the pathloss model.
+
+        Outputs:
+        - (Tensor): The learned P0.
+        """
+        return self.model_PL.get_P0()
+    
+    def get_gamma(self):
+        """
+        Retrieves the learned gamma from the pathloss model.
+
+        Outputs:
+        - (Tensor): The learned gamma.
+        """
+        return self.model_PL.get_gamma()
 
 
 class GatingNetwork(nn.Module):
@@ -277,6 +314,8 @@ class Net_augmented_gate(nn.Module):
     - forward: Combines outputs from experts based on weights from the gating network.
     - get_NN_param: Retrieves the parameters of the neural network.
     - get_theta: Retrieves the learned theta from the pathloss model.
+    - get_P0: Retrieves the learned P0 from the pathloss model.
+    - get_gamma: Retrieves the learned gamma from the pathloss model.
     """
     def __init__(self, input_dim, layer_wid, nonlinearity, gamma=2, theta0=None, data_max=None, data_min=None, model_mode='both', num_experts=2):
         """
@@ -346,3 +385,21 @@ class Net_augmented_gate(nn.Module):
         - (Tensor): The learned theta.
         """
         return self.model_PL.get_theta()
+    
+    def get_P0(self):
+        """
+        Retrieves the learned P0 from the pathloss model.
+
+        Outputs:
+        - (Tensor): The learned P0.
+        """
+        return self.model_PL.get_P0()
+    
+    def get_gamma(self):
+        """
+        Retrieves the learned gamma from the pathloss model.
+
+        Outputs:
+        - (Tensor): The learned gamma.
+        """
+        return self.model_PL.get_gamma()

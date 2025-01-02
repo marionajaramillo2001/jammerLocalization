@@ -232,7 +232,7 @@ def visualize_3d_model_output(model, train_loader, test_loader, true_jam_loc, pr
     min_xy, max_xy = min(min_x, min_y), max(max_x, max_y)
 
     model.eval()  # Set the model to evaluation mode
-    grid_range = np.linspace(min_xy - 1, max_xy + 1, max_xy-min_xy)  # Define a grid range for x-axis
+    grid_range = np.linspace(min_xy - 1, max_xy + 1, (max_xy-min_xy))  # Define a grid range for x-axis
     X, Y = np.meshgrid(grid_range, grid_range)  # Create a mesh grid for plotting
     Z = np.zeros(X.shape)  # Initialize Z (output values) with zeros
 

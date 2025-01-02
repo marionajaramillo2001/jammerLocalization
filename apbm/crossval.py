@@ -10,7 +10,7 @@ from apbm.model import Net_augmented
 
 
 class CrossVal(object):
-    def __init__(self, model, theta_init, optimizer_nn, optimizer_theta, batch_size, mu, max_epochs, patience, early_stopping, betas=None):
+    def __init__(self, model, theta_init, optimizer_nn, lr_optimizer_theta, lr_optimizer_P0, lr_optimizer_gamma, batch_size, mu, max_epochs, patience, early_stopping, betas=None):
         """
         Initializes the CrossVal class for cross-validation with early stopping.
 
@@ -18,7 +18,7 @@ class CrossVal(object):
         - config (dict): Dictionary containing the configuration parameters.
         - batch_size (int): Batch size for data loaders.
         - optimizer_nn (function): Optimizer for the neural network parameters.
-        - optimizer_theta (function): Optimizer for the theta parameters.
+        - optimizer_pl (function): Optimizer for the pl model parameters.
         - mu (float): Hyperparameter for regularization or optimization purposes.
         - max_epochs (int): Maximum number of epochs for training.
         - patience (int): Number of epochs to wait before early stopping if no improvement.
@@ -32,7 +32,9 @@ class CrossVal(object):
         self.initial_model = model
         self.theta_init = theta_init
         self.optimizer_nn = optimizer_nn
-        self.optimizer_theta = optimizer_theta
+        self.lr_optimizer_theta = lr_optimizer_theta
+        self.lr_optimizer_P0 = lr_optimizer_P0
+        self.lr_optimizer_gamma = lr_optimizer_gamma
         self.criterion = nn.MSELoss(reduction="mean")  # Loss function for training
         self.mu = mu
         self.max_epochs = max_epochs
@@ -42,14 +44,14 @@ class CrossVal(object):
         self.num_rounds = 1  # For non-FL cases, this is 1 (kept for compatibility)
         self.betas = [10 * (1 - (i + 1) / self.num_rounds) for i in range(self.num_rounds)] if betas else [0 for _ in range(self.num_rounds)]
 
-    def train_one_epoch(self, model, train_loader, optimizer_nn, optimizer_theta):
+    def train_one_epoch(self, model, train_loader, optimizer_nn, optimizer_pl):
         """
         Trains the model for one epoch.
 
         Parameters:
         - train_loader (DataLoader): DataLoader for the training set.
         - optimizer_nn (torch.optim.Optimizer): Optimizer for neural network parameters.
-        - optimizer_theta (torch.optim.Optimizer): Optimizer for theta parameters.
+        - optimizer_pl (torch.optim.Optimizer): Optimizer for pl parameters.
         
         Output:
         - avg_train_loss (float): The average training loss for the epoch.
@@ -62,7 +64,7 @@ class CrossVal(object):
 
             # Zero the gradients
             optimizer_nn.zero_grad()
-            optimizer_theta.zero_grad()
+            optimizer_pl.zero_grad()
 
             # Forward pass
             output = model(data)
@@ -74,7 +76,7 @@ class CrossVal(object):
 
             # Update parameters
             optimizer_nn.step()
-            optimizer_theta.step()
+            optimizer_pl.step()
 
             total_train_loss += loss.item() * len(data)
 
@@ -133,6 +135,8 @@ class CrossVal(object):
             print("-------")
             
             model = copy.deepcopy(self.initial_model)
+            best_model_state = copy.deepcopy(model.state_dict())
+            best_epoch = self.max_epochs
             
             # Identify the position with the highest y (received signal strength) for 'max_loc' initialization
             if self.theta_init == 'max_loc':
@@ -166,7 +170,11 @@ class CrossVal(object):
 
             # Initialize optimizers for the current fold
             optimizer_nn = self.optimizer_nn(model.model_NN.parameters())
-            optimizer_theta = self.optimizer_theta(model.model_PL.parameters())
+            optimizer_pl = torch.optim.Adam([
+                {'params': model.model_PL.gamma, 'lr': 1e-3, 'weight_decay': 0.0},  # Gamma-specific settings
+                {'params': model.model_PL.theta, 'lr': 5e-4, 'weight_decay': 0.0},   # Theta-specific settings
+                {'params': model.model_PL.P0, 'lr': 1e-2, 'weight_decay': 0.0}      # P0-specific settings
+            ])
 
             # Lists to track training and validation losses for each epoch
             train_losses_per_epoch = []
@@ -178,7 +186,7 @@ class CrossVal(object):
 
             # Training loop for each epoch
             for epoch_idx in tqdm(range(self.max_epochs)):
-                avg_train_loss = self.train_one_epoch(model, train_loader, optimizer_nn, optimizer_theta)
+                avg_train_loss = self.train_one_epoch(model, train_loader, optimizer_nn, optimizer_pl)
                 train_losses_per_epoch.append(avg_train_loss)
 
                 avg_val_loss = self.validate_one_epoch(model, val_loader)
@@ -198,10 +206,12 @@ class CrossVal(object):
                             break
 
             # Load the best model if early stopping was triggered
-            if (self.early_stopping and epochs_no_improve >= self.patience) or (epoch_idx == self.max_epochs - 1):
+            if self.early_stopping and (epochs_no_improve >= self.patience or epoch_idx == (self.max_epochs - 1)):
                 model.load_state_dict(best_model_state)
                 best_epochs_per_fold.append(best_epoch)
                 print(f"Best model was found at epoch {best_epoch}")
+            elif not self.early_stopping and epoch_idx == (self.max_epochs - 1):
+                model.load_state_dict(best_model_state)
 
             # Append losses for this fold
             all_train_losses_per_fold.append(train_losses_per_epoch)
@@ -210,6 +220,9 @@ class CrossVal(object):
         # Calculate the mean of the best epochs across all folds
         if self.early_stopping:
             mean_best_epoch = int(np.mean(best_epochs_per_fold))
+        else:
+            mean_best_epoch = self.max_epochs
+
 
         # Calculate the mean of the last validation losses across all folds
         last_val_losses = [val_losses[-1] for val_losses in all_val_losses_per_fold]
@@ -241,21 +254,25 @@ class CrossVal(object):
 
         # Initialize optimizers for the current fold
         optimizer_nn = self.optimizer_nn(model.model_NN.parameters())
-        optimizer_theta = self.optimizer_theta(model.model_PL.parameters())
+        optimizer_pl = torch.optim.Adam([
+            {'params': model.model_PL.gamma, 'lr': self.lr_optimizer_gamma, 'weight_decay': 0.0},  # Gamma-specific settings
+            {'params': model.model_PL.theta, 'lr': self.lr_optimizer_theta, 'weight_decay': 0.0},   # Theta-specific settings
+            {'params': model.model_PL.P0, 'lr': self.lr_optimizer_P0, 'weight_decay': 0.0}      # P0-specific settings
+        ])
 
         train_losses_per_epoch = []
 
         # Training loop for each epoch; in this case, max_epochs usually is the mean_best_epoch found during crossvalidation
         for epoch_idx in tqdm(range(self.max_epochs)):
-            avg_train_loss = self.train_one_epoch(model, train_loader, optimizer_nn, optimizer_theta)
+            avg_train_loss = self.train_one_epoch(model, train_loader, optimizer_nn, optimizer_pl)
             train_losses_per_epoch.append(avg_train_loss)
 
         # Evaluate on the global test set
         global_test_loss = self.test_reg(model, test_loader)
         jam_loc_error, predicted_jam_loc = self.test_loc(model, real_loc)
-
+        learnt_P0, learnt_gamma = self.get_learnt_parameters(model)
         
-        return train_losses_per_epoch, global_test_loss, jam_loc_error, predicted_jam_loc, model
+        return train_losses_per_epoch, global_test_loss, jam_loc_error, predicted_jam_loc, learnt_P0, learnt_gamma, model
 
 
     def test_reg(self, model, test_loader):
@@ -296,3 +313,20 @@ class CrossVal(object):
         jam_loc_error = np.sqrt(np.mean((real_loc - predicted_jam_loc)**2))
         
         return jam_loc_error, predicted_jam_loc
+    
+
+    def get_learnt_parameters(self, model):
+        """
+        Get the learned parameters P0 and gamma from the model.
+
+        Parameters:
+        - model (nn.Module): The trained model.
+
+        Output:
+        - P0 (float): The learned P0 parameter.
+        - gamma (float): The learned gamma parameter.
+        """
+        P0 = model.model_PL.P0.item()
+        gamma = model.model_PL.gamma.item()
+        
+        return P0, gamma

@@ -16,13 +16,13 @@ class data_process:
     - path (str): The path to the data files.
     - time_t (int): Time index for time series data (default is 1).
     - test_ratio (float): Ratio of the data to be used as the test set (default is 0.3).
-    - data_preprocesing (int): Flag to apply preprocessing to Y data (default is 1).
+    - data_preprocessing (int): Flag to apply preprocessing to Y data (default is 1).
     - split_method (str): Method to split the data (default is 'random').
     - batch_size (int): Batch size for data loaders (default is 16).
     - bins_num (int): Number of bins for data binning (default is 10).
     """
 
-    def __init__(self, path, time_t=1, test_ratio=0.3, data_preprocesing=1, split_method='random', batch_size=16, bins_num=10):
+    def __init__(self, path, time_t=1, test_ratio=0.3, data_preprocessing=1, noise=1, noise_std = 3, split_method='random', batch_size=16, bins_num=10):
         """
         Initializes the data_process class by loading and preprocessing data.
 
@@ -30,7 +30,7 @@ class data_process:
         - path (str): Path to the data files.
         - time_t (int): Time index for time series data (default is 1).
         - test_ratio (float): Ratio for the train-test split (default is 0.3).
-        - data_preprocesing (int): Flag to determine if preprocessing is applied (default is 1).
+        - data_preprocessing (int): Flag to determine if preprocessing is applied (default is 1).
         - split_method (str): Method for splitting the dataset (default is 'random').
         - batch_size (int): Batch size for data loaders (default is 16).
         - bins_num (int): Number of bins for data binning (default is 10).
@@ -50,6 +50,7 @@ class data_process:
         # Load X data (input features)
         fname_x = path + 'X.mat'
         x_data = io.loadmat(fname_x)
+
         X = x_data['XX']
 
         # Load Y data (labels)
@@ -60,13 +61,25 @@ class data_process:
         # If data is time series, select the specified time index
         if len(X.shape) > 2:
             X = X[:, :, time_t]
+        if len(Y.shape) > 1:
             Y = Y[:, time_t]
             self.trueJloc = self.trueJloc[time_t, :]
 
+        # This block of code is responsible for applying preprocessing to the Y data if the
+        # `data_preprocessing` flag is set to 1. Here's a breakdown of what it does:
         # Apply preprocessing if needed
-        if data_preprocesing == 1:
+        if data_preprocessing == 1:
             y_copy = Y.copy()
             Y[y_copy == -np.inf] = min(y_copy[y_copy != -np.inf]) - 10  # Replace -inf with minimum value minus 10
+        elif data_preprocessing == 2:
+            # Find indices where Y contains -inf
+            # valid_indices = ~(Y == -np.inf)
+            valid_indices = ~(Y < -150.0)
+            X = X[valid_indices,:]
+            Y = Y[valid_indices]
+            
+        if noise == 1:
+            Y = Y + np.random.normal(0, noise_std, Y.shape)
 
         # Expand Y to 2D for compatibility
         Y = np.expand_dims(Y, axis=1)
