@@ -36,6 +36,10 @@ class Net(nn.Module):
         for i in range(len(layer_wid) - 1):
             self.fc_layers.append(nn.Linear(in_features=layer_wid[i], out_features=layer_wid[i + 1]))
 
+        # Apply Xavier Initialization
+        self.initialize_weights()
+
+    
         # Set the activation function
         if nonlinearity == "sigmoid":
             self.nonlinearity = lambda x: torch.sigmoid(x)
@@ -49,6 +53,13 @@ class Net(nn.Module):
             self.nonlinearity = lambda x: F.leaky_relu(x)
         else:
             raise ValueError(f"Unsupported nonlinearity: {nonlinearity}")
+    
+    def initialize_weights(self):
+        for layer in self.fc_layers:
+            if isinstance(layer, nn.Linear):  # Apply only to Linear layers
+                torch.nn.init.xavier_uniform_(layer.weight)  # Xavier uniform initialization
+                if layer.bias is not None:  # Initialize bias as zero
+                    torch.nn.init.zeros_(layer.bias)
 
     def forward(self, x):
         """
@@ -119,7 +130,7 @@ class Polynomial3(nn.Module):
         super().__init__()
         self.theta = nn.Parameter(torch.zeros((2))) if theta0 is None else nn.Parameter(torch.tensor(theta0))
         self.gamma = nn.Parameter(torch.tensor(gamma, dtype=torch.float32))
-        self.P0 = nn.Parameter(torch.tensor(10, dtype=torch.float32))
+        self.P0 = nn.Parameter(torch.tensor(0, dtype=torch.float32))
         # self.P0 = nn.Parameter(torch.randn(()))  # Transmit power parameter
         self.data_max = data_max
         self.data_min = data_min
@@ -220,7 +231,8 @@ class Net_augmented(nn.Module):
         elif self.model_mode == 'PL':
             y = self.model_PL(x)
         else:
-            y = self.model_PL(x) + self.model_NN(x)  # Combined output
+            w_PL, w_NN = torch.softmax(self.w, dim=0)
+            y = w_PL * self.model_PL(x) + w_NN * self.model_NN(x)
         return y
 
     def get_NN_param(self):

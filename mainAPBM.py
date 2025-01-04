@@ -639,8 +639,98 @@ if __name__ == '__main__':
         'hyperparameter_tuning': True
     }
     
-    best_config_RT21_0_opt = {
-        'path': '/Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT21/obs_time_1/',
+    best_config_RT20_0_opt = {
+        'path': '/Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT20/obs_time_1/',
+        'time_t': 0,
+        'test_ratio': 0.2,
+        'data_preprocessing': 2,
+        'noise': 1,
+        'noise_std': 3,
+        'bins_num': 10,
+        'theta_init': 'max_loc',
+        'runs': 1,
+        'monte_carlo_runs': 1,
+        'betas': True,
+        'input_dim': 2,
+        'layer_wid': [500, 1],
+        'nonlinearity': 'relu',
+        'gamma': 2,
+        'model_mode': 'both',
+        'max_epochs': 150,
+        'batch_size': 4,
+        'lr_optimizer_nn': 0.1,
+        'lr_optimizer_theta': 0.1,
+        'lr_optimizer_P0': 0.1,
+        'lr_optimizer_gamma': 0.001,
+        'weight_decay_optimizer_nn': 1e-10,
+        'mu': 0.1,
+        'patience': 30,
+        'early_stopping': True,
+        'hyperparameter_tuning': True
+    }
+    
+    best_config_RT22_0_opt = {
+        'path': '/Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT22/obs_time_1/',
+        'time_t': 0,
+        'test_ratio': 0.2,
+        'data_preprocessing': 2,
+        'noise': 1,
+        'noise_std': 3,
+        'bins_num': 10,
+        'theta_init': 'max_loc',
+        'runs': 1,
+        'monte_carlo_runs': 1,
+        'betas': True,
+        'input_dim': 2,
+        'layer_wid': [500, 1],
+        'nonlinearity': 'relu',
+        'gamma': 2,
+        'model_mode': 'both',
+        'max_epochs': 150,
+        'batch_size': 4,
+        'lr_optimizer_nn': 0.001,
+        'lr_optimizer_theta': 0.1,
+        'lr_optimizer_P0': 0.001,
+        'lr_optimizer_gamma': 0.1,
+        'weight_decay_optimizer_nn': 1e-10,
+        'mu': 0.1,
+        'patience': 30,
+        'early_stopping': True,
+        'hyperparameter_tuning': True
+    }
+    
+    best_config_RT23_0_opt = {
+        'path': '/Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT23/obs_time_1/',
+        'time_t': 0,
+        'test_ratio': 0.2,
+        'data_preprocessing': 2,
+        'noise': 1,
+        'noise_std': 3,
+        'bins_num': 10,
+        'theta_init': 'max_loc',
+        'runs': 1,
+        'monte_carlo_runs': 1,
+        'betas': True,
+        'input_dim': 2,
+        'layer_wid': [500, 1],
+        'nonlinearity': 'tanh',
+        'gamma': 2,
+        'model_mode': 'both',
+        'max_epochs': 150,
+        'batch_size': 4,
+        'lr_optimizer_nn': 0.001,
+        'lr_optimizer_theta': 0.01,
+        'lr_optimizer_P0': 0.0001,
+        'lr_optimizer_gamma': 0.1,
+        'weight_decay_optimizer_nn': 1e-07,
+        'mu': 0.1,
+        'patience': 15,
+        'early_stopping': True,
+        'hyperparameter_tuning': True
+    }
+    
+    best_config_RT23_0_opt = {
+        'path': '/Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT23/obs_time_1/',
         'time_t': 0,
         'test_ratio': 0.2,
         'data_preprocessing': 1,
@@ -657,29 +747,118 @@ if __name__ == '__main__':
         'gamma': 2,
         'model_mode': 'both',
         'max_epochs': 150,
-        'batch_size': 8,
+        'batch_size': 4,
         'lr_optimizer_nn': 0.01,
         'lr_optimizer_theta': 0.1,
-        'lr_optimizer_P0': 0.1,
+        'lr_optimizer_P0': 0.01,
         'lr_optimizer_gamma': 0.001,
-        'weight_decay_optimizer_nn': 1e-08,
-        'weight_decay_optimizer_theta': 0.0,
+        'weight_decay_optimizer_nn': 1e-06,
         'mu': 0.1,
         'patience': 30,
         'early_stopping': True,
-        'hyperparameter_tuning': True
+        'hyperparameter_tuning': False
     }
     
-    # Configuration dictionary
-    search_space = {
-        'path': '/Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT21/obs_time_1/',
+    best_config_RT23_0_opt_2 = {
+        'path': '/Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT23/obs_time_1/',
         'time_t': 0,
         'test_ratio': 0.2,
         'data_preprocessing': 2,
         'noise': 1,
         'noise_std': 3,
         'bins_num': 10,
-        "theta_init": tune.choice(['max_loc']),  # Initialization method for theta
+        'theta_init': 'max_loc',
+        'runs': 1,
+        'monte_carlo_runs': 1,
+        'betas': True,
+        'input_dim': 2,
+        'layer_wid': [500, 1],
+        'nonlinearity': 'tanh',
+        'gamma': 2,
+        'model_mode': 'both',
+        'max_epochs': 150,
+        'batch_size': 8,
+        'lr_optimizer_nn': 0.001,
+        'lr_optimizer_theta': 0.001,
+        'lr_optimizer_P0': 0.0001,
+        'lr_optimizer_gamma': 0.1,
+        'weight_decay_optimizer_nn': 1e-10,
+        'mu': 0.1,
+        'patience': 30,
+        'early_stopping': True,
+        'hyperparameter_tuning': True
+    }
+    
+    id_25 = {
+        'path': '/Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT18/obs_time_1/',
+        'time_t': 0,
+        'test_ratio': 0.2,
+        'data_preprocessing': 1,
+        'noise': 1,
+        'noise_std': 3,
+        'bins_num': 10,
+        'theta_init': 'max_loc',
+        'runs': 1,
+        'monte_carlo_runs': 1,
+        'betas': True,
+        'input_dim': 2,
+        'layer_wid': [500, 200, 50, 1],
+        'nonlinearity': 'tanh',
+        'gamma': 2,
+        'model_mode': 'both',
+        'max_epochs': 150,
+        'batch_size': 32,
+        'lr_optimizer_nn': 0.0001,
+        'lr_optimizer_theta': 0.01,
+        'lr_optimizer_P0': 0.1,
+        'lr_optimizer_gamma': 0.1,
+        'weight_decay_optimizer_nn': 1e-06,
+        'mu': 0.1,
+        'patience': 30,
+        'early_stopping': True,
+        'hyperparameter_tuning': False
+    }
+    
+    id_26 = {
+        'path': '/Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT18/obs_time_1/',
+        'time_t': 0,
+        'test_ratio': 0.2,
+        'data_preprocessing': 1,
+        'noise': 1,
+        'noise_std': 3,
+        'bins_num': 10,
+        'theta_init': 'max_loc',
+        'runs': 1,
+        'monte_carlo_runs': 1,
+        'betas': True,
+        'input_dim': 2,
+        'layer_wid': [64, 64, 32, 16, 1],
+        'nonlinearity': 'relu',
+        'gamma': 2,
+        'model_mode': 'both',
+        'max_epochs': 150,
+        'batch_size': 32,
+        'lr_optimizer_nn': 0.001,
+        'lr_optimizer_theta': 0.001,
+        'lr_optimizer_P0': 0.01,
+        'lr_optimizer_gamma': 0.1,
+        'weight_decay_optimizer_nn': 1e-07,
+        'mu': 0.1,
+        'patience': 30,
+        'early_stopping': True,
+        'hyperparameter_tuning': False
+    }
+        
+    # Configuration dictionary
+    search_space = {
+        'path': '/Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT18/obs_time_1/',
+        'time_t': 0,
+        'test_ratio': 0.2,
+        'data_preprocessing': 1,
+        'noise': 1,
+        'noise_std': 3,
+        'bins_num': 10,
+        "theta_init": tune.choice(['fix']),  # Initialization method for theta
         "runs": 1,  # Number of complete training runs
         "monte_carlo_runs": 1,  # Number of Monte Carlo simulations per run
         "betas": True,  # Whether to use betas for training
@@ -691,17 +870,18 @@ if __name__ == '__main__':
         "max_epochs": 150,  # Maximum number of training epochs
         "batch_size": tune.choice([4, 8, 16, 32]),  # Batch size for training
         "lr_optimizer_nn": tune.grid_search([0.001, 0.01, 0.1]),
-        "lr_optimizer_theta": tune.grid_search([0.001, 0.01, 0.1]),  # Learning rate for theta optimizer
+        "lr_optimizer_theta": tune.grid_search([0.001, 0.01, 0.1, 1.0]),
+        'lr_optimizer_P0': tune.grid_search([0.0001, 0.001, 0.01, 0.1]),
+        'lr_optimizer_gamma': tune.grid_search([0.001, 0.01, 0.1]),
         "weight_decay_optimizer_nn": tune.grid_search([1e-10, 1e-9, 1e-8, 1e-7, 1e-6, 1e-5]),  # Weight decay for regularization (NN)
-        "weight_decay_optimizer_theta": tune.grid_search([1e-10, 1e-9, 1e-8, 1e-7, 1e-6, 1e-5]),  # Weight decay for regularization (theta)
         "mu": 0.1,  # Additional hyperparameter
-        "patience": tune.choice([10, 20, 30]),  # Patience for early stopping
+        "patience": tune.choice([15, 30]),  # Patience for early stopping
         "early_stopping": True,  # Whether to enable early stopping
         'hyperparameter_tuning': True
     }
 
     
-    config = best_config_RT21_0_opt
+    config = id_26
 
     # Initialize accumulators for overall averages across runs
     total_test_loss = 0

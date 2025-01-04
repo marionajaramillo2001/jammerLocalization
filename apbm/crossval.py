@@ -35,7 +35,8 @@ class CrossVal(object):
         self.lr_optimizer_theta = lr_optimizer_theta
         self.lr_optimizer_P0 = lr_optimizer_P0
         self.lr_optimizer_gamma = lr_optimizer_gamma
-        self.criterion = nn.MSELoss(reduction="mean")  # Loss function for training
+        # self.criterion = nn.MSELoss(reduction="mean")  # Loss function for training
+        self.criterion = torch.nn.HuberLoss(reduction='mean', delta=2.0)
         self.mu = mu
         self.max_epochs = max_epochs
         self.patience = patience
@@ -68,7 +69,17 @@ class CrossVal(object):
 
             # Forward pass
             output = model(data)
-            loss = self.criterion(output, target)
+            output_pl = model.model_PL(data)
+            mse_loss = self.criterion(output, target) 
+            mse_loss_pl = self.criterion(output_pl, target)
+            
+            # Add L2 regularization for NN parameters
+            l2_lambda = 0.01  # Regularization strength
+            l2_loss = 0
+            for param in model.model_NN.parameters():
+                l2_loss += torch.norm(param, 2)  # Compute L2 norm for all NN parameters
+            
+            loss = mse_loss + mse_loss_pl + l2_lambda * l2_loss
 
             # Backward pass and gradient clipping
             loss.backward()
@@ -151,7 +162,7 @@ class CrossVal(object):
                 model.model_PL.theta = nn.Parameter(99 * torch.rand(2))
             elif self.theta_init == 'fix':
                 # Fixed theta0 initialization at a specific point
-                model.model_PL.theta = nn.Parameter(torch.tensor([50.0, 50.0]))
+                model.model_PL.theta = nn.Parameter(torch.tensor([10.0, 10.0]))
 
             # Create data loaders for the current fold
             train_loader = DataLoader(
