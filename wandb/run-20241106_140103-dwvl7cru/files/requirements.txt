@@ -25,7 +25,7 @@ contourpy==1.2.0
 requests==2.32.3
 pickleshare==0.7.5
 stack-data==0.6.2
-Jinja2==3.1.4
+Jinja2==3.1.5
 gitdb==4.0.11
 six==1.16.0
 pandas==2.2.2
