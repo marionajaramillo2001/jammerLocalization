@@ -130,7 +130,7 @@ class Polynomial3(nn.Module):
         super().__init__()
         self.theta = nn.Parameter(torch.zeros((2))) if theta0 is None else nn.Parameter(torch.tensor(theta0))
         self.gamma = nn.Parameter(torch.tensor(gamma, dtype=torch.float32))
-        self.P0 = nn.Parameter(torch.tensor(0, dtype=torch.float32))
+        self.P0 = nn.Parameter(torch.tensor(20, dtype=torch.float32))
         # self.P0 = nn.Parameter(torch.randn(()))  # Transmit power parameter
         self.data_max = data_max
         self.data_min = data_min
@@ -214,7 +214,8 @@ class Net_augmented(nn.Module):
         self.model_PL = Polynomial3(gamma, theta0, data_max, data_min)
         self.model_NN = Net(input_dim, layer_wid, nonlinearity)
         self.model_mode = model_mode
-        self.w = nn.Parameter(torch.tensor([0.5, 0.5]))
+        
+        self.w = nn.Parameter(torch.tensor([0.5, 0.5], requires_grad=True))  # Initialize logits for w_PL and w_NN
 
     def forward(self, x):
         """
@@ -231,9 +232,24 @@ class Net_augmented(nn.Module):
         elif self.model_mode == 'PL':
             y = self.model_PL(x)
         else:
+            # Apply softmax to logits to ensure weights sum to 1 and are non-negative
             w_PL, w_NN = torch.softmax(self.w, dim=0)
-            y = w_PL * self.model_PL(x) + w_NN * self.model_NN(x)
+            # y = w_PL * self.model_PL(x) + w_NN * self.model_NN(x)
+            y = self.model_PL(x) + self.model_NN(x)
         return y
+
+    
+    def get_w_weights(self):
+        """
+        Returns the current values of w_PL and w_NN.
+
+        Outputs:
+        - w_PL (float): Weight for the pathloss model.
+        - w_NN (float): Weight for the neural network model.
+        """
+        with torch.no_grad():
+            w_PL, w_NN = torch.softmax(self.w, dim=0)
+        return w_PL.item(), w_NN.item()
 
     def get_NN_param(self):
         """

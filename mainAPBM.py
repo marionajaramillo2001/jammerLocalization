@@ -60,27 +60,28 @@ def prepare_data(config):
 
     # Define partial optimizers for NN and theta
     optimizer_nn = partial(optim.Adam, lr=config['lr_optimizer_nn'], weight_decay=config['weight_decay_optimizer_nn'])
-    
+    optimizer_theta = partial(optim.Adam, lr=config['lr_optimizer_theta'], weight_decay=0.0)
+    optimizer_P0 = partial(optim.Adam, lr=config['lr_optimizer_P0'], weight_decay=0.0)
+    optimizer_gamma = partial(optim.Adam, lr=config['lr_optimizer_gamma'], weight_decay=0.0)
+
     model = Net_augmented(**model_args)
     
-    return model, optimizer_nn, config['lr_optimizer_theta'], config['lr_optimizer_P0'], config['lr_optimizer_gamma'], d_p, indices_folds, crossval_dataset, test_loader, alg_args
+    return model, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, d_p, indices_folds, crossval_dataset, test_loader, alg_args
     
 def hypermarameter_tuning(config):
-    model, optimizer_nn, lr_optimizer_theta, lr_optimizer_P0, lr_optimizer_gamma, d_p, indices_folds, crossval_dataset, test_loader, alg_args = prepare_data(config)
+    model, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, d_p, indices_folds, crossval_dataset, test_loader, alg_args = prepare_data(config)
     
     # Create CrossVal instance and train the model
-    crossval = CrossVal(model, config['theta_init'], optimizer_nn=optimizer_nn, lr_optimizer_theta=lr_optimizer_theta, 
-                        lr_optimizer_P0=lr_optimizer_P0, lr_optimizer_gamma=lr_optimizer_gamma, **alg_args)
+    crossval = CrossVal(model, config['theta_init'], optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, **alg_args)
     _, _, last_val_loss_mean_across_folds, _ = crossval.train_crossval(indices_folds, crossval_dataset)
     
     return {"last_val_loss_mean_across_folds": last_val_loss_mean_across_folds}
 
 def crossval(config):
-    model, optimizer_nn, lr_optimizer_theta, lr_optimizer_P0, lr_optimizer_gamma, d_p, indices_folds, crossval_dataset, test_loader, alg_args = prepare_data(config)
+    model, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, d_p, indices_folds, crossval_dataset, test_loader, alg_args = prepare_data(config)
     
     # Create CrossVal instance and train the model
-    crossval = CrossVal(model, config['theta_init'], optimizer_nn=optimizer_nn, lr_optimizer_theta=lr_optimizer_theta, 
-                        lr_optimizer_P0=lr_optimizer_P0, lr_optimizer_gamma=lr_optimizer_gamma, **alg_args)
+    crossval = CrossVal(model, config['theta_init'], optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, **alg_args)
     all_train_losses_per_fold, all_val_losses_per_fold, last_val_loss_mean_across_folds, mean_best_epoch = crossval.train_crossval(indices_folds, crossval_dataset)
     
     # Plot average training and validation losses for visual analysis
@@ -88,12 +89,11 @@ def crossval(config):
     return all_train_losses_per_fold, all_val_losses_per_fold, last_val_loss_mean_across_folds, mean_best_epoch
     
 def train_test(config):
-    model, optimizer_nn, lr_optimizer_theta, lr_optimizer_P0, lr_optimizer_gamma, d_p, _, train_dataset, test_loader, alg_args = prepare_data(config)
+    model, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, d_p, _, train_dataset, test_loader, alg_args = prepare_data(config)
     
     true_jam_loc = d_p.trueJloc
     # Create CrossVal instance and train the model
-    train = CrossVal(model, config['theta_init'], optimizer_nn=optimizer_nn, lr_optimizer_theta=lr_optimizer_theta, 
-                        lr_optimizer_P0=lr_optimizer_P0, lr_optimizer_gamma=lr_optimizer_gamma, **alg_args)
+    train = CrossVal(model, config['theta_init'], optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, **alg_args)
     train_losses_per_epoch, global_test_loss, jam_loc_error, predicted_jam_loc, learnt_P0, learnt_gamma, trained_model = train.train_test(train_dataset, test_loader, true_jam_loc)
     
     plot_train_test_loss(train_losses_per_epoch, global_test_loss)
@@ -820,29 +820,59 @@ if __name__ == '__main__':
     }
     
     id_26 = {
-        'path': '/Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT18/obs_time_1/',
+        'path': '/Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT29/obs_time_1/',
         'time_t': 0,
         'test_ratio': 0.2,
         'data_preprocessing': 1,
         'noise': 1,
         'noise_std': 3,
         'bins_num': 10,
-        'theta_init': 'max_loc',
+        'theta_init': 'mean_max_n_random',
         'runs': 1,
         'monte_carlo_runs': 1,
         'betas': True,
         'input_dim': 2,
-        'layer_wid': [64, 64, 32, 16, 1],
-        'nonlinearity': 'relu',
+        'layer_wid': [128, 64, 32, 16, 1],
+        'nonlinearity': 'softplus',
         'gamma': 2,
         'model_mode': 'both',
-        'max_epochs': 150,
-        'batch_size': 32,
+        'max_epochs': 200,
+        'batch_size': 8,
         'lr_optimizer_nn': 0.001,
-        'lr_optimizer_theta': 0.001,
+        'lr_optimizer_theta': 0.01,
         'lr_optimizer_P0': 0.01,
-        'lr_optimizer_gamma': 0.1,
-        'weight_decay_optimizer_nn': 1e-07,
+        'lr_optimizer_gamma': 0.01,
+        'weight_decay_optimizer_nn': 0.0,
+        'mu': 0.1,
+        'patience': 30,
+        'early_stopping': False,
+        'hyperparameter_tuning': False
+    }
+    
+    id_27 = {
+        'path': '/Users/marionajaramillocivill/Documents/GitHub/jammerLocalization/datasets/dataPLANS/4.definitive/PL2/',
+        'time_t': 0,
+        'test_ratio': 0.2,
+        'data_preprocessing': 1,
+        'noise': 1,
+        'noise_std': 1,
+        'bins_num': 10,
+        'theta_init': 'fix',
+        'runs': 1,
+        'monte_carlo_runs': 1,
+        'betas': True,
+        'input_dim': 2,
+        'layer_wid': [128, 64, 32, 16, 1],
+        'nonlinearity': 'relu',
+        'gamma': 3,
+        'model_mode': 'both',
+        'max_epochs': 200,
+        'batch_size': 8,
+        'lr_optimizer_nn': 0.001,
+        'lr_optimizer_theta': 0.1,
+        'lr_optimizer_P0': 0.001,
+        'lr_optimizer_gamma': 0.01,
+        'weight_decay_optimizer_nn': 0.0,
         'mu': 0.1,
         'patience': 30,
         'early_stopping': True,
@@ -863,7 +893,7 @@ if __name__ == '__main__':
         "monte_carlo_runs": 1,  # Number of Monte Carlo simulations per run
         "betas": True,  # Whether to use betas for training
         'input_dim': 2,
-        'layer_wid': [500, 1],
+        'layer_wid': [64, 64, 32, 16, 1],
         'nonlinearity': tune.choice(['relu', 'tanh', 'softplus']),
         'gamma': 2,
         'model_mode': 'both',  # Options: 'NN', 'PL', 'both'
