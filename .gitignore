@@ -1,0 +1,54 @@
+# Ignore Python specific files
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.swp
+*.swo
+*.bak
+*.log
+*.egg
+*.egg-info/
+dist/
+build/
+*.manifest
+*.spec
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore virtual environment folders
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Ignore MATLAB specific files
+*.asv
+*.mexa64
+*.mexmaci64
+*.mexw64
+*.mex
+*.fig
+*.mat
+*.mdl
+*.slx
+*.autosave
+*.mexglx
+*.mexmaci
+*.mexw32
+
+# Ignore temporary MATLAB folders
+slprj/
+sccprj/
+_work/
+
+# Ignore folders
+figs/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+*.tmp
+*.temp
