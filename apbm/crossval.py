@@ -10,7 +10,7 @@ from apbm.model import Net_augmented
 
 
 class CrossVal(object):
-    def __init__(self, model, theta_init, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, batch_size, mu, max_epochs, patience, early_stopping, betas=None):
+    def __init__(self, model, theta_init_mode, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, batch_size, mu, max_epochs, patience, early_stopping, betas=None):
         """
         Initializes the CrossVal class for cross-validation with early stopping.
 
@@ -32,13 +32,15 @@ class CrossVal(object):
         """
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         self.initial_model = model
-        self.theta_init = theta_init
+        self.theta_init_mode = theta_init_mode
+        self.theta_init_value = nn.Parameter(torch.tensor([0.0, 0.0]))
         self.optimizer_nn = optimizer_nn
         self.optimizer_theta = optimizer_theta
         self.optimizer_P0 = optimizer_P0
         self.optimizer_gamma = optimizer_gamma
         self.theta_tuning_epochs = 0  # Number of epochs for tuning theta only
         self.theta_nn_separate = False  # Flag to separate theta and NN updates
+        self.NN_tuning_epochs = 80  # Number of epochs for tuning the NN alone 
         self.mu = mu
         self.max_epochs = max_epochs
         self.patience = patience
@@ -46,69 +48,225 @@ class CrossVal(object):
         self.batch_size = batch_size
         self.num_rounds = 1  # For non-FL cases, this is 1 (kept for compatibility)
         self.betas = [10 * (1 - (i + 1) / self.num_rounds) for i in range(self.num_rounds)] if betas else [0 for _ in range(self.num_rounds)]
-        self.theta_init_fix = [200.0, 200.0]
-        self.num_groups = 10  # Number of groups for mean_max_n_random initialization
+        # self.num_groups = 10  # Number of groups for mean_max_n_random initialization
         
-    def get_theta_init(self, dataset):
-        data_loader_theta_init = DataLoader(dataset, batch_size=len(dataset))
-        # Identify the position with the highest y (received signal strength) for 'max_loc' initialization
-        if self.theta_init == 'max_loc':
+    def get_theta_init(self, data_loader_theta_init, model):
+        if self.theta_init_mode == 'max_loc':
+            # Identify the position with the highest y (received signal strength) for 'max_loc' initialization
+            max_target = -np.inf
             for data, target in data_loader_theta_init:
-                max_index = torch.argmax(target)  # Find the index of the max signal strength
-                max_position = data[max_index]
-                break
+                if torch.max(target) > max_target:
+                    max_target = torch.max(target)
+                    max_index = torch.argmax(target) 
+            max_position = data[max_index]
             return nn.Parameter(max_position + torch.randn(2))
-        elif self.theta_init == 'random':
-            # Random initialization of theta0 within a range
-            return nn.Parameter(99 * torch.rand(2))
-        elif self.theta_init == 'fix':
-            # Fixed theta0 initialization at a specific point
-            return nn.Parameter(torch.tensor(self.theta_init_fix))
-        elif self.theta_init == 'mean_n_random':
-            # Mean initialization of theta0 from n random positions
-            random_positions = []
-            for data, target in data_loader_theta_init:
-                indices = torch.randperm(len(data))[:10]  # Get 10 random indices
-                random_positions = data[indices] 
-                break 
-            mean_random_position = random_positions.mean(dim=0)
-            return nn.Parameter(mean_random_position + torch.randn(2))
-        elif self.theta_init == 'mean_max_n_random':
-            num_groups = self.num_groups
-            group_size = len(dataset) // num_groups
-            random_indices = torch.randperm(len(dataset))
-            max_positions = []
-            for i in range(num_groups):
-                if i == num_groups - 1:
-                    group_indices = random_indices[i * group_size:]
-                else:
-                    group_indices = random_indices[i * group_size: (i + 1) * group_size]
+        # elif self.theta_init_mode == 'mean_max_n_random':
+        #     num_groups = self.num_groups
+        #     group_size = len(dataset) // num_groups
+        #     random_indices = torch.randperm(len(dataset))
+        #     max_positions = []
+        #     for i in range(num_groups):
+        #         if i == num_groups - 1:
+        #             group_indices = random_indices[i * group_size:]
+        #         else:
+        #             group_indices = random_indices[i * group_size: (i + 1) * group_size]
 
-                group_data_loader = DataLoader(dataset, batch_size=group_size, sampler=torch.utils.data.SubsetRandomSampler(group_indices))
+        #         group_data_loader = DataLoader(dataset, batch_size=group_size, sampler=torch.utils.data.SubsetRandomSampler(group_indices))
                 
-                for data, target in group_data_loader:
-                    max_index = torch.argmax(target)  # Find the index of the max signal strength in the group
-                    max_position = data[max_index]
-                    max_positions.append(max_position)
-                    break
+        #         for data, target in group_data_loader:
+        #             max_index = torch.argmax(target)  # Find the index of the max signal strength in the group
+        #             max_position = data[max_index]
+        #             max_positions.append(max_position)
+        #             break
                             
-            # Average the positions with the highest target values from each group
-            mean_max_position = torch.stack(max_positions).mean(dim=0)
-            return nn.Parameter(mean_max_position + torch.randn(2))
+        #     # Average the positions with the highest target values from each group
+        #     mean_max_position = torch.stack(max_positions).mean(dim=0)
+        #     return nn.Parameter(mean_max_position + torch.randn(2))
+
+        # elif self.theta_init_mode == 'max_NN':
+        #     # Initialize theta0 to the position with the highest output from the neural network
+        #     positions, measurements = [], []
+    
+        #     for data, target in data_loader_theta_init:
+        #         positions.append(data.numpy())
+        #         measurements.append(target.numpy())
+
+        #     # Concatenate points and measurements
+        #     positions = np.concatenate(positions, axis=0)
+        #     measurements = np.concatenate(measurements, axis=0)
+            
+        #     min_x, max_x = int(np.min(positions[:, 0])), int(np.max(positions[:, 0]))
+        #     min_y, max_y = int(np.min(positions[:, 1])), int(np.max(positions[:, 1]))
+        #     min_xy, max_xy = min(min_x, min_y), max(max_x, max_y)
+
+        #     model.eval()
+        #     grid_range = np.linspace(min_xy - 1, max_xy + 1, (max_xy-min_xy)) 
+        #     X, Y = np.meshgrid(grid_range, grid_range) 
+        #     Z = np.zeros(X.shape)
+
+        #     with torch.no_grad():
+        #         for i in range(len(X)):
+        #             for j in range(len(Y)):
+        #                 Z[i, j] = model(torch.tensor([[X[i, j], Y[i, j]]]).float(), include_PL = False).item()
+
+        #     max_index = np.unravel_index(np.argmax(Z, axis=None), Z.shape)
+            
+        #     return nn.Parameter(torch.tensor([X[max_index], Y[max_index]]))  # Return the position with the highest output from the neural network
         
-    def compute_loss(self, model, data, target):
-            # Forward pass
-            output = model(data)
-            output_pl = model.model_PL(data)
+        # elif self.theta_init_mode == 'max_NN':
+        #     # Initialize theta0 to the position with the highest output from the neural network
+        #     positions, measurements = [], []
+
+        #     # Collect positions and measurements from the data loader
+        #     for data, target in data_loader_theta_init:
+        #         positions.append(data.numpy())
+        #         measurements.append(target.numpy())
+
+        #     # Concatenate points and measurements
+        #     positions = np.concatenate(positions, axis=0)
+        #     measurements = np.concatenate(measurements, axis=0)
+
+        #     # Define grid range
+        #     min_x, max_x = int(np.min(positions[:, 0])), int(np.max(positions[:, 0]))
+        #     min_y, max_y = int(np.min(positions[:, 1])), int(np.max(positions[:, 1]))
+
+        #     model.eval()
+
+        #     # Generate grid ranges for x and y
+        #     grid_range_x = np.linspace(min_x - 1, max_x + 1, max_x - min_x + 3)
+        #     grid_range_y = np.linspace(min_y - 1, max_y + 1, max_y - min_y + 3)
+
+        #     # Create a 2D grid combining all points
+        #     grid_x, grid_y = torch.meshgrid(torch.tensor(grid_range_x), torch.tensor(grid_range_y), indexing="ij")
+        #     grid_tensor = torch.stack([grid_x, grid_y], dim=-1)  # Shape (N, N, 2)
+
+        #     # Flatten the grid for batch evaluation
+        #     grid_points = grid_tensor.view(-1, 2)  # Shape (N^2, 2)
+
+        #     # Compute Z values for all grid points
+        #     with torch.no_grad():
+        #         Z = model(grid_points.float(), include_PL=False).view(grid_x.shape)  # Reshape back to (N, N)
+
+        #     # Find the 2D index of the maximum value in Z
+        #     max_index = torch.unravel_index(torch.argmax(Z), Z.shape)  # (row, column)
+
+        #     # Retrieve the corresponding x and y coordinates
+        #     max_position = torch.tensor([grid_x[max_index], grid_y[max_index]])
+
+        #     # Return the initialized theta with some added random noise
+        #     return nn.Parameter(max_position)
+        
+        elif self.theta_init_mode == 'max_NN':
+            # Initialize theta0 to the position with the highest output from the neural network
+            positions, measurements = [], []
+
+            # Collect positions and measurements from the data loader
+            for data, target in data_loader_theta_init:
+                positions.append(data.numpy())
+                measurements.append(target.numpy())
+
+            # Concatenate points and measurements
+            positions = np.concatenate(positions, axis=0)
+            measurements = np.concatenate(measurements, axis=0)
+
+            # Define grid range
+            min_x, max_x = int(np.min(positions[:, 0])), int(np.max(positions[:, 0]))
+            min_y, max_y = int(np.min(positions[:, 1])), int(np.max(positions[:, 1]))
+
+            model.eval()
+
+            # Generate grid ranges for x and y
+            grid_range_x = np.linspace(min_x - 1, max_x + 1, max_x - min_x + 3)
+            grid_range_y = np.linspace(min_y - 1, max_y + 1, max_y - min_y + 3)
+
+            # Create a 2D grid combining all points
+            grid_x, grid_y = torch.meshgrid(torch.tensor(grid_range_x), torch.tensor(grid_range_y), indexing="ij")
+            grid_tensor = torch.stack([grid_x, grid_y], dim=-1)  # Shape (N, N, 2)
+
+            # Flatten the grid for batch evaluation
+            grid_points = grid_tensor.view(-1, 2)  # Shape (N^2, 2)
+
+            # Compute Z values for all grid points
+            with torch.no_grad():
+                Z = model(grid_points.float(), include_PL=False).view(grid_x.shape)  # Reshape back to (N, N)
+
+            # Convert grid_x and grid_y to NumPy arrays
+            X = grid_x.numpy()
+            Y = grid_y.numpy()
+                        
+            # Create a 3D plot using Plotly
+            import plotly.graph_objects as go
+
+            fig = go.Figure(data=[go.Surface(z=Z, x=X, y=Y)])
+            fig.update_layout(
+                title='3D Surface Plot',
+                autosize=False,
+                width=800,
+                height=800,
+                margin=dict(l=65, r=50, b=65, t=90)
+            )
             
-            error = torch.norm(output - target, dim=1)
-            error_pl = torch.norm(output_pl - target, dim=1)
+            fig.add_trace(go.Scatter3d(
+                x=positions[:, 0],  
+                y=positions[:, 1],  
+                z=measurements.flatten(), 
+                mode='markers',
+                marker=dict(size=4),
+                name='Training Points'
+            ))
+            fig.update_layout(legend=dict(
+                yanchor="top",
+                y=0.99,
+                xanchor="right",
+                x=0.01
+            ))
             
-            lambda_mse_loss_total = 1.0
-            lambda_mse_loss_pl = 2.0
+            fig.show()
+
+            # Find local maxima
+            Z_np = Z.numpy()  # Convert to NumPy for easier processing
+            local_maxima = []
+            margin = 2  # Exclude a 5-point margin from the borders
+
+            for i in range(margin, Z_np.shape[0] - margin):  # Exclude margin points
+                for j in range(margin, Z_np.shape[1] - margin):  # Exclude margin points
+                    local_maxima.append((i, j, Z_np[i, j]))
+                    # Extract neighborhood
+                    # neighborhood = Z_np[i - 1:i + 2, j - 1:j + 2]
+                    
+                    # # Check if the current point is a local maximum
+                    # if Z_np[i, j] >= np.max(neighborhood)-1:
+                    #     local_maxima.append((i, j, Z_np[i, j]))
+
+            # # Select the maximum value among valid local maxima
+            # if local_maxima:
+            #     # Sort by Z value and pick the highest
+            #     local_maxima = sorted(local_maxima, key=lambda x: x[2], reverse=True)
+            #     max_i, max_j, max_z = local_maxima[0]
+            # else:
+            #     raise ValueError("No valid local maxima found.")
+
+            # Select the global maximum among local maxima
+            if local_maxima:
+                local_maxima = sorted(local_maxima, key=lambda x: x[2], reverse=True)  # Sort by Z value
+                max_i, max_j, _ = local_maxima[0]  # Top local maximum
+            else:
+                raise ValueError("No local maxima found. Check the input field.")
+
+            # Retrieve the corresponding x and y coordinates
+            max_position = torch.tensor([grid_x[max_i, max_j], grid_y[max_i, max_j]])
+
+            # Return the initialized theta with some added random noise
+            return nn.Parameter(max_position + torch.randn(2))
             
+        
+    def compute_loss(self, model, data, target, weights, include_PL):
             # Use RSS (target values) to compute weights and normalize target values to the range [0, 1]
             normalized_target = (target - torch.min(target)) / (torch.max(target) - torch.min(target) + 1e-6)
+            
+            weights_just_NN = normalized_target
+            weights_just_NN = weights_just_NN / weights_just_NN.sum() 
+            
             weights = normalized_target # Assign higher weight to higher target values (higher RSS)
             weights = weights / weights.sum() # Normalize weights to sum to 1
             
@@ -121,9 +279,31 @@ class CrossVal(object):
             # distance_and_inverse_weights = distance_weights * inverse_weights
             # distance_and_inverse_weights = distance_and_inverse_weights / distance_and_inverse_weights.sum()  # Normalize distance and inverse weights to sum to 1
             
-            mse_loss = torch.mean(error)
-            mse_loss_pl = torch.mean(error_pl * weights)
-            
+            lambda_mse_loss_total = 1.0
+            output = model(data, include_PL)
+            error = torch.norm(output - target, dim=1)
+            if include_PL:
+                mse_loss = torch.mean(error)
+            else:
+                # sorted_indices = torch.argsort(target.flatten(), descending=True)
+
+                # top_30_percent_count = int(0.3 * len(target))
+                # top_indices = sorted_indices[:top_30_percent_count]
+
+                # top_predictions = output[top_indices]
+                # top_targets = output[top_indices]
+
+                # error = torch.mean((top_predictions - top_targets) ** 2)
+
+                mse_loss = torch.mean(error*weights_just_NN)
+
+            mse_loss_pl = 0
+            lambda_mse_loss_pl = 2.0
+            if include_PL:
+                output_pl = model.model_PL(data)
+                error_pl = torch.norm(output_pl - target, dim=1)
+                mse_loss_pl = torch.mean(error_pl * weights)
+
             # Add L2 regularization for NN parameters
             l2_lambda = 0.01  # Regularization strength
             l2_loss = 0
@@ -152,19 +332,29 @@ class CrossVal(object):
         """
         model.train()  # Set the model to training mode
         total_train_loss = 0  # Initialize total training loss
+        
+        if self.theta_init_mode == 'max_NN' and epoch < self.NN_tuning_epochs:
+            include_PL = False
+        else:
+            include_PL = True
+                
+        if self.theta_init_mode == 'max_NN' and epoch == self.NN_tuning_epochs:
+            self.theta_init_value = self.get_theta_init(train_loader, model)
+            model.model_PL.theta = self.theta_init_value
+            print(f"Initial theta: {model.model_PL.theta}")
+            optimizer_theta = self.optimizer_theta([model.model_PL.theta])  
+            model.model_NN.initialize_weights()  # Reinitialize NN weights after theta init update
 
         for batch_idx, (data, target) in enumerate(train_loader):
             data, target = data.to(self.device), target.to(self.device)
-
-            # Zero the gradients
             
+            # Zero the gradients
             optimizer_theta.zero_grad()
             optimizer_nn.zero_grad()
             optimizer_P0.zero_grad()
             optimizer_gamma.zero_grad()
             
-            loss = self.compute_loss(model, data, target)
-        
+            loss = self.compute_loss(model, data, target, include_PL)
 
             # Backward pass and gradient clipping
             loss.backward()
@@ -176,10 +366,15 @@ class CrossVal(object):
             nn.utils.clip_grad_norm_(remaining_params, max_norm=1.0)
 
             # Update parameters
-            if (epoch <= self.theta_tuning_epochs) or (epoch > self.theta_tuning_epochs and not self.theta_nn_separate):
-                optimizer_theta.step()  # Always update theta
-            if epoch > self.theta_tuning_epochs:  # Update NN only after theta tuning phase
+            if self.theta_init_mode == 'max_NN':
                 optimizer_nn.step()
+                if epoch >= self.NN_tuning_epochs:
+                    optimizer_theta.step()
+            else:
+                if (epoch <= self.theta_tuning_epochs) or (epoch > self.theta_tuning_epochs and not self.theta_nn_separate):
+                    optimizer_theta.step()  # Always update theta
+                if epoch > self.theta_tuning_epochs:  # Update NN only after theta tuning phase
+                    optimizer_nn.step()
             optimizer_P0.step()
             optimizer_gamma.step()
 
@@ -189,7 +384,7 @@ class CrossVal(object):
         avg_train_loss = total_train_loss / sum(len(data) for data, _ in train_loader)
         return avg_train_loss
     
-    def validate_one_epoch(self, model, val_loader):
+    def validate_one_epoch(self, model, val_loader, epoch):
             """
             Evaluates the model on the validation set for one epoch.
 
@@ -199,13 +394,18 @@ class CrossVal(object):
             Output:
             - avg_val_loss (float): The average validation loss for the epoch.
             """
+            if self.theta_init_mode == 'max_NN' and epoch < self.NN_tuning_epochs:
+                include_PL = False
+            else:
+                include_PL = True
+                        
             model.eval()  # Set the model to evaluation mode
             total_val_loss = 0  # Initialize total validation loss
 
             with torch.no_grad():  # Disable gradient computation for validation
                 for data, target in val_loader:
                     data, target = data.to(self.device), target.to(self.device)
-                    loss = self.compute_loss(model, data, target)
+                    loss = self.compute_loss(model, data, target, include_PL)
                     total_val_loss += loss.item() * len(data)
 
             # Calculate average validation loss for the epoch
@@ -242,9 +442,6 @@ class CrossVal(object):
             best_model_state = copy.deepcopy(model.state_dict())
             best_epoch = self.max_epochs
             
-            model.model_PL.theta = self.get_theta_init(crossval_dataset)
-            print(f"Initial theta for cross-validation fold {fold_idx}: {model.model_PL.theta}")
-            
             # Create data loaders for the current fold
             train_loader = DataLoader(
                 dataset=crossval_dataset,
@@ -256,19 +453,25 @@ class CrossVal(object):
                 batch_size=self.batch_size,
                 sampler=torch.utils.data.SubsetRandomSampler(fold["val_index"]),
             )
-
+            
+            if self.theta_init_mode != 'max_NN':
+                self.theta_init_value = self.get_theta_init(train_loader, model)
+                print(f"Initial theta for complete training dataset: {self.theta_init_value}")
+            
+            model.model_PL.theta = self.theta_init_value
+            
             # Move the model to the selected device (GPU/CPU)
             model.to(self.device)
 
             # Initialize optimizers for the current fold
             optimizer_nn = self.optimizer_nn(list(model.model_NN.parameters()) + [model.w])
-            optimizer_theta = self.optimizer_theta([model.model_PL.theta])        
+            optimizer_theta = self.optimizer_theta([model.model_PL.theta])
             optimizer_P0 = self.optimizer_P0([model.model_PL.P0]) 
             optimizer_gamma = self.optimizer_gamma([model.model_PL.gamma])
             
             # Define scheduler for theta
-            scheduler_theta = torch.optim.lr_scheduler.StepLR(optimizer_theta, step_size=25, gamma=0.5)  # Halve LR every 10 epochs
-            # scheduler_theta = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer_theta, mode='min', factor=0.5, patience=5)
+            if self.theta_init_mode != 'max_NN':
+                scheduler_theta = torch.optim.lr_scheduler.StepLR(optimizer_theta, step_size=25, gamma=0.5)  # Halve LR every 10 epochs
             
             # Lists to track training and validation losses for each epoch
             train_losses_per_epoch = []
@@ -278,16 +481,26 @@ class CrossVal(object):
             best_val_loss = float('inf')  # Track the best validation loss
             epochs_no_improve = 0  # Track epochs with no improvement
 
+            # Precompute weights for the entire dataset
+            indices = train_loader.sampler.indices  # Get all indices from the train_loader sampler
+            dataset = train_loader.dataset          # Access the dataset
+            data, target = dataset[indices]         # Retrieve full dataset and target values
+
+            # Normalize the target values to [0, 1]
+            normalized_target = (target - torch.min(target)) / (torch.max(target) - torch.min(target) + 1e-6)
+            weights = normalized_target / normalized_target.sum()  # Normalize weights to sum to 1
+            
             # Training loop for each epoch
             for epoch_idx in tqdm(range(self.max_epochs)):
                 avg_train_loss = self.train_one_epoch(model, train_loader, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, epoch_idx)
                 train_losses_per_epoch.append(avg_train_loss)
 
-                avg_val_loss = self.validate_one_epoch(model, val_loader)
+                avg_val_loss = self.validate_one_epoch(model, val_loader, epoch_idx)
                 val_losses_per_epoch.append(avg_val_loss)
 
                 # Step the scheduler for theta
-                scheduler_theta.step()
+                if self.theta_init_mode != 'max_NN':
+                    scheduler_theta.step()
 
                 # Check if early stopping should be triggered
                 if self.early_stopping:
@@ -303,11 +516,11 @@ class CrossVal(object):
                             break
 
             # Load the best model if early stopping was triggered
-            if self.early_stopping and (epochs_no_improve >= self.patience or epoch_idx == (self.max_epochs - 1)):
+            if self.early_stopping:
                 model.load_state_dict(best_model_state)
                 best_epochs_per_fold.append(best_epoch)
                 print(f"Best model was found at epoch {best_epoch}")
-            elif not self.early_stopping and epoch_idx == (self.max_epochs - 1):
+            else:
                 model.load_state_dict(best_model_state)
 
             # Append losses for this fold
@@ -331,20 +544,24 @@ class CrossVal(object):
         model = copy.deepcopy(self.initial_model)
         train_loader = DataLoader(train_dataset, batch_size=self.batch_size, shuffle=True)
         
-        model.model_PL.theta = self.get_theta_init(train_dataset)
-        print(f"Initial theta for complete training dataset: {model.model_PL.theta}")
+        if self.theta_init_mode != 'max_NN':
+            self.theta_init_value = self.get_theta_init(train_loader, model)
+            print(f"Initial theta for complete training dataset: {self.theta_init_value}")
+        
+        model.model_PL.theta = self.theta_init_value
                     
         # Move the model to the selected device (GPU/CPU)
         model.to(self.device)
 
         # Initialize optimizers for the current fold
         optimizer_nn = self.optimizer_nn(list(model.model_NN.parameters()) + [model.w])
-        optimizer_theta = self.optimizer_theta([model.model_PL.theta])        
+        optimizer_theta = self.optimizer_theta([model.model_PL.theta])
         optimizer_P0 = self.optimizer_P0([model.model_PL.P0]) 
         optimizer_gamma = self.optimizer_gamma([model.model_PL.gamma])
         
         # Define scheduler for theta
-        scheduler_theta = torch.optim.lr_scheduler.StepLR(optimizer_theta, step_size=25, gamma=0.5)  # Halve LR every 10 epochs
+        if self.theta_init_mode != 'max_NN':
+            scheduler_theta = torch.optim.lr_scheduler.StepLR(optimizer_theta, step_size=25, gamma=0.5)  # Halve LR every 10 epochs
 
         train_losses_per_epoch = []
 
@@ -353,6 +570,7 @@ class CrossVal(object):
             avg_train_loss = self.train_one_epoch(model, train_loader, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, epoch_idx)
             train_losses_per_epoch.append(avg_train_loss)
             
+        if self.theta_init_mode != 'max_NN':
             scheduler_theta.step()
         
         # Find the point in the train_dataset that is closest to the real_loc position
@@ -397,7 +615,7 @@ class CrossVal(object):
         with torch.no_grad():  # Disable gradient computation for testing
             for data, target in test_loader:
                 data, target = data.to(self.device), target.to(self.device)
-                total_test_loss += self.compute_loss(model, data, target) * len(data)
+                total_test_loss += self.compute_loss(model, data, target, include_PL=True) * len(data)
 
         # Calculate average test loss
         avg_test_loss = total_test_loss / sum(len(data) for data, _ in test_loader)

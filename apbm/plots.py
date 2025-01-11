@@ -229,26 +229,79 @@ def visualize_3d_model_output(model, train_loader, test_loader, true_jam_loc, pr
     all_points = np.concatenate((points_train, points_test), axis=0)
     min_x, max_x = int(np.min(all_points[:, 0])), int(np.max(all_points[:, 0]))
     min_y, max_y = int(np.min(all_points[:, 1])), int(np.max(all_points[:, 1]))
-    min_xy, max_xy = min(min_x, min_y), max(max_x, max_y)
+    
+    # Generate grid ranges for x and y
+    grid_range_x = np.linspace(min_x - 1, max_x + 1, max_x - min_x + 3)  # +3 to include boundaries
+    grid_range_y = np.linspace(min_y - 1, max_y + 1, max_y - min_y + 3)
 
-    model.eval()  # Set the model to evaluation mode
-    grid_range = np.linspace(min_xy - 1, max_xy + 1, (max_xy-min_xy))  # Define a grid range for x-axis
-    X, Y = np.meshgrid(grid_range, grid_range)  # Create a mesh grid for plotting
-    Z = np.zeros(X.shape)  # Initialize Z (output values) with zeros
+    # Create a 2D grid combining all points
+    grid_x, grid_y = torch.meshgrid(torch.tensor(grid_range_x), torch.tensor(grid_range_y), indexing="ij")
+    grid_tensor = torch.stack([grid_x, grid_y], dim=-1)  # Shape (N, N, 2)
 
-    # Disable gradient computation for visualization
-    with torch.no_grad():
-        for i in range(len(X)):
-            for j in range(len(Y)):
-                Z[i, j] = model(torch.tensor([[X[i, j], Y[i, j]]]).float()).item()
+    # Flatten the grid for batch evaluation
+    grid_points = grid_tensor.view(-1, 2)  # Shape (N^2, 2)
+
+    # # Compute Z values for all grid points
+    # with torch.no_grad():
+    #     Z = model(grid_points.float(), include_PL=True).view(grid_x.shape)  # Reshape back to (N, N)
+        
+    # # Convert grid_x and grid_y to NumPy arrays
+    # X = grid_x.numpy()
+    # Y = grid_y.numpy()
                 
+    # # Create a 3D plot using Plotly
+    # fig = go.Figure(data=[go.Surface(z=Z, x=X, y=Y)])
+    # fig.update_layout(
+    #     title='3D Surface Plot',
+    #     autosize=False,
+    #     width=800,
+    #     height=800,
+    #     margin=dict(l=65, r=50, b=65, t=90)
+    # )
+    
+    # Compute Z values for all grid points
+    with torch.no_grad():
+        # Full model (combination of pathloss and NN contributions)
+        Z = model(grid_points.float(), include_PL=True).view(grid_x.shape)  # Reshape back to (N, N)
+        
+        # Pathloss model contribution only
+        Z_pathloss = model.model_PL(grid_points.float()).view(grid_x.shape)
+        
+        # Neural network contribution only
+        Z_nn = model.model_NN(grid_points.float()).view(grid_x.shape)
+
+    # Convert grid_x and grid_y to NumPy arrays
+    X = grid_x.numpy()
+    Y = grid_y.numpy()
+
+    # Convert Z values to NumPy arrays
+    Z = Z.numpy()
+    Z_pathloss = Z_pathloss.numpy()
+    Z_nn = Z_nn.numpy()
+
     # Create a 3D plot using Plotly
-    fig = go.Figure(data=[go.Surface(z=Z, x=X, y=Y)])
+    fig = go.Figure()
+
+    # Add surface for the combined model
+    fig.add_trace(go.Surface(z=Z, x=X, y=Y, colorscale='Viridis', name='Combined'))
+
+    # Add surface for the pathloss model
+    fig.add_trace(go.Surface(z=Z_pathloss, x=X, y=Y, colorscale='Blues', opacity=0.7, name='Pathloss'))
+
+    # Add surface for the neural network
+    fig.add_trace(go.Surface(z=Z_nn, x=X, y=Y, colorscale='Oranges', opacity=0.7, name='Neural Network'))
+
+    # Update layout for better visualization
     fig.update_layout(
-        title='3D Surface Plot',
+        title='3D Surface Plot: Combined, Pathloss, and NN Contributions',
+        scene=dict(
+            xaxis_title='X',
+            yaxis_title='Y',
+            zaxis_title='Z',
+        ),
         autosize=False,
-        width=800,
-        height=800,
+        width=900,
+        height=900,
         margin=dict(l=65, r=50, b=65, t=90)
     )
     
