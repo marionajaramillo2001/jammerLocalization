@@ -184,16 +184,6 @@ class Polynomial3(nn.Module):
         - (Tensor): The learned gamma.
         """
         return self.gamma
-    
-
-class NormalizationLayer(nn.Module):
-    def __init__(self, min_val=0, max_val=1000):
-        super(NormalizationLayer, self).__init__()
-        self.min_val = min_val
-        self.max_val = max_val
-
-    def forward(self, x):
-        return (x - self.min_val) / (self.max_val - self.min_val)
 
 
 class Net_augmented(nn.Module):
@@ -225,7 +215,7 @@ class Net_augmented(nn.Module):
         super().__init__()
         self.model_PL = Polynomial3(gamma, theta0, data_max, data_min)
         self.model_NN = Net(input_dim, layer_wid, nonlinearity)
-        self.normalization = nn.LayerNorm(input_dim)  # Use LayerNorm for input normalization
+        # self.normalization = nn.LayerNorm(input_dim)  # Use LayerNorm for input normalization
         self.model_mode = model_mode
         
         self.w = nn.Parameter(torch.tensor([0.5, 0.5], requires_grad=True))  # Initialize logits for w_PL and w_NN
@@ -240,7 +230,7 @@ class Net_augmented(nn.Module):
         Outputs:
         - (Tensor): Combined output based on the model mode.
         """
-        # x = self.normalization(x)  # Normalize inputs
+        # x_nn = self.normalization(x)  # Normalize inputs
         
         if self.model_mode == 'NN':
             y = self.model_NN(x)
@@ -251,7 +241,8 @@ class Net_augmented(nn.Module):
             w_PL, w_NN = torch.softmax(self.w, dim=0)
             # y = w_PL * self.model_PL(x) + w_NN * self.model_NN(x)
             if include_PL:
-                y = self.model_PL(x) + self.model_NN(x)
+                # y = self.model_PL(x) + self.model_NN(x)
+                y = self.model_PL(x)
             else:
                 y = self.model_NN(x)
         return y

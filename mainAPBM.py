@@ -825,61 +825,33 @@ if __name__ == '__main__':
         'test_ratio': 0.2,
         'data_preprocessing': 1,
         'noise': 1,
-        'noise_std': 0,
+        'noise_std': 3,
         'bins_num': 10,
         'theta_init': 'max_NN',
         'runs': 1,
         'monte_carlo_runs': 1,
         'betas': True,
         'input_dim': 2,
-        # 'layer_wid': [128, 64, 32, 16, 1],
-        'layer_wid': [128, 1],
-        'nonlinearity': 'tanh',
-        'gamma': 2,
-        'model_mode': 'both',
-        'max_epochs': 150,
-        'batch_size': 8,
-        'lr_optimizer_nn': 0.0001,
-        'lr_optimizer_theta': 0.001,
-        'lr_optimizer_P0': 0.01,
-        'lr_optimizer_gamma': 0.01,
-        'weight_decay_optimizer_nn': 0.0,
-        'mu': 0.1,
-        'patience': 30,
-        'early_stopping': False,
-        'hyperparameter_tuning': False
-    }
-    
-    id_27 = {
-        'path': '/Users/marionajaramillocivill/Documents/GitHub/jammerLocalization/datasets/dataPLANS/4.definitive/PL2/',
-        'time_t': 0,
-        'test_ratio': 0.2,
-        'data_preprocessing': 1,
-        'noise': 1,
-        'noise_std': 1,
-        'bins_num': 10,
-        'theta_init': 'fix',
-        'runs': 1,
-        'monte_carlo_runs': 1,
-        'betas': True,
-        'input_dim': 2,
-        'layer_wid': [128, 64, 32, 16, 1],
+        'layer_wid': [128, 64, 32, 1],
+        # 'layer_wid': [500, 1],
         'nonlinearity': 'relu',
-        'gamma': 3,
+        'gamma': 2,
         'model_mode': 'both',
         'max_epochs': 150,
         'batch_size': 8,
         'lr_optimizer_nn': 0.001,
         'lr_optimizer_theta': 0.1,
-        'lr_optimizer_P0': 0.001,
+        'lr_optimizer_P0': 0.01,
         'lr_optimizer_gamma': 0.01,
-        'weight_decay_optimizer_nn': 0.0,
+        'weight_decay_optimizer_nn': 0,
         'mu': 0.1,
         'patience': 30,
-        'early_stopping': True,
-        'hyperparameter_tuning': False
+        'early_stopping': False,
+        'hyperparameter_tuning': False,
+        'crossvalidation': False
     }
-        
+    
+    
     # Configuration dictionary
     search_space = {
         'path': '/Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT18/obs_time_1/',
@@ -908,7 +880,8 @@ if __name__ == '__main__':
         "mu": 0.1,  # Additional hyperparameter
         "patience": tune.choice([15, 30]),  # Patience for early stopping
         "early_stopping": True,  # Whether to enable early stopping
-        'hyperparameter_tuning': True
+        'hyperparameter_tuning': True, 
+        'crossvalidation': False
     }
 
     
@@ -938,10 +911,11 @@ if __name__ == '__main__':
                 config = results.get_best_result(metric="last_val_loss_mean_across_folds", mode="min").config
                 print(config)
             
-            all_train_losses_per_fold, all_val_losses_per_fold, last_val_loss_mean_across_folds, mean_best_epoch = crossval(config)
+            if config['crossvalidation']:
+                all_train_losses_per_fold, all_val_losses_per_fold, last_val_loss_mean_across_folds, mean_best_epoch = crossval(config)
 
-            # Change max_epochs to the mean of the best epochs across folds
-            config['max_epochs'] = mean_best_epoch
+                # Change max_epochs to the mean of the best epochs across folds
+                config['max_epochs'] = mean_best_epoch
             
             global_test_loss, jam_loc_error, true_jam_loc, predicted_jam_loc, learnt_P0, learnt_gamma = train_test(config)
             
@@ -955,7 +929,8 @@ if __name__ == '__main__':
 
         # Print averaged results for this run
         print(f"Run {r + 1} results:")
-        print(f"  Average last validation loss across folds: {last_val_loss_mean_across_folds:.4f}")
+        if config['crossvalidation']: 
+            print(f"  Average last validation loss across folds: {last_val_loss_mean_across_folds:.4f}")
         print(f"  Average global test loss: {r_mc_test_loss:.4f}")
         print(f"  Jammer localization error: {r_mc_jam_loc_error:.4f}\n")
         print(f"  Predicted jammer location: {predicted_jam_loc}")

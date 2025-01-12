@@ -263,12 +263,13 @@ def visualize_3d_model_output(model, train_loader, test_loader, true_jam_loc, pr
     with torch.no_grad():
         # Full model (combination of pathloss and NN contributions)
         Z = model(grid_points.float(), include_PL=True).view(grid_x.shape)  # Reshape back to (N, N)
+        Z_nn = model(grid_points.float(), include_PL=False).view(grid_x.shape)  # Reshape back to (N, N)
+
+        # # Pathloss model contribution only
+        # Z_pathloss = model.model_PL(grid_points.float()).view(grid_x.shape)
         
-        # Pathloss model contribution only
-        Z_pathloss = model.model_PL(grid_points.float()).view(grid_x.shape)
-        
-        # Neural network contribution only
-        Z_nn = model.model_NN(grid_points.float()).view(grid_x.shape)
+        # # Neural network contribution only
+        # Z_nn = model.model_NN(grid_points.float()).view(grid_x.shape)
 
     # Convert grid_x and grid_y to NumPy arrays
     X = grid_x.numpy()
@@ -276,20 +277,23 @@ def visualize_3d_model_output(model, train_loader, test_loader, true_jam_loc, pr
 
     # Convert Z values to NumPy arrays
     Z = Z.numpy()
-    Z_pathloss = Z_pathloss.numpy()
-    Z_nn = Z_nn.numpy()
+    # Z_pathloss = Z_pathloss.numpy()
+    # Z_nn = Z_nn.numpy()
 
     # Create a 3D plot using Plotly
     fig = go.Figure()
 
-    # Add surface for the combined model
-    fig.add_trace(go.Surface(z=Z, x=X, y=Y, colorscale='Viridis', name='Combined'))
+    fig.add_trace(go.Surface(z=Z, x=X, y=Y, colorscale='Blues', name='Pathloss'))
+    fig.add_trace(go.Surface(z=Z_nn, x=X, y=Y, colorscale='Oranges', name='NN'))
 
-    # Add surface for the pathloss model
-    fig.add_trace(go.Surface(z=Z_pathloss, x=X, y=Y, colorscale='Blues', opacity=0.7, name='Pathloss'))
+    # # Add surface for the combined model
+    # fig.add_trace(go.Surface(z=Z, x=X, y=Y, colorscale='Viridis', name='Combined'))
 
-    # Add surface for the neural network
-    fig.add_trace(go.Surface(z=Z_nn, x=X, y=Y, colorscale='Oranges', opacity=0.7, name='Neural Network'))
+    # # Add surface for the pathloss model
+    # fig.add_trace(go.Surface(z=Z_pathloss, x=X, y=Y, colorscale='Blues', opacity=0.7, name='Pathloss'))
+
+    # # Add surface for the neural network
+    # fig.add_trace(go.Surface(z=Z_nn, x=X, y=Y, colorscale='Oranges', opacity=0.7, name='Neural Network'))
 
     # Update layout for better visualization
     fig.update_layout(

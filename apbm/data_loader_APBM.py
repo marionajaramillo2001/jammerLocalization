@@ -122,7 +122,7 @@ class data_process:
         # If using random splitting, apply KFold cross-validation
         if self.split_method == 'random':
             crossval_dataset = CustomDataset(self.train_x_original, self.train_y_original)
-            kf_train_val = KFold(n_splits=2, shuffle=True, random_state=22)
+            kf_train_val = KFold(n_splits=5, shuffle=True, random_state=22)
 
             # Create train and validation indices for each fold
             for j, (train_index, val_index) in enumerate(kf_train_val.split(self.train_x_original, self.train_y_original)):

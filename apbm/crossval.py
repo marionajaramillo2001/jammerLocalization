@@ -40,7 +40,7 @@ class CrossVal(object):
         self.optimizer_gamma = optimizer_gamma
         self.theta_tuning_epochs = 0  # Number of epochs for tuning theta only
         self.theta_nn_separate = False  # Flag to separate theta and NN updates
-        self.NN_tuning_epochs = 80  # Number of epochs for tuning the NN alone 
+        self.NN_tuning_epochs = 100  # Number of epochs for tuning the NN alone 
         self.mu = mu
         self.max_epochs = max_epochs
         self.patience = patience
@@ -57,8 +57,7 @@ class CrossVal(object):
             for data, target in data_loader_theta_init:
                 if torch.max(target) > max_target:
                     max_target = torch.max(target)
-                    max_index = torch.argmax(target) 
-            max_position = data[max_index]
+                    max_position = data[torch.argmax(target)] 
             return nn.Parameter(max_position + torch.randn(2))
         # elif self.theta_init_mode == 'mean_max_n_random':
         #     num_groups = self.num_groups
@@ -261,60 +260,33 @@ class CrossVal(object):
             
         
     def compute_loss(self, model, data, target, weights, include_PL):
-            # Use RSS (target values) to compute weights and normalize target values to the range [0, 1]
-            normalized_target = (target - torch.min(target)) / (torch.max(target) - torch.min(target) + 1e-6)
-            
-            weights_just_NN = normalized_target
-            weights_just_NN = weights_just_NN / weights_just_NN.sum() 
-            
-            weights = normalized_target # Assign higher weight to higher target values (higher RSS)
-            weights = weights / weights.sum() # Normalize weights to sum to 1
-            
-            # inverse_weights = 1/(normalized_target**2 + 1e-6)  # Inverse weights
-            # inverse_weights = inverse_weights / inverse_weights.sum()  # Normalize inverse weights to sum to 1
-            
-            # distance_weights = torch.norm(data - model.model_PL.theta, dim=1)
-            # distance_weights = distance_weights / distance_weights.sum()  # Normalize distance weights to sum to 1
-            
-            # distance_and_inverse_weights = distance_weights * inverse_weights
-            # distance_and_inverse_weights = distance_and_inverse_weights / distance_and_inverse_weights.sum()  # Normalize distance and inverse weights to sum to 1
-            
             lambda_mse_loss_total = 1.0
             output = model(data, include_PL)
             error = torch.norm(output - target, dim=1)
             if include_PL:
-                mse_loss = torch.mean(error)
+                mse_loss = torch.mean(error*weights)
             else:
-                # sorted_indices = torch.argsort(target.flatten(), descending=True)
+                mse_loss = torch.mean(error*weights)
 
-                # top_30_percent_count = int(0.3 * len(target))
-                # top_indices = sorted_indices[:top_30_percent_count]
-
-                # top_predictions = output[top_indices]
-                # top_targets = output[top_indices]
-
-                # error = torch.mean((top_predictions - top_targets) ** 2)
-
-                mse_loss = torch.mean(error*weights_just_NN)
-
-            mse_loss_pl = 0
-            lambda_mse_loss_pl = 2.0
-            if include_PL:
-                output_pl = model.model_PL(data)
-                error_pl = torch.norm(output_pl - target, dim=1)
-                mse_loss_pl = torch.mean(error_pl * weights)
+            # mse_loss_pl = 0
+            # lambda_mse_loss_pl = 0.0
+            # if include_PL:
+            #     output_pl = model.model_PL(data)
+            #     error_pl = torch.norm(output_pl - target, dim=1)
+            #     mse_loss_pl = torch.mean(error_pl * weights)
 
             # Add L2 regularization for NN parameters
-            l2_lambda = 0.01  # Regularization strength
+            l2_lambda = 0.00  # Regularization strength
             l2_loss = 0
             for param in model.model_NN.parameters():
                 l2_loss += torch.norm(param, 2)  # Compute L2 norm for all NN parameters
 
-            loss = lambda_mse_loss_total*mse_loss + lambda_mse_loss_pl * mse_loss_pl + l2_lambda * l2_loss
+            # loss = lambda_mse_loss_total*mse_loss + lambda_mse_loss_pl * mse_loss_pl + l2_lambda * l2_loss
+            loss = lambda_mse_loss_total*mse_loss + l2_lambda * l2_loss
             
             return loss
 
-    def train_one_epoch(self, model, train_loader, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, epoch):
+    def train_one_epoch(self, model, train_loader, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, epoch, full_weights):
         """
         Trains the model for one epoch with hybrid tuning (theta first, then theta + NN).
         
@@ -343,18 +315,21 @@ class CrossVal(object):
             model.model_PL.theta = self.theta_init_value
             print(f"Initial theta: {model.model_PL.theta}")
             optimizer_theta = self.optimizer_theta([model.model_PL.theta])  
-            model.model_NN.initialize_weights()  # Reinitialize NN weights after theta init update
+            # model.model_NN.initialize_weights()  # Reinitialize NN weights after theta init update
 
         for batch_idx, (data, target) in enumerate(train_loader):
             data, target = data.to(self.device), target.to(self.device)
             
+            # Select corresponding weights for the current batch
+            batch_weights = full_weights[batch_idx * self.batch_size:(batch_idx + 1) * self.batch_size].to(self.device)
+
             # Zero the gradients
             optimizer_theta.zero_grad()
             optimizer_nn.zero_grad()
             optimizer_P0.zero_grad()
             optimizer_gamma.zero_grad()
             
-            loss = self.compute_loss(model, data, target, include_PL)
+            loss = self.compute_loss(model, data, target, batch_weights, include_PL)
 
             # Backward pass and gradient clipping
             loss.backward()
@@ -367,7 +342,8 @@ class CrossVal(object):
 
             # Update parameters
             if self.theta_init_mode == 'max_NN':
-                optimizer_nn.step()
+                if epoch < self.NN_tuning_epochs:
+                    optimizer_nn.step()
                 if epoch >= self.NN_tuning_epochs:
                     optimizer_theta.step()
             else:
@@ -384,7 +360,7 @@ class CrossVal(object):
         avg_train_loss = total_train_loss / sum(len(data) for data, _ in train_loader)
         return avg_train_loss
     
-    def validate_one_epoch(self, model, val_loader, epoch):
+    def validate_one_epoch(self, model, val_loader, epoch, full_weights):
             """
             Evaluates the model on the validation set for one epoch.
 
@@ -403,9 +379,13 @@ class CrossVal(object):
             total_val_loss = 0  # Initialize total validation loss
 
             with torch.no_grad():  # Disable gradient computation for validation
-                for data, target in val_loader:
+                for batch_idx, (data, target) in enumerate(val_loader):
                     data, target = data.to(self.device), target.to(self.device)
-                    loss = self.compute_loss(model, data, target, include_PL)
+                    
+                    # Select corresponding weights for the current batch
+                    batch_weights = full_weights[batch_idx * self.batch_size:(batch_idx + 1) * self.batch_size].to(self.device)
+
+                    loss = self.compute_loss(model, data, target, batch_weights, include_PL)
                     total_val_loss += loss.item() * len(data)
 
             # Calculate average validation loss for the epoch
@@ -482,20 +462,27 @@ class CrossVal(object):
             epochs_no_improve = 0  # Track epochs with no improvement
 
             # Precompute weights for the entire dataset
-            indices = train_loader.sampler.indices  # Get all indices from the train_loader sampler
-            dataset = train_loader.dataset          # Access the dataset
-            data, target = dataset[indices]         # Retrieve full dataset and target values
+            train_indices = train_loader.sampler.indices  # Get all indices from the train_loader sampler
+            train_dataset = train_loader.dataset          # Access the dataset
+            _, train_target = train_dataset[train_indices]
 
+            train_normalized_target = (train_target - torch.min(train_target)) / (torch.max(train_target) - torch.min(train_target) + 1e-6)
+            train_weights = train_normalized_target / train_normalized_target.sum()  # Normalize weights to sum to 1
+            
+            val_indices = val_loader.sampler.indices  
+            val_dataset = val_loader.dataset        
+            _, val_target = val_dataset[val_indices]
+            
             # Normalize the target values to [0, 1]
-            normalized_target = (target - torch.min(target)) / (torch.max(target) - torch.min(target) + 1e-6)
-            weights = normalized_target / normalized_target.sum()  # Normalize weights to sum to 1
+            val_normalized_target = (val_target - torch.min(val_target)) / (torch.max(val_target) - torch.min(val_target) + 1e-6)
+            val_weights = val_normalized_target / val_normalized_target.sum()  # Normalize weights to sum to 1
             
             # Training loop for each epoch
             for epoch_idx in tqdm(range(self.max_epochs)):
-                avg_train_loss = self.train_one_epoch(model, train_loader, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, epoch_idx)
+                avg_train_loss = self.train_one_epoch(model, train_loader, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, epoch_idx, train_weights)
                 train_losses_per_epoch.append(avg_train_loss)
 
-                avg_val_loss = self.validate_one_epoch(model, val_loader, epoch_idx)
+                avg_val_loss = self.validate_one_epoch(model, val_loader, epoch_idx, val_weights)
                 val_losses_per_epoch.append(avg_val_loss)
 
                 # Step the scheduler for theta
@@ -516,13 +503,11 @@ class CrossVal(object):
                             break
 
             # Load the best model if early stopping was triggered
-            if self.early_stopping:
+            if self.early_stopping and best_epoch < self.max_epochs:
                 model.load_state_dict(best_model_state)
                 best_epochs_per_fold.append(best_epoch)
                 print(f"Best model was found at epoch {best_epoch}")
-            else:
-                model.load_state_dict(best_model_state)
-
+            
             # Append losses for this fold
             all_train_losses_per_fold.append(train_losses_per_epoch)
             all_val_losses_per_fold.append(val_losses_per_epoch)
@@ -563,11 +548,18 @@ class CrossVal(object):
         if self.theta_init_mode != 'max_NN':
             scheduler_theta = torch.optim.lr_scheduler.StepLR(optimizer_theta, step_size=25, gamma=0.5)  # Halve LR every 10 epochs
 
+        # Precompute weights for the entire training dataset
+        indices = range(len(train_dataset))  # Get all indices from the train dataset
+        data, target = train_dataset[indices]  # Retrieve full dataset and target values
+        normalized_target = (target - torch.min(target)) / (torch.max(target) - torch.min(target) + 1e-6)
+        normalized_target = normalized_target**6
+        weights = normalized_target / normalized_target.sum()  # Normalize weights to sum to 1
+
         train_losses_per_epoch = []
 
         # Training loop for each epoch; in this case, max_epochs usually is the mean_best_epoch found during crossvalidation
         for epoch_idx in tqdm(range(self.max_epochs)):
-            avg_train_loss = self.train_one_epoch(model, train_loader, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, epoch_idx)
+            avg_train_loss = self.train_one_epoch(model, train_loader, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, epoch_idx, weights)
             train_losses_per_epoch.append(avg_train_loss)
             
         if self.theta_init_mode != 'max_NN':
@@ -611,11 +603,20 @@ class CrossVal(object):
         """
         model.eval()  # Set the model to evaluation mode
         total_test_loss = 0  # Initialize total test loss
+              
+        test_target = []
+        for _, target in test_loader:
+            test_target.append(target)
 
+        test_target = torch.cat(test_target, dim=0) 
+        
+        test_normalized_target = (test_target - torch.min(test_target)) / (torch.max(test_target) - torch.min(test_target) + 1e-6)
+        test_weights = test_normalized_target / test_normalized_target.sum()  # Normalize weights to sum to 1
+            
         with torch.no_grad():  # Disable gradient computation for testing
             for data, target in test_loader:
                 data, target = data.to(self.device), target.to(self.device)
-                total_test_loss += self.compute_loss(model, data, target, include_PL=True) * len(data)
+                total_test_loss += self.compute_loss(model, data, target, test_weights, include_PL=True) * len(data)
 
         # Calculate average test loss
         avg_test_loss = total_test_loss / sum(len(data) for data, _ in test_loader)
