@@ -6,7 +6,7 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 import datetime as date
 from apbm_v2_fed.data_loader_APBM import data_process
-from apbm_v2_fed.train import Train
+from apbm_v2_fed.fedavg import FedAvg
 from functools import partial
 import random
 from apbm_v2_fed.plots import *
@@ -37,9 +37,11 @@ def prepare_data(config):
     }
     
     alg_args = {
-        'max_epochs_nn': config['max_epochs_nn'],
-        'max_epochs_pl': config['max_epochs_pl'],
-        'batch_size': config['batch_size']
+        'batch_size': config['batch_size'],
+        'local_epochs_nn': config['local_epochs_nn'],
+        'local_epochs_pl': config['local_epochs_pl'],
+        'num_rounds_nn': config['num_rounds_nn'],
+        'num_rounds_pl': config['num_rounds_pl'],
     }
     
     model_nn_args = {
@@ -72,7 +74,7 @@ def train_test(config):
     model_nn, model_pl, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, true_jam_loc, train_loader_splited, test_loader, train_y_mean_splited, alg_args = prepare_data(config)
     
     # Create CrossVal instance and train the model
-    train = Train(model_nn, model_pl, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, **alg_args)
+    train = FedAvg(model_nn, model_pl, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, **alg_args)
     train_losses_nn_per_round, train_losses_pl_per_round, global_test_nn_loss, global_test_pl_loss, jam_loc_error, predicted_jam_loc, learnt_P0, learnt_gamma, trained_model_nn, trained_model_pl = train.train_test(train_loader_splited, test_loader, true_jam_loc, train_y_mean_splited)
     
     # nn loss
@@ -89,12 +91,11 @@ def train_test(config):
 if __name__ == '__main__':
     
     id_0 = {
-        'path': '/Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT18/obs_time_1/',
+        'path': '/Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT27/obs_time_1/',
         # 'path': '/Users/marionajaramillocivill/Documents/GitHub/jammerLocalization/datasets/dataPLANS/4.definitive/PL2/',
         'time_t': 0,
         'test_ratio': 0.2,
         'data_preprocessing': 1,
-        'num_nodes': 1,
         'noise': 1,
         'noise_std': 3,
         'betas': True,
@@ -105,11 +106,14 @@ if __name__ == '__main__':
         # 'layer_wid': [512, 512, 1],
         'nonlinearity': 'leaky_relu',
         'gamma': 2,
-        'max_epochs_nn': 50,
-        'max_epochs_pl':50,
+        'num_nodes': 10,
+        'local_epochs_nn': 50,
+        'local_epochs_pl': 50,
+        'num_rounds_nn': 30,
+        'num_rounds_pl': 50,
         'batch_size': 8,
         'lr_optimizer_nn': 0.001,
-        'lr_optimizer_theta': 0.1,
+        'lr_optimizer_theta': 0.01,
         'lr_optimizer_P0': 0.01,
         'lr_optimizer_gamma': 0.01,
         'weight_decay_optimizer_nn': 0,

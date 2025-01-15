@@ -10,8 +10,8 @@ import torch.optim as optim
 from apbm.model import Net_augmented
 
 
-class Train(object):
-    def __init__(self, model_nn, model_pl, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, batch_size, max_epochs_nn, max_epochs_pl):
+class FedAvg(object):
+    def __init__(self, model_nn, model_pl, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, batch_size, local_epochs_nn, local_epochs_pl, num_rounds_nn, num_rounds_pl):
         """
         Initializes the CrossVal class for cross-validation with early stopping.
 
@@ -22,7 +22,6 @@ class Train(object):
         - optimizer_theta (function): Optimizer for the theta parameter.
         - optimizer_P0 (function): Optimizer for the P0 parameter.
         - optimizer_gamma (function): Optimizer for the gamma parameter.
-        - max_epochs (int): Maximum number of epochs for training.
         
         Output:
         Initializes the class attributes and settings.
@@ -34,13 +33,11 @@ class Train(object):
         self.optimizer_theta = optimizer_theta
         self.optimizer_P0 = optimizer_P0
         self.optimizer_gamma = optimizer_gamma
-        self.local_epochs_nn = 50
-        self.local_epochs_pl = 50
-        self.max_epochs_nn = max_epochs_nn  # Number of epochs for tuning the NN alone 
-        self.max_epochs_pl = max_epochs_pl
+        self.local_epochs_nn = local_epochs_nn
+        self.local_epochs_pl = local_epochs_pl
         self.batch_size = batch_size
-        self.num_rounds_nn = 10
-        self.num_rounds_pl = 10
+        self.num_rounds_nn = num_rounds_nn
+        self.num_rounds_pl = num_rounds_pl
         self.weights_nn_type = 'max'
         self.weights_pl_type = 'max'
         
@@ -91,7 +88,7 @@ class Train(object):
                 weights_nn = (target - torch.mean(target)).abs() + 1e-6
                 
             model_nn.train()
-            loss = 0
+            total_loss = 0
             for epoch in range(self.local_epochs_nn):
                 for batch_idx, (data, target) in enumerate(dataloader):
                     data, target = data.to(self.device), target.to(self.device)
@@ -118,9 +115,11 @@ class Train(object):
                     nn.utils.clip_grad_norm_(model_nn.parameters(), max_norm=1.0)
                     optimizer_nn.step()
                     
-                    loss += loss.item()
+                    total_loss += loss.item()
                     
-            return model_nn, loss / self.local_epochs_nn
+                # print(f"Epoch {epoch}: Loss = {loss.item()}")
+                    
+            return model_nn, total_loss / self.local_epochs_nn
         
         elif training_phase == 'PL':
             model_pl = copy.deepcopy(self.server_model_pl)
@@ -132,7 +131,6 @@ class Train(object):
             
             # scheduler_theta = torch.optim.lr_scheduler.StepLR(optimizer_theta, step_size=5, gamma=0.5)
 
-            
             if self.weights_pl_type == 'max':
                 weights_pl = (target - torch.min(target)) / (torch.max(target) - torch.min(target) + 1e-6)
                 weights_pl = weights_pl / weights_pl.sum()  # Normalize weights to sum to 1
@@ -144,7 +142,7 @@ class Train(object):
                 weights_pl = (target - torch.mean(target)).abs() + 1e-6
             
             model_pl.train()
-            loss = 0
+            total_loss = 0
             for epoch in range(self.local_epochs_pl):
                 for batch_idx, (data, target) in enumerate(dataloader):
                     data, target = data.to(self.device), target.to(self.device)
@@ -172,16 +170,16 @@ class Train(object):
                     # Backward pass and gradient clipping
                     loss.backward()
                     # Gradient clipping
-                    max_norm_theta = max(1.0, 5.0 * (1 - epoch / self.max_epochs_pl))  # Dynamic for theta
+                    max_norm_theta = max(1.0, 5.0 * (1 - epoch / self.local_epochs_pl))  # Dynamic for theta
                     nn.utils.clip_grad_norm_([model_pl.theta], max_norm=max_norm_theta)
 
                     optimizer_theta.step()
                     optimizer_P0.step()
                     optimizer_gamma.step()
                     
-                    loss += loss.item()
+                    total_loss += loss.item()
                     
-            return model_pl, loss / self.local_epochs_pl
+            return model_pl, total_loss / self.local_epochs_pl
         
     def server_update(self, model_list, uploaded_weights, training_phase):
         """
@@ -208,6 +206,8 @@ class Train(object):
         elif training_phase == 'PL':
             with torch.no_grad():
                 self.server_model_pl.get_theta().data.zero_()
+                self.server_model_pl.get_P0().data.zero_()
+                self.server_model_pl.get_gamma().data.zero_()
             for w, client_model_pl in zip(uploaded_weights, model_list):
                 self.server_model_pl.theta.data += client_model_pl.theta.data * w
                 self.server_model_pl.P0.data += client_model_pl.P0.data * w
@@ -329,22 +329,22 @@ class Train(object):
         # Start training the NN to get a good initialization for theta
         training_phase = 'NN' # Variable to indicate the training phase
         print("Training the NN model...")
-    
+                    
         train_losses_nn_per_round = []
         for round in range(self.num_rounds_nn):
             model_nn_list = []
             weighted_average_loss_clients = 0
             for i in range(len(train_loader_splitted)):
                 model_nn, loss_nn = self.model_update(train_loader_splitted[i], round, training_phase)
-                print('Client %d: train_nn_loss = %f' % (i, loss_nn))
+                # print('Client %d: train_nn_loss = %f' % (i, loss_nn))
                 model_nn_list.append(model_nn)
                 weighted_average_loss_clients += loss_nn * uploaded_weights[i]
             train_losses_nn_per_round.append(weighted_average_loss_clients.detach().numpy() )
 
             self.server_model_nn = self.server_update(model_nn_list, uploaded_weights, training_phase)
-
-            global_loss_nn = self.test_reg(self.server_model_nn, test_loader)
-            print('Round %d: test_loss = %f' % (round, global_loss_nn))
+                
+        # Print the train losses per round
+        print("Train losses per round (NN):", train_losses_nn_per_round)
                 
         # Get theta initialization
         theta_init = self.get_theta_init(self.server_model_nn, train_loader_splitted)
@@ -362,13 +362,13 @@ class Train(object):
             weighted_average_loss_clients = 0
             for i in range(len(train_loader_splitted)):
                 model_pl, loss_pl = self.model_update(train_loader_splitted[i], round, training_phase)
-                print('Client %d: train_pl_loss = %f' % (i, loss_pl))
+                # print('Client %d: train_pl_loss = %f' % (i, loss_pl))
                 model_pl_list.append(model_pl)
                 weighted_average_loss_clients += loss_pl * uploaded_weights[i]
             train_losses_pl_per_round.append(weighted_average_loss_clients.detach().numpy() )
 
             self.server_model_pl = self.server_update(model_pl_list, uploaded_weights, training_phase)
-            global_loss_pl = self.test_reg(self.server_model_pl, test_loader)
+            global_loss_pl = self.test_reg_pl(self.server_model_pl, test_loader)
             loc_error = self.test_loc(real_loc)
             print('Round %d: test_loss = %f' % (round, global_loss_pl))
             print('Round %d:', (round, loc_error))
@@ -389,16 +389,16 @@ class Train(object):
         print(f"Minimum distance to the real location: {min_distance}")
         
         # Evaluate on the global test set
-        global_test_nn_loss = self.test_reg(self.server_model_nn, test_loader)
-        global_test_pl_loss = self.test_reg(self.server_model_pl, test_loader)
+        global_test_nn_loss = self.test_reg_pl(self.server_model_nn, test_loader)
+        global_test_pl_loss = self.test_reg_pl(self.server_model_pl, test_loader)
         jam_loc_error, predicted_jam_loc = self.test_loc(real_loc)
         learnt_P0, learnt_gamma = self.get_learnt_parameters(self.server_model_pl)
         
         
-        return train_losses_nn_per_round, train_losses_pl_per_round, global_test_nn_loss, global_test_pl_loss, jam_loc_error, predicted_jam_loc, learnt_P0, learnt_gamma, model_nn, model_pl
+        return train_losses_nn_per_round, train_losses_pl_per_round, global_test_nn_loss, global_test_pl_loss, jam_loc_error, predicted_jam_loc, learnt_P0, learnt_gamma, self.server_model_nn, self.server_model_pl
 
 
-    def test_reg(self, model, test_loader):
+    def test_reg_pl(self, model, test_loader):
         """
         Evaluates the model on a test set.
 

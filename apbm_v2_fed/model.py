@@ -28,7 +28,7 @@ class Net(nn.Module):
         self.input_dim = input_dim
         self.output_dim = layer_wid[-1]
         self.normalization = nn.LayerNorm(input_dim)  # Use LayerNorm for input normalization
-        self.batch_norm = nn.BatchNorm1d(input_dim)  # Add BatchNorm for input normalization
+        self.batch_norm = nn.BatchNorm1d(input_dim, track_running_stats=False)  # Add BatchNorm for input normalization
         self.dropout = nn.Dropout(p=0.2)  # Add Dropout layer
         self.fc_layers = nn.ModuleList()
 
