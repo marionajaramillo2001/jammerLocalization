@@ -210,4 +210,3 @@ def partition_space(x, y, num_partitions_x1, num_partitions_x2):
         partitioned_data[partition_idx]['y'] = torch.tensor(partitioned_data[partition_idx]['y'])
 
     return partitioned_data
-

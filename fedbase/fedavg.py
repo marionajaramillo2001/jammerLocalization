@@ -150,7 +150,7 @@ class FedAvg(object):
         # test_loader: dataloader of test dataset
         # return: server model
         # train_loaders, test_loaders, test_loader_global, y_power_ratios = Load_Dataloader(self.args)
-        train_loaders, test_loader_global, max_values_each_partition, train_y_mean_splited, bins,  train_x_max, train_y_max = data_splited
+        train_loaders, test_loader_global,max_values_each_partition, train_y_mean_splited, bins,  train_x_max, train_y_max = data_splited
         train_samples = torch.zeros(len(train_loaders))
         for i in range(len(train_loaders)):
             train_samples[i]=len(train_loaders[i].dataset)
@@ -269,7 +269,6 @@ class FedAvg(object):
                         width=500, height=500,
                         margin=dict(l=65, r=50, b=65, t=90))
         fig.write_html(f'figs/field_{t}.html')
-        
         
 
         

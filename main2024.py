@@ -79,8 +79,8 @@ if __name__ == '__main__':
     # optimizer_theta = partial(optim.SGD,lr=1)
     # torch.optim.SGD(model.parameters(), lr=0.5)
     
-    num_nodes = 1 #[2,5] #10 #[2,4] #[1,1] #10 #[1,1] # #1 [2,4]
-    split_method= 'random' #'random' #'area_grid' # divie the data method
+    num_nodes = [2,5]#[2,5] #10 #[2,4] #[1,1] #10 #[1,1] # #1 [2,4]
+    split_method= 'area_grid' #'random' #'area_grid'#'random' #'area_grid' # divie the data method
     theta_init = 'fix' #'max_loc' #'random', 'fix', 'None'
     weight_method = 'global_power_mean' #'normal' #'global_power_mean' #'local_power_mean' #'bins' # 'batch_power_mean','batch_power_mean2', 'local_power_mean'
     weight_ratio = 'normal' # mean_max, mean, max, power_max, normal
