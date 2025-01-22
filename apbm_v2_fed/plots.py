@@ -4,6 +4,8 @@ import torch.nn as nn
 import os
 import pandas as pd
 import plotly.graph_objects as go
+from plotly.colors import qualitative
+
 
 def pad_lists_with_nan(list_of_lists):
     """
@@ -20,12 +22,12 @@ def pad_lists_with_nan(list_of_lists):
     return np.array(padded_lists)
 
 
-def plot_train_test_loss(train_losses_per_epoch, global_test_loss):
+def plot_train_test_loss(train_losses_per_round, test_losses_per_round, pl_or_apbm_or_nn):
     """
-    Plots the training losses per epoch and the global test loss using Plotly.
+    Plots the training losses per round and the global test loss using Plotly.
 
     Parameters:
-    - train_losses_per_epoch (list): A list containing training losses for each epoch.
+    - train_losses_per_round (list): A list containing training losses for each round.
     - global_test_loss (float): The global test loss value.
 
     Output:
@@ -34,28 +36,37 @@ def plot_train_test_loss(train_losses_per_epoch, global_test_loss):
     # Create a Plotly figure
     fig = go.Figure()
 
-    # Add trace for training loss per epoch
+    # Add trace for training loss per round
     fig.add_trace(go.Scatter(
-        x=list(range(1, len(train_losses_per_epoch) + 1)),
-        y=train_losses_per_epoch,
+        x=list(range(1, len(train_losses_per_round) + 1)),
+        y=train_losses_per_round,
         mode='lines+markers',
-        name='Training Loss per Epoch',
+        name='Training Loss per Round',
         line=dict(color='blue')
     ))
-
-    # Add trace for global test loss as a horizontal line
+    
+    # Add trace for testing loss per round
     fig.add_trace(go.Scatter(
-        x=[1, len(train_losses_per_epoch)],
-        y=[global_test_loss, global_test_loss],
+        x=list(range(1, len(test_losses_per_round) + 1)),
+        y=test_losses_per_round,
+        mode='lines+markers',
+        name='Test Loss per Round',
+        line=dict(color='red')
+    ))
+
+    # Add trace for final test loss as a horizontal line
+    fig.add_trace(go.Scatter(
+        x=[1, len(test_losses_per_round)],
+        y=[test_losses_per_round[-1], test_losses_per_round[-1]],
         mode='lines',
         name='Global Test Loss',
-        line=dict(color='red', dash='dash')
+        line=dict(color='black', dash='dash')
     ))
 
     # Update the layout for better visualization
     fig.update_layout(
-        title='Training Loss per Epoch and Global Test Loss',
-        xaxis_title='Epoch',
+        title=f'Training Loss and Test Loss per round for the {"Pathloss Model" if pl_or_apbm_or_nn == "pl" else "APBM Model" if pl_or_apbm_or_nn == "apbm" else "NN initialization"}',
+        xaxis_title='Round',
         yaxis_title='Loss',
         legend_title='Loss Type',
         template='plotly_white'
@@ -132,7 +143,7 @@ def plot_test_field(model, test_loader, round):
     
     fig.show()
     
-def visualize_3d_model_output(model_nn, model_pl, train_loader_splitted, test_loader, true_jam_loc, predicted_jam_loc, t):
+def visualize_3d_model_output(model, train_loader_splitted, test_loader, true_jam_loc, predicted_jam_loc, t, train_or_test, pl_or_apbm_or_nn):
     """
     Visualizes a 3D surface plot of the model's output and adds test points as markers.
 
@@ -145,29 +156,27 @@ def visualize_3d_model_output(model_nn, model_pl, train_loader_splitted, test_lo
     - Saves an HTML file containing a 3D plot of the model's output surface.
     """
     # Extract points and measurements from the test_loader
-    points_train, measurements_train, points_test, measurements_test = [], [], [], []
+    if train_or_test == 'train':
+        num_nodes = len(train_loader_splitted)
+        points_per_node, measurements_per_node = [], []
+        for train_loader in train_loader_splitted:
+            points_one_node, measurements_one_node = [], []
+            for data, target in train_loader:
+                points_one_node.append(data.numpy())
+                measurements_one_node.append(target.numpy())
+            points_per_node.append(np.concatenate(points_one_node, axis=0))
+            measurements_per_node.append(np.concatenate(measurements_one_node, axis=0))
+        points = np.concatenate(points_per_node, axis=0)
+    elif train_or_test == 'test':
+        points, measurements = [], []
+        for data, target in test_loader:
+            points.append(data.numpy())
+            measurements.append(target.numpy())
+        points = np.concatenate(points, axis=0)
+        measurements_test = np.concatenate(measurements, axis=0)
     
-    for train_loader in train_loader_splitted:
-        for data, target in train_loader:
-            points_train.append(data.numpy())
-            measurements_train.append(target.numpy())
-
-    # Concatenate points and measurements
-    points_train = np.concatenate(points_train, axis=0)
-    measurements_train = np.concatenate(measurements_train, axis=0)
-    
-    for data, target in test_loader:
-        points_test.append(data.numpy())
-        measurements_test.append(target.numpy())
-
-    # Concatenate points and measurements
-    points_test = np.concatenate(points_test, axis=0)
-    measurements_test = np.concatenate(measurements_test, axis=0)
-    
-    # Concatenate training and testing points
-    all_points = np.concatenate((points_train, points_test), axis=0)
-    min_x, max_x = int(np.min(all_points[:, 0])), int(np.max(all_points[:, 0]))
-    min_y, max_y = int(np.min(all_points[:, 1])), int(np.max(all_points[:, 1]))
+    min_x, max_x = int(np.min(points[:, 0])), int(np.max(points[:, 0]))
+    min_y, max_y = int(np.min(points[:, 1])), int(np.max(points[:, 1]))
     
     # Generate grid ranges for x and y
     grid_range_x = np.linspace(min_x - 1, max_x + 1, max_x - min_x + 3)  # +3 to include boundaries
@@ -182,26 +191,22 @@ def visualize_3d_model_output(model_nn, model_pl, train_loader_splitted, test_lo
     
     # Compute Z values for all grid points
     with torch.no_grad():
-        # Full model (combination of pathloss and NN contributions)
-        Z = model_pl(grid_points.float()).view(grid_x.shape)  # Reshape back to (N, N)
-        Z_nn = model_nn(grid_points.float()).view(grid_x.shape)  # Reshape back to (N, N)
+        Z = model(grid_points.float()).view(grid_x.shape)  # Reshape back to (N, N)
 
-    # Convert grid_x and grid_y to NumPy arrays
+    # Convert to NumPy arrays
     X = grid_x.numpy()
     Y = grid_y.numpy()
-
-    # Convert Z values to NumPy arrays
     Z = Z.numpy()
 
     # Create a 3D plot using Plotly
     fig = go.Figure()
 
-    fig.add_trace(go.Surface(z=Z, x=X, y=Y, colorscale='Blues', name='Pathloss'))
-    fig.add_trace(go.Surface(z=Z_nn, x=X, y=Y, colorscale='Oranges', name='NN'))
+    fig.add_trace(go.Surface(z=Z, x=X, y=Y, name=f'{"Pathloss" if pl_or_apbm_or_nn == "pl" else "APBM" if pl_or_apbm_or_nn == "apbm" else "NN"}'))
+    # fig.add_trace(go.Surface(z=Z_nn, x=X, y=Y, colorscale='Oranges', name='NN'))
 
     # Update layout for better visualization
     fig.update_layout(
-        title='3D Surface Plot: Combined, Pathloss, and NN Contributions',
+        title=f'3D Surface Plot: {"Pathloss Model" if pl_or_apbm_or_nn == "pl" else "APBM Model" if pl_or_apbm_or_nn == "apbm" else "NN initialization"}',
         scene=dict(
             xaxis_title='X',
             yaxis_title='Y',
@@ -214,23 +219,34 @@ def visualize_3d_model_output(model_nn, model_pl, train_loader_splitted, test_lo
     )
     
     # Add scatter plot of the points and measurements
-    fig.add_trace(go.Scatter3d(
-        x=points_train[:, 0],  
-        y=points_train[:, 1],  
-        z=measurements_train.flatten(), 
-        mode='markers',
-        marker=dict(size=4),
-        name='Training Points'
-    ))
-    
-    fig.add_trace(go.Scatter3d(
-        x=points_test[:, 0],  
-        y=points_test[:, 1],  
-        z=measurements_test.flatten(), 
-        mode='markers',
-        marker=dict(size=4),
-        name='Testing Points'
-    ))
+    discrete_colors = qualitative.Dark24
+
+    if train_or_test == 'train':
+        for i in range(num_nodes):
+            fig.add_trace(go.Scatter3d(
+                x=points_per_node[i][:, 0],  
+                y=points_per_node[i][:, 1],  
+                z=measurements_per_node[i].flatten(), 
+                mode='markers',
+                marker=dict(
+                    size=4,
+                    color=discrete_colors[i % len(discrete_colors)],  # Cycle through colors
+                ),
+                name=f'Training Points Node {i+1}'  # Unique names for each node
+            ))
+    elif train_or_test == 'test':
+        fig.add_trace(go.Scatter3d(
+            x=points[:, 0],  
+            y=points[:, 1],  
+            z=measurements_test.flatten(), 
+            mode='markers',
+            marker=dict(
+                size=4,
+                color='black',  # Black color for test markers
+                symbol='cross'  # Use 'cross' or any other symbol for differentiation
+            ),
+            name='Testing Points'
+        ))
     
     fig.update_layout(legend=dict(
         yanchor="top",
@@ -245,8 +261,8 @@ def visualize_3d_model_output(model_nn, model_pl, train_loader_splitted, test_lo
         y=[true_jam_loc[1], true_jam_loc[1]],  
         z=[Z.min(), Z.max()+10.0],  # Line from ground level to the top of the Z axis
         mode='lines',
-        line=dict(color='green', width=6, dash='dash'),
-        name='True Jammer Location Line'
+        line=dict(color='blue', width=6, dash='dash'),
+        name='True Jammer Location'
     ))
 
     # Add vertical line for predicted jammer location
@@ -256,7 +272,7 @@ def visualize_3d_model_output(model_nn, model_pl, train_loader_splitted, test_lo
         z=[Z.min(), Z.max()+10.0],  # Line from ground level to the top of the Z axis
         mode='lines',
         line=dict(color='orange', width=6, dash='dash'),
-        name='Predicted Jammer Location Line'
+        name='Predicted Jammer Location'
     ))
 
     # Save the 3D plot as an HTML file
@@ -264,5 +280,5 @@ def visualize_3d_model_output(model_nn, model_pl, train_loader_splitted, test_lo
     if not os.path.exists(output_path):
         os.makedirs(output_path)
 
-    fig.write_html(f'{output_path}/field_{t}.html')
+    fig.write_html(f'{output_path}/field_{train_or_test}.html')
     fig.show()

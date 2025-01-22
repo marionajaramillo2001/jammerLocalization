@@ -135,7 +135,7 @@ class Polynomial3(nn.Module):
         super().__init__()
         self.theta = nn.Parameter(torch.zeros((2))) if theta0 is None else nn.Parameter(torch.tensor(theta0))
         self.gamma = nn.Parameter(torch.tensor(gamma, dtype=torch.float32))
-        self.P0 = nn.Parameter(torch.tensor(20, dtype=torch.float32))
+        self.P0 = nn.Parameter(torch.tensor(10, dtype=torch.float32))
         # self.P0 = nn.Parameter(torch.randn(()))  # Transmit power parameter
         self.data_max = data_max
         self.data_min = data_min

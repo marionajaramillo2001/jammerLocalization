@@ -1,13 +1,10 @@
 import torch
 import torch.nn as nn
 import numpy as np
-import pandas as pd
-from tqdm.auto import tqdm
-from torch.utils.data import DataLoader
 import copy
-from functools import partial
-import torch.optim as optim
-from apbm.model import Net_augmented
+import plotly.graph_objects as go
+from plotly.colors import qualitative
+
 
 
 class FedAvg(object):
@@ -38,8 +35,8 @@ class FedAvg(object):
         self.batch_size = batch_size
         self.num_rounds_nn = num_rounds_nn
         self.num_rounds_pl = num_rounds_pl
-        self.weights_nn_type = 'max'
-        self.weights_pl_type = 'max'
+        self.weights_nn_type = 'max_quadratic'
+        self.weights_pl_type = 'max_quadratic'
         
     def compute_loss_nn(self, output, target, weights):
         lambda_mse_loss_total = 1.0
@@ -65,7 +62,7 @@ class FedAvg(object):
         
         return loss
     
-    def model_update(self, dataloader, round, training_phase):
+    def model_update(self, dataloader, training_phase):
         dataset = dataloader.dataset
         
         indices = list(range(len(dataset)))  # Get all indices from the train dataset
@@ -88,7 +85,6 @@ class FedAvg(object):
                 weights_nn = (target - torch.mean(target)).abs() + 1e-6
                 
             model_nn.train()
-            total_loss = 0
             for epoch in range(self.local_epochs_nn):
                 for batch_idx, (data, target) in enumerate(dataloader):
                     data, target = data.to(self.device), target.to(self.device)
@@ -114,12 +110,8 @@ class FedAvg(object):
                     loss.backward()
                     nn.utils.clip_grad_norm_(model_nn.parameters(), max_norm=1.0)
                     optimizer_nn.step()
-                    
-                    total_loss += loss.item()
-                    
-                # print(f"Epoch {epoch}: Loss = {loss.item()}")
-                    
-            return model_nn, total_loss / self.local_epochs_nn
+                                        
+            return model_nn
         
         elif training_phase == 'PL':
             model_pl = copy.deepcopy(self.server_model_pl)
@@ -142,7 +134,6 @@ class FedAvg(object):
                 weights_pl = (target - torch.mean(target)).abs() + 1e-6
             
             model_pl.train()
-            total_loss = 0
             for epoch in range(self.local_epochs_pl):
                 for batch_idx, (data, target) in enumerate(dataloader):
                     data, target = data.to(self.device), target.to(self.device)
@@ -175,11 +166,9 @@ class FedAvg(object):
 
                     optimizer_theta.step()
                     optimizer_P0.step()
-                    optimizer_gamma.step()
+                    optimizer_gamma.step()                
                     
-                    total_loss += loss.item()
-                    
-            return model_pl, total_loss / self.local_epochs_pl
+            return model_pl
         
     def server_update(self, model_list, uploaded_weights, training_phase):
         """
@@ -216,20 +205,20 @@ class FedAvg(object):
                 
     
     def get_theta_init(self, model_nn, train_loader_splitted):
-        positions, measurements = [], []
-
+        num_nodes = len(train_loader_splitted)
+        points_per_node, measurements_per_node = [], []
         for train_loader in train_loader_splitted:
-            for batch_idx, (data, target) in enumerate(train_loader):
-                positions.append(data.numpy())
-                measurements.append(target.numpy())
-            
-        # Initialize theta0 to the position with the highest output from the neural network
-        positions = np.concatenate(positions, axis=0)
-        measurements = np.concatenate(measurements, axis=0)
+            points_one_node, measurements_one_node = [], []
+            for data, target in train_loader:
+                points_one_node.append(data.numpy())
+                measurements_one_node.append(target.numpy())
+            points_per_node.append(np.concatenate(points_one_node, axis=0))
+            measurements_per_node.append(np.concatenate(measurements_one_node, axis=0))
+        points = np.concatenate(points_per_node, axis=0)
 
         # Define grid range
-        min_x, max_x = int(np.min(positions[:, 0])), int(np.max(positions[:, 0]))
-        min_y, max_y = int(np.min(positions[:, 1])), int(np.max(positions[:, 1]))
+        min_x, max_x = int(np.min(points[:, 0])), int(np.max(points[:, 0]))
+        min_y, max_y = int(np.min(points[:, 1])), int(np.max(points[:, 1]))
 
         model_nn.eval()
 
@@ -252,26 +241,36 @@ class FedAvg(object):
         X = grid_x.numpy()
         Y = grid_y.numpy()
                     
-        # Create a 3D plot using Plotly
-        import plotly.graph_objects as go
 
         fig = go.Figure(data=[go.Surface(z=Z, x=X, y=Y)])
         fig.update_layout(
-            title='3D Surface Plot',
+            title='3D Surface Plot: NN Initialization',
+            scene=dict(
+                xaxis_title='X',
+                yaxis_title='Y',
+                zaxis_title='Z',
+            ),
             autosize=False,
-            width=800,
-            height=800,
+            width=900,
+            height=900,
             margin=dict(l=65, r=50, b=65, t=90)
         )
         
-        fig.add_trace(go.Scatter3d(
-            x=positions[:, 0],  
-            y=positions[:, 1],  
-            z=measurements.flatten(), 
-            mode='markers',
-            marker=dict(size=4),
-            name='Training Points'
-        ))
+        # Add scatter plot of the points and measurements
+        discrete_colors = qualitative.Dark24
+        
+        for i in range(num_nodes):
+            fig.add_trace(go.Scatter3d(
+                x=points_per_node[i][:, 0],  
+                y=points_per_node[i][:, 1],  
+                z=measurements_per_node[i].flatten(), 
+                mode='markers',
+                marker=dict(
+                    size=4,
+                    color=discrete_colors[i % len(discrete_colors)],  # Cycle through colors
+                ),
+                name=f'Training Points Node {i+1}'  # Unique names for each node
+            ))
         fig.update_layout(legend=dict(
             yanchor="top",
             y=0.99,
@@ -319,7 +318,7 @@ class FedAvg(object):
         ws = torch.tensor(ws)
         return ws
     
-    def train_test(self, train_loader_splitted, test_loader, real_loc, train_y_mean_splited):  
+    def train_test_pipeline(self, train_loader_splitted, test_loader, real_loc, train_y_mean_splited):  
         train_samples = torch.zeros(len(train_loader_splitted))
         for i in range(len(train_loader_splitted)):
             train_samples[i]=len(train_loader_splitted[i].dataset)
@@ -331,17 +330,20 @@ class FedAvg(object):
         print("Training the NN model...")
                     
         train_losses_nn_per_round = []
+        test_losses_nn_per_round = []
         for round in range(self.num_rounds_nn):
             model_nn_list = []
             weighted_average_loss_clients = 0
             for i in range(len(train_loader_splitted)):
-                model_nn, loss_nn = self.model_update(train_loader_splitted[i], round, training_phase)
-                # print('Client %d: train_nn_loss = %f' % (i, loss_nn))
+                model_nn = self.model_update(train_loader_splitted[i], training_phase)
+                loss_nn = self.evaluate(model_nn, train_loader_splitted[i], nn_or_pl='nn') # get the train loss on the train_loader after every round
                 model_nn_list.append(model_nn)
                 weighted_average_loss_clients += loss_nn * uploaded_weights[i]
             train_losses_nn_per_round.append(weighted_average_loss_clients.detach().numpy() )
 
             self.server_model_nn = self.server_update(model_nn_list, uploaded_weights, training_phase)
+            test_losses_nn_per_round.append(self.evaluate(self.server_model_nn, test_loader, nn_or_pl='nn'))
+
                 
         # Print the train losses per round
         print("Train losses per round (NN):", train_losses_nn_per_round)
@@ -357,20 +359,22 @@ class FedAvg(object):
         print("Training the PL model...")
         
         train_losses_pl_per_round = []
+        test_losses_pl_per_round = []
         for round in range(self.num_rounds_pl):
             model_pl_list = []
             weighted_average_loss_clients = 0
             for i in range(len(train_loader_splitted)):
-                model_pl, loss_pl = self.model_update(train_loader_splitted[i], round, training_phase)
-                # print('Client %d: train_pl_loss = %f' % (i, loss_pl))
+                model_pl = self.model_update(train_loader_splitted[i], training_phase)
+                loss_pl = self.evaluate(model_pl, train_loader_splitted[i], nn_or_pl='pl') # get the train loss on the train_loader after every round
                 model_pl_list.append(model_pl)
                 weighted_average_loss_clients += loss_pl * uploaded_weights[i]
             train_losses_pl_per_round.append(weighted_average_loss_clients.detach().numpy() )
 
             self.server_model_pl = self.server_update(model_pl_list, uploaded_weights, training_phase)
-            global_loss_pl = self.test_reg_pl(self.server_model_pl, test_loader)
+            test_loss_pl = self.evaluate(self.server_model_pl, test_loader, nn_or_pl='pl')
+            test_losses_pl_per_round.append(test_loss_pl)
             loc_error = self.test_loc(real_loc)
-            print('Round %d: test_loss = %f' % (round, global_loss_pl))
+            print('Round %d: test_loss = %f' % (round, test_loss_pl))
             print('Round %d:', (round, loc_error))
                 
         # Find the point in the train_dataset that is closest to the real_loc position
@@ -389,16 +393,13 @@ class FedAvg(object):
         print(f"Minimum distance to the real location: {min_distance}")
         
         # Evaluate on the global test set
-        global_test_nn_loss = self.test_reg_pl(self.server_model_nn, test_loader)
-        global_test_pl_loss = self.test_reg_pl(self.server_model_pl, test_loader)
         jam_loc_error, predicted_jam_loc = self.test_loc(real_loc)
         learnt_P0, learnt_gamma = self.get_learnt_parameters(self.server_model_pl)
         
-        
-        return train_losses_nn_per_round, train_losses_pl_per_round, global_test_nn_loss, global_test_pl_loss, jam_loc_error, predicted_jam_loc, learnt_P0, learnt_gamma, self.server_model_nn, self.server_model_pl
+        return train_losses_nn_per_round, train_losses_pl_per_round, test_losses_nn_per_round, test_losses_pl_per_round, jam_loc_error, predicted_jam_loc, learnt_P0, learnt_gamma, self.server_model_nn, self.server_model_pl
 
 
-    def test_reg_pl(self, model, test_loader):
+    def evaluate(self, model, test_loader, nn_or_pl):
         """
         Evaluates the model on a test set.
 
@@ -418,26 +419,43 @@ class FedAvg(object):
 
         test_target = torch.cat(test_target, dim=0) 
         
-        if self.weights_pl_type == 'max':
-            test_weights = (test_target - torch.min(test_target)) / (torch.max(test_target) - torch.min(test_target) + 1e-6)
-            test_weights = test_weights / test_weights.sum()  # Normalize weights to sum to 1
-        elif self.weights_pl_type == 'max_quadratic':
-            test_weights = (test_target - torch.min(test_target)) / (torch.max(test_target) - torch.min(test_target) + 1e-6)
-            test_weights = test_weights**2
-            test_weights = test_weights / test_weights.sum()
-        elif self.weights_pl_type == 'min_max':
-            test_weights = (test_target - torch.mean(test_target)).abs() + 1e-6
+        if nn_or_pl == 'nn':
+            if self.weights_nn_type == 'max':
+                test_weights = (test_target - torch.min(test_target)) / (torch.max(test_target) - torch.min(test_target) + 1e-6)
+                test_weights = test_weights / test_weights.sum()  # Normalize weights to sum to 1
+            elif self.weights_nn_type == 'max_quadratic':
+                test_weights = (test_target - torch.min(test_target)) / (torch.max(test_target) - torch.min(test_target) + 1e-6)
+                test_weights = test_weights**2
+                test_weights = test_weights / test_weights.sum()  # Normalize weights to sum to 1
+            elif self.weights_nn_type == 'min_max':
+                test_weights = (test_target - torch.mean(test_target)).abs() + 1e-6
             
-        with torch.no_grad():  # Disable gradient computation for testing
-            for data, target in test_loader:
-                data, target = data.to(self.device), target.to(self.device)
-                output = model(data)
-                total_test_loss += self.compute_loss_pl(output, target, test_weights)
-
+            with torch.no_grad():  # Disable gradient computation for testing
+                for data, target in test_loader:
+                    data, target = data.to(self.device), target.to(self.device)
+                    output = model(data)
+                    total_test_loss += self.compute_loss_nn(output, target, test_weights)*len(data)
+        elif nn_or_pl == 'pl':
+            if self.weights_pl_type == 'max':
+                test_weights = (test_target - torch.min(test_target)) / (torch.max(test_target) - torch.min(test_target) + 1e-6)
+                test_weights = test_weights / test_weights.sum()  # Normalize weights to sum to 1
+            elif self.weights_pl_type == 'max_quadratic':
+                test_weights = (test_target - torch.min(test_target)) / (torch.max(test_target) - torch.min(test_target) + 1e-6)
+                test_weights = test_weights**2
+                test_weights = test_weights / test_weights.sum()
+            elif self.weights_pl_type == 'min_max':
+                test_weights = (test_target - torch.mean(test_target)).abs() + 1e-6
+                
+            with torch.no_grad():  # Disable gradient computation for testing
+                for data, target in test_loader:
+                    data, target = data.to(self.device), target.to(self.device)
+                    output = model(data)
+                    total_test_loss += self.compute_loss_pl(output, target, test_weights)*len(data)
+            
         # Calculate average test loss
-        avg_test_loss = total_test_loss / len(test_loader.dataset)
+        test_loss = total_test_loss / len(test_loader.dataset)
         
-        return avg_test_loss
+        return test_loss
     
     def test_loc(self, real_loc):
         """

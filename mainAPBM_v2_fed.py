@@ -1,37 +1,26 @@
 import torch
 import numpy as np
-import pandas as pd
+import random
 import os
+import time
 import torch.optim as optim
-from torch.utils.data import DataLoader
-import datetime as date
+from functools import partial
 from apbm_v2_fed.data_loader_APBM import data_process
 from apbm_v2_fed.fedavg import FedAvg
-from functools import partial
-import random
-from apbm_v2_fed.plots import *
-from ray import tune, train
-from ray.tune import loguniform, uniform
 from apbm_v2_fed.model import Net, Polynomial3
-
-
-# Set random seed for reproducibility
-seed_value = 0
-torch.manual_seed(seed_value)
-torch.cuda.manual_seed_all(seed_value)
-np.random.seed(seed_value)
-random.seed(seed_value)
+from apbm_v2_fed.plots import plot_train_test_loss, visualize_3d_model_output
 
 # Set the current path as the working directory
 os.chdir(os.getcwd())
 
+# Function to prepare data and models
 def prepare_data(config):
     data_args = {
         'path': config['path'],
         'time_t': config['time_t'],
         'test_ratio': config['test_ratio'],
         'data_preprocessing': config['data_preprocessing'],
-        'noise': config['noise'],  # add noise here, if data comes from MATLAB w/out noise
+        'noise': config['noise'],  # Add noise here, if data comes from MATLAB w/out noise
         'noise_std': config['noise_std'],
         'batch_size': config['batch_size'],
     }
@@ -67,32 +56,37 @@ def prepare_data(config):
     model_nn = Net(**model_nn_args)
     model_pl = Polynomial3(**model_pl_args)
     
-    return model_nn, model_pl, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, d_p.trueJloc,train_loader_splited, test_loader, train_y_mean_splited, alg_args
-    
-    
-def train_test(config):
+    return model_nn, model_pl, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, d_p.trueJloc, train_loader_splited, test_loader, train_y_mean_splited, alg_args
+
+
+# Function to perform a single train-test cycle
+def train_test(config, seed):
+    # Set the seed for this Monte Carlo run
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    np.random.seed(seed)
+    random.seed(seed)
+
     model_nn, model_pl, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, true_jam_loc, train_loader_splited, test_loader, train_y_mean_splited, alg_args = prepare_data(config)
     
-    # Create CrossVal instance and train the model
+    # Create FedAvg instance and train the model
     train = FedAvg(model_nn, model_pl, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, **alg_args)
-    train_losses_nn_per_round, train_losses_pl_per_round, global_test_nn_loss, global_test_pl_loss, jam_loc_error, predicted_jam_loc, learnt_P0, learnt_gamma, trained_model_nn, trained_model_pl = train.train_test(train_loader_splited, test_loader, true_jam_loc, train_y_mean_splited)
+    train_losses_nn_per_round, train_losses_pl_per_round, test_losses_nn_per_round, test_losses_pl_per_round, jam_loc_error, predicted_jam_loc, learnt_P0, learnt_gamma, _, trained_model = train.train_test_pipeline(train_loader_splited, test_loader, true_jam_loc, train_y_mean_splited)
     
-    # nn loss
-    plot_train_test_loss(train_losses_nn_per_round, global_test_nn_loss)
-    
-    # pl loss
-    plot_train_test_loss(train_losses_pl_per_round, global_test_pl_loss)
-    
-    visualize_3d_model_output(trained_model_nn, trained_model_pl, train_loader_splited, test_loader, true_jam_loc, predicted_jam_loc, None)
-    
-    return global_test_pl_loss, jam_loc_error, true_jam_loc, predicted_jam_loc, learnt_P0, learnt_gamma
+    # Plot and visualize
+    plot_train_test_loss(train_losses_nn_per_round, test_losses_nn_per_round, pl_or_apbm_or_nn='nn')
+    plot_train_test_loss(train_losses_pl_per_round, test_losses_pl_per_round, pl_or_apbm_or_nn='pl')
+    visualize_3d_model_output(trained_model, train_loader_splited, test_loader, true_jam_loc, predicted_jam_loc, None, train_or_test='train', pl_or_apbm_or_nn='pl')
+    visualize_3d_model_output(trained_model, train_loader_splited, test_loader, true_jam_loc, predicted_jam_loc, None, train_or_test='test', pl_or_apbm_or_nn='pl')
+
+    return test_losses_pl_per_round[-1], jam_loc_error, true_jam_loc, predicted_jam_loc, learnt_P0, learnt_gamma
 
 
+# Main function
 if __name__ == '__main__':
-    
+    # Configuration dictionary
     id_0 = {
-        'path': '/Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT27/obs_time_1/',
-        # 'path': '/Users/marionajaramillocivill/Documents/GitHub/jammerLocalization/datasets/dataPLANS/4.definitive/PL2/',
+        'path': '/Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT18/obs_time_1/',
         'time_t': 0,
         'test_ratio': 0.2,
         'data_preprocessing': 1,
@@ -100,32 +94,61 @@ if __name__ == '__main__':
         'noise_std': 3,
         'betas': True,
         'input_dim': 2,
-        # 'layer_wid': [500, 1],
-        # 'layer_wid': [128, 64, 32, 1],
         'layer_wid': [256, 128, 64, 1],
-        # 'layer_wid': [512, 512, 1],
         'nonlinearity': 'leaky_relu',
         'gamma': 2,
         'num_nodes': 10,
-        'local_epochs_nn': 50,
-        'local_epochs_pl': 50,
+        'local_epochs_nn': 20,
+        'local_epochs_pl': 20,
         'num_rounds_nn': 30,
-        'num_rounds_pl': 50,
+        'num_rounds_pl': 30,
         'batch_size': 8,
         'lr_optimizer_nn': 0.001,
-        'lr_optimizer_theta': 0.01,
+        'lr_optimizer_theta': 0.1,
         'lr_optimizer_P0': 0.01,
         'lr_optimizer_gamma': 0.01,
         'weight_decay_optimizer_nn': 0,
     }
 
-    config = id_0
-    global_test_loss, jam_loc_error, true_jam_loc, predicted_jam_loc, learnt_P0, learnt_gamma = train_test(config)
+    # Number of Monte Carlo runs
+    N_mc = 20
+    mc_results = []
 
-    # Print averaged results for this run
-    print(f"  Global test loss: {global_test_loss:.4f}")
-    print(f"  Jammer localization error: {jam_loc_error:.4f}\n")
-    print(f"  Predicted jammer location: {predicted_jam_loc}")
-    print(f"  Real jammer location: {true_jam_loc}")
-    print(f"  Learnt P0: {learnt_P0}")
-    print(f"  Learnt gamma: {learnt_gamma}")
+    base_seed = 42  # Base seed for reproducibility
+    start_time = time.time()
+
+    for mc_run in range(N_mc):
+        # Generate a unique seed for this run
+        run_seed = base_seed + mc_run**2
+
+        print(f"Monte Carlo Run {mc_run + 1}/{N_mc} with Seed: {run_seed}")
+
+        # Run train-test cycle
+        global_test_loss, jam_loc_error, true_jam_loc, predicted_jam_loc, learnt_P0, learnt_gamma = train_test(id_0, run_seed)
+
+        # Store results
+        mc_results.append({
+            'run': mc_run + 1,
+            'seed': run_seed,
+            'global_test_loss': global_test_loss,
+            'jam_loc_error': jam_loc_error,
+            'true_jam_loc': true_jam_loc,
+            'predicted_jam_loc': predicted_jam_loc,
+            'learnt_P0': learnt_P0,
+            'learnt_gamma': learnt_gamma,
+        })
+
+        print(f"  Global Test Loss: {global_test_loss:.4f}")
+        print(f"  Jammer Localization Error: {jam_loc_error:.4f}")
+        print(f"  Predicted Jammer Location: {predicted_jam_loc}")
+        print(f"  Real Jammer Location: {true_jam_loc}\n")
+
+    # Aggregate and summarize results
+    test_losses = [res['global_test_loss'] for res in mc_results]
+    jam_loc_errors = [res['jam_loc_error'] for res in mc_results]
+
+    print("\nMonte Carlo Results Summary:")
+    print(f"Average Global Test Loss: {np.mean(test_losses):.4f} ± {np.std(test_losses):.4f}")
+    print(f"Average Jammer Localization Error: {np.mean(jam_loc_errors):.4f} ± {np.std(jam_loc_errors):.4f}")
+
+    print(f"Total Execution Time: {time.time() - start_time:.2f} seconds")
