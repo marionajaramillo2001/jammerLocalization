@@ -5,21 +5,10 @@ import os
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.colors import qualitative
+from statsmodels.distributions.empirical_distribution import ECDF
+from matplotlib import pyplot as plt
+import seaborn as sns
 
-
-def pad_lists_with_nan(list_of_lists):
-    """
-    Pads shorter lists with np.nan to make all lists the same length.
-
-    Parameters:
-    - list_of_lists (list of lists): A list where each element is a list of values (e.g., losses).
-
-    Output:
-    - padded_lists (np.array): A 2D numpy array with lists padded with np.nan to match the length of the longest list.
-    """
-    max_length = max(len(lst) for lst in list_of_lists)  # Find the maximum length among the lists
-    padded_lists = [lst + [np.nan] * (max_length - len(lst)) for lst in list_of_lists]  # Pad with np.nan
-    return np.array(padded_lists)
 
 
 def plot_train_test_loss(train_losses_per_round, test_losses_per_round, pl_or_apbm_or_nn):
@@ -83,65 +72,7 @@ def plot_train_test_loss(train_losses_per_round, test_losses_per_round, pl_or_ap
 
     # Display the plot in the browser
     fig.show()
-    
-def plot_test_field(model, test_loader, round):
-    """
-    Generates and saves a 3D field visualization of the model's output.
 
-    Parameters:
-    - model (nn.Module): The trained model to be visualized.
-    - t (int or str): Identifier for the output file (e.g., an index or timestamp).
-
-    Output:
-    - Saves an HTML file containing a 3D plot of the model's output surface.
-    """
-    model.eval()  # Set the model to evaluation mode
-    x = np.linspace(0, 100, 100)  # Define a grid range for x-axis
-    y = np.linspace(0, 100, 100)  # Define a grid range for y-axis
-    X, Y = np.meshgrid(x, y)  # Create a mesh grid for plotting
-    Z = np.zeros(X.shape)  # Initialize Z (output values) with zeros
-
-    # Disable gradient computation for visualization
-    with torch.no_grad():
-        for i in range(len(X)):
-            for j in range(len(Y)):
-                # Predict the model's output for each (x, y) point
-                Z[i, j] = model(torch.tensor([[X[i, j], Y[i, j]]]).float()).item()
-
-    # Create a 3D plot using Plotly
-    fig = go.Figure(data=[go.Surface(z=Z, x=X, y=Y)])
-    fig.update_layout(
-        title='3D Surface Plot',
-        autosize=False,
-        width=500,
-        height=500,
-        margin=dict(l=65, r=50, b=65, t=90)
-    )
-    
-    # Extract points and measurements from the test_loader
-    points = []
-    measurements = []
-    for data, target in test_loader:
-        points.append(data.numpy())
-        measurements.append(target.numpy())
-
-    points = np.concatenate(points, axis=0)
-    measurements = np.concatenate(measurements, axis=0)
-
-    # Add scatter plot of the points and measurements
-    fig.add_trace(go.Scatter3d(
-        x=points[:, 0],
-        y=points[:, 1],
-        z=measurements,
-        mode='markers',
-        marker=dict(size=4, color='red'),
-        name='Test Points'
-    ))
-
-    # Save the 3D plot as an HTML file
-    fig.write_html(f'figs/field_{round}.html')
-    
-    fig.show()
     
 def visualize_3d_model_output(model, train_loader_splitted, test_loader, true_jam_loc, predicted_jam_loc, t, train_or_test, pl_or_apbm_or_nn):
     """
@@ -281,4 +212,70 @@ def visualize_3d_model_output(model, train_loader_splitted, test_loader, true_ja
         os.makedirs(output_path)
 
     fig.write_html(f'{output_path}/field_{train_or_test}.html')
+    
     fig.show()
+    
+def plot_ECDF(mc_results, output_dir):
+    """
+    Plots the empirical cumulative distribution function (ECDF) of the given data.
+    """
+
+    # Extract the jam_loc_error from the Monte Carlo results
+    jam_loc_errors = [result['jam_loc_error'] for result in mc_results]
+
+    # Fit the empirical cumulative distribution function (ECDF)
+    ecdf = ECDF(jam_loc_errors)
+
+    # Generate the ECDF plot
+    plt.figure(figsize=(8, 6))
+    plt.plot(ecdf.x, ecdf.y, marker='o', linestyle='-', label='Empirical CDF', markersize=4)
+
+    # Add labels and title
+    plt.title('Empirical Cumulative Distribution Function (CDF) of Jammer Localization Error', fontsize=14)
+    plt.xlabel('Jammer Localization Error [m]', fontsize=12)
+    plt.ylabel('Cumulative Probability', fontsize=12)
+    plt.grid(True, linestyle='--', alpha=0.7)
+    plt.legend(fontsize=12)
+
+    # Add text with statistics
+    mean_error = np.mean(jam_loc_errors)
+    std_error = np.std(jam_loc_errors)
+    textstr = (
+        f"Mean Error: {mean_error:.6f} m\n"
+        f"Std Error: {std_error:.6f} m\n"
+        f"Num. MC Runs: {len(jam_loc_errors)}"
+    )
+    plt.text(0.05, 0.4, textstr, transform=plt.gca().transAxes, fontsize=10, bbox=dict(facecolor='white', alpha=0.5))
+
+    # Save and display the plot
+    output_path = os.path.join(output_dir, "jammer_localization_ecdf.png")
+    plt.savefig(output_path)
+    
+    
+def plot_boxplot(values_to_iterate, aggregate_results, output_dir):
+    """
+    Plots a boxplot for the given data.
+    """
+    plot_data = []
+    for value, mc_results in zip(values_to_iterate, aggregate_results):
+        for result in mc_results:
+            # Extract jam_loc_error for each Monte Carlo run
+            plot_data.append({"Value": value, "Error": result["jam_loc_error"]})
+
+    # Convert to DataFrame
+    df = pd.DataFrame(plot_data)
+
+    # Generate the boxplot
+    plt.figure(figsize=(10, 6))
+    sns.boxplot(x="Value", y="Error", data=df, palette="Set2", showmeans=True)
+    sns.stripplot(x="Value", y="Error", data=df, color="black", size=4, jitter=True, alpha=0.6)
+
+    # Add labels and title
+    plt.title("Jammer Localization Error Across Monte Carlo Runs", fontsize=14)
+    plt.xlabel("Experiment Values", fontsize=12)
+    plt.ylabel("Localization Error (m)", fontsize=12)
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+
+    # Save and display the plot
+    output_path = os.path.join(output_dir, "jammer_localization_boxplot.png")
+    plt.savefig(output_path)

@@ -21,7 +21,7 @@ class data_process:
     - batch_size (int): Batch size for data loaders (default is 16).
     """
 
-    def __init__(self, path, time_t=1, test_ratio=0.3, data_preprocessing=1, noise=1, noise_std = 3, split_method='random', batch_size=16):
+    def __init__(self, path, time_t, num_obs, test_ratio, data_preprocessing, noise, measNoiseVar, batch_size, split_method='random'):
         """
         Initializes the data_process class by loading and preprocessing data.
 
@@ -39,6 +39,7 @@ class data_process:
         self.path = path
         self.split_method = split_method
         self.batch_size = batch_size
+        self.num_obs = num_obs
 
         # Load the true jammer location
         fname_Jloc = path + 'trueJamLoc.mat'
@@ -49,13 +50,19 @@ class data_process:
         fname_x = path + 'X.mat'
         x_data = io.loadmat(fname_x)
 
-        X = x_data['XX']
+        X_all_obs = x_data['XX']
 
         # Load Y data (labels)
         fname_y = path + 'Y.mat'
         y_data = io.loadmat(fname_y)
-        Y = y_data['YY']
+        Y_all_obs = y_data['YY']
 
+        # Reduce the dataset to num_obs observations
+        if len(X_all_obs) >= self.num_obs and len(Y_all_obs) >= self.num_obs:
+            indices = np.random.choice(len(X), self.num_obs, replace=False)
+            X = X_all_obs[indices].copy()
+            Y = Y_all_obs[indices].copy()
+            
         # If data is time series, select the specified time index
         if len(X.shape) > 2:
             X = X[:, :, time_t]
@@ -78,8 +85,8 @@ class data_process:
             Y = Y[valid_indices]
             
         if noise == 1:
-            Y = Y + np.random.normal(0, noise_std, Y.shape)
-
+            Y = Y + np.sqrt(measNoiseVar)* torch.randn(Y.shape)
+            
         # Expand Y to 2D for compatibility
         Y = np.expand_dims(Y, axis=1)
 

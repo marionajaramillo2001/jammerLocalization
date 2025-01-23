@@ -1,19 +1,39 @@
+import os
+from contextlib import redirect_stdout
+import time
 import torch
 import numpy as np
 import random
-import os
-import time
 import torch.optim as optim
 from functools import partial
 from apbm_v2_fed.data_loader_APBM import data_process
 from apbm_v2_fed.fedavg import FedAvg
 from apbm_v2_fed.model import Net, Polynomial3
-from apbm_v2_fed.plots import plot_train_test_loss, visualize_3d_model_output
+from apbm_v2_fed.plots import plot_train_test_loss, visualize_3d_model_output, plot_ECDF, plot_boxplot
 
 # Set the current path as the working directory
 os.chdir(os.getcwd())
 
-# Function to prepare data and models
+
+def create_directories(execution_folder, scenario, model_type, experiment_type, value, mc_run):
+    """
+    Create the necessary directory structure for the experiment.
+    """    
+    scenario_folder = os.path.join(execution_folder, scenario)
+    model_folder = os.path.join(scenario_folder, model_type)
+    experiment_folder = os.path.join(model_folder, experiment_type)
+    experiment_value_folder = os.path.join(experiment_folder, str(value))
+
+    # Create directories
+    os.makedirs(experiment_value_folder, exist_ok=True)
+
+    # Subdirectories for results for each Monte Carlo run
+    mc_run_folder = os.path.join(experiment_value_folder, f"mc_run_{mc_run}")
+    os.makedirs(mc_run_folder, exist_ok=True)
+
+    return experiment_value_folder, mc_run_folder
+
+
 def prepare_data(config):
     data_args = {
         'path': config['path'],
@@ -21,8 +41,9 @@ def prepare_data(config):
         'test_ratio': config['test_ratio'],
         'data_preprocessing': config['data_preprocessing'],
         'noise': config['noise'],  # Add noise here, if data comes from MATLAB w/out noise
-        'noise_std': config['noise_std'],
+        'meas_noise_var': config['meas_noise_var'],
         'batch_size': config['batch_size'],
+        'num_obs': config['num_obs'],
     }
     
     alg_args = {
@@ -59,8 +80,7 @@ def prepare_data(config):
     return model_nn, model_pl, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, d_p.trueJloc, train_loader_splited, test_loader, train_y_mean_splited, alg_args
 
 
-# Function to perform a single train-test cycle
-def train_test(config, seed):
+def train_test(config, seed, output_dir, show_figures=False):
     # Set the seed for this Monte Carlo run
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
@@ -73,25 +93,31 @@ def train_test(config, seed):
     train = FedAvg(model_nn, model_pl, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, **alg_args)
     train_losses_nn_per_round, train_losses_pl_per_round, test_losses_nn_per_round, test_losses_pl_per_round, jam_loc_error, predicted_jam_loc, learnt_P0, learnt_gamma, _, trained_model = train.train_test_pipeline(train_loader_splited, test_loader, true_jam_loc, train_y_mean_splited)
     
-    # Plot and visualize
-    plot_train_test_loss(train_losses_nn_per_round, test_losses_nn_per_round, pl_or_apbm_or_nn='nn')
-    plot_train_test_loss(train_losses_pl_per_round, test_losses_pl_per_round, pl_or_apbm_or_nn='pl')
-    visualize_3d_model_output(trained_model, train_loader_splited, test_loader, true_jam_loc, predicted_jam_loc, None, train_or_test='train', pl_or_apbm_or_nn='pl')
-    visualize_3d_model_output(trained_model, train_loader_splited, test_loader, true_jam_loc, predicted_jam_loc, None, train_or_test='test', pl_or_apbm_or_nn='pl')
+    if show_figures:
+        plot_train_test_loss(train_losses_nn_per_round, test_losses_nn_per_round, pl_or_apbm_or_nn='nn')
+        plot_train_test_loss(train_losses_pl_per_round, test_losses_pl_per_round, pl_or_apbm_or_nn='pl')
+        visualize_3d_model_output(trained_model, train_loader_splited, test_loader, true_jam_loc, predicted_jam_loc, None, train_or_test='train', pl_or_apbm_or_nn='pl')
+        visualize_3d_model_output(trained_model, train_loader_splited, test_loader, true_jam_loc, predicted_jam_loc, None, train_or_test='test', pl_or_apbm_or_nn='pl')
+
+    # Redirect print statements to a file
+    log_file = os.path.join(output_dir, "results_log.txt")
+    with open(log_file, "w") as f:
+        print(f"Seed: {seed}", file=f)
+        print(f"Final Test Loss (PL): {test_losses_pl_per_round[-1]}", file=f)
+        print(f"Jammer Localization Error: {jam_loc_error}", file=f)
 
     return test_losses_pl_per_round[-1], jam_loc_error, true_jam_loc, predicted_jam_loc, learnt_P0, learnt_gamma
 
 
-# Main function
 if __name__ == '__main__':
     # Configuration dictionary
-    id_0 = {
+    config = {
         'path': '/Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT18/obs_time_1/',
         'time_t': 0,
         'test_ratio': 0.2,
         'data_preprocessing': 1,
         'noise': 1,
-        'noise_std': 3,
+        'meas_noise_var': 1,
         'betas': True,
         'input_dim': 2,
         'layer_wid': [256, 128, 64, 1],
@@ -108,47 +134,152 @@ if __name__ == '__main__':
         'lr_optimizer_P0': 0.01,
         'lr_optimizer_gamma': 0.01,
         'weight_decay_optimizer_nn': 0,
+        'model_type': 'PL',
+        'num_obs': 1000,
     }
 
     # Number of Monte Carlo runs
     N_mc = 20
-    mc_results = []
 
     base_seed = 42  # Base seed for reproducibility
-    start_time = time.time()
+    current_path = os.getcwd()
+    base_path = os.path.join(current_path, "results")
+    
+    existing_folders = [folder for folder in os.listdir(base_path) if folder.startswith("Execution_")]
+    existing_ids = [int(folder.split("_")[1]) for folder in existing_folders if folder.split("_")[1].isdigit()]
+    next_id = max(existing_ids, default=0) + 1
+    execution_folder = os.path.join(base_path, f"Execution_{next_id}")
+    os.makedirs(execution_folder, exist_ok=True)
 
-    for mc_run in range(N_mc):
-        # Generate a unique seed for this run
-        run_seed = base_seed + mc_run**2
+    # list options for experiments to run
+    scenarios = ['pathloss', 'suburban_raytrace']
+    # model_folder = ['PL', 'APBM', 'PL_APBM']
+    model_folder = ['PL']
+    experiments = ['numNodes', 'posEstVar', 'num_obs', 'meas_noise_var']
+    numNodes = np.array([1, 5, 10, 25, 50, 100])
+    posEstVar = np.array([0,36])
+    num_obs = np.array([100, 250, 500, 750, 1000])
+    meas_noise_var = np.array([10, 10/np.sqrt(10),  1, 0.1, 0.01])
+    
+    
+    for scenario in scenarios:
+        if scenario == 'pathloss':
+            path_without_posEstVar = '/Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT33/obs_time_1/'
+            path_with_posEstVar = '/Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT34/obs_time_1/'
+        elif scenario == 'suburban_raytrace':
+            path_without_posEstVar = '/Users/marionajaramillocivill/Documents/GitHub/GNSS-FL/datasets/dataPLANS/4.definitive/PL2/'
+            path_with_posEstVar = '/Users/marionajaramillocivill/Documents/GitHub/GNSS-FL/datasets/dataPLANS/4.definitive/PL10/'
 
-        print(f"Monte Carlo Run {mc_run + 1}/{N_mc} with Seed: {run_seed}")
+        for model_type in model_folder:
+            if model_type == 'PL':
+                config['model_type'] = 'PL'
+            elif model_type == 'APBM':
+                config['model_type'] = 'APBM'
+                
+            for experiment in experiments:
+                values_to_iterate = []
+                if experiment == 'numNodes':
+                    config['num_nodes'] = numNodes
+                    values_to_iterate = numNodes
+                elif experiment == 'posEstVar':
+                    config['posEstVar'] = posEstVar
+                    values_to_iterate = posEstVar
+                elif experiment == 'num_obs':
+                    config['num_obs'] = num_obs
+                    values_to_iterate = num_obs
+                elif experiment == 'meas_noise_var':
+                    config['meas_noise_var'] = meas_noise_var
+                    values_to_iterate = meas_noise_var
+                
+                experiment_value_folder = []
+                for value in values_to_iterate:
+                    results_all_mc_runs = [] # To store results for each value
+                    for mc_run in range(N_mc):
+                        results_mc_run = []
+                        # Generate a unique seed for this run
+                        experiment_value_folder, mc_run_folder = create_directories(execution_folder, scenario, model_type, experiment, value, mc_run)
+                    
+                        run_seed = base_seed + mc_run
+                        
+                        if experiment == 'numNodes':
+                            config['num_nodes'] = value
+                            config['path'] = path_without_posEstVar
+                            config['num_obs'] = 1000
+                            config['meas_noise_var'] = 1
+                        elif experiment == 'posEstVar':
+                            config['num_nodes'] = 10
+                            if value == 0:
+                                config['path'] = path_without_posEstVar
+                            elif value == 36:
+                                config['path'] = path_with_posEstVar
+                            config['num_obs'] = 1000
+                            config['meas_noise_var'] = 1
+                        elif experiment == 'num_obs':
+                            config['num_nodes'] = 10
+                            config['path'] = path_without_posEstVar
+                            config['num_obs'] = value
+                            config['meas_noise_var'] = 1
+                        elif experiment == 'meas_noise_var':
+                            config['num_nodes'] = 10
+                            config['path'] = path_without_posEstVar
+                            config['num_obs'] = 1000
+                            config['meas_noise_var'] = value
+                        
+                        # Redirect print statements to a file
+                        log_file = os.path.join(mc_run_folder, "log.txt")
+                        with open(log_file, "w") as f:
+                            with redirect_stdout(f):
+                                print(f"Monte Carlo Run {mc_run + 1}/{N_mc} with Seed: {run_seed}")
+                                
+                                print("Configuration:")
+                                for key, value in config.items():
+                                    print(f"{key}: {value}")
+                                    
+                                # Run train-test cycle
+                                global_test_loss, jam_loc_error, true_jam_loc, predicted_jam_loc, learnt_P0, learnt_gamma = train_test(config, run_seed, mc_run_folder)
 
-        # Run train-test cycle
-        global_test_loss, jam_loc_error, true_jam_loc, predicted_jam_loc, learnt_P0, learnt_gamma = train_test(id_0, run_seed)
+                                # Store results
+                                results_mc_run.append({
+                                    'run': mc_run + 1,
+                                    'seed': run_seed,
+                                    'global_test_loss': global_test_loss,
+                                    'jam_loc_error': jam_loc_error,
+                                    'true_jam_loc': true_jam_loc,
+                                    'predicted_jam_loc': predicted_jam_loc,
+                                    'learnt_P0': learnt_P0,
+                                    'learnt_gamma': learnt_gamma,
+                                })
 
-        # Store results
-        mc_results.append({
-            'run': mc_run + 1,
-            'seed': run_seed,
-            'global_test_loss': global_test_loss,
-            'jam_loc_error': jam_loc_error,
-            'true_jam_loc': true_jam_loc,
-            'predicted_jam_loc': predicted_jam_loc,
-            'learnt_P0': learnt_P0,
-            'learnt_gamma': learnt_gamma,
-        })
+                                print(f"  Global Test Loss: {global_test_loss:.4f}")
+                                print(f"  Jammer Localization Error: {jam_loc_error:.4f}")
 
-        print(f"  Global Test Loss: {global_test_loss:.4f}")
-        print(f"  Jammer Localization Error: {jam_loc_error:.4f}")
-        print(f"  Predicted Jammer Location: {predicted_jam_loc}")
-        print(f"  Real Jammer Location: {true_jam_loc}\n")
+                                plot_ECDF(results_mc_run, mc_run_folder)
+                                
+                        results_all_mc_runs.append(results_mc_run)
+                                        
+                    # Save aggregate results to a text file
+                    results_file = os.path.join(experiment_value_folder, "results.txt")
+                    with open(results_file, "w") as f:
+                        f.write(f"Scenario: {scenario}\n")
+                        f.write(f"Model Type: {model_type}\n")
+                        f.write(f"Experiment: {experiment}\n")
+                        f.write(f"Value: {value}\n")
+                        f.write("Configuration:\n")
+                        for key, val in config.items():
+                            f.write(f"  {key}: {val}\n")
+                        test_losses = [res['global_test_loss'] for res in results_mc_run]
+                        jam_loc_errors = [res['jam_loc_error'] for res in results_mc_run]
 
-    # Aggregate and summarize results
-    test_losses = [res['global_test_loss'] for res in mc_results]
-    jam_loc_errors = [res['jam_loc_error'] for res in mc_results]
+                        print("\nMonte Carlo Results Summary:")
+                        print(f"Average Global Test Loss: {np.mean(test_losses):.4f} ± {np.std(test_losses):.4f}")
+                        print(f"Average Jammer Localization Error: {np.mean(jam_loc_errors):.4f} ± {np.std(jam_loc_errors):.4f}")
+                        f.write(f"Average Global Test Loss: {np.mean(test_losses):.4f} ± {np.std(test_losses):.4f}\n")
+                        f.write(f"Average Jammer Localization Error: {np.mean(jam_loc_errors):.4f} ± {np.std(jam_loc_errors):.4f}\n")
+                        f.write(f"Median Jammer Localization Error: {np.median(jam_loc_errors):.4f}\n")
+                        f.write(f"Interquartile Range of Jammer Localization Error: {np.percentile(jam_loc_errors, 75) - np.percentile(jam_loc_errors, 25):.4f}\n")
+                        f.write(f"Minimum Jammer Localization Error: {np.min(jam_loc_errors):.4f}\n")
+                        f.write(f"Maximum Jammer Localization Error: {np.max(jam_loc_errors):.4f}\n")
+                        
+                plot_boxplot(values_to_iterate, results_all_mc_runs, experiment_value_folder)
 
-    print("\nMonte Carlo Results Summary:")
-    print(f"Average Global Test Loss: {np.mean(test_losses):.4f} ± {np.std(test_losses):.4f}")
-    print(f"Average Jammer Localization Error: {np.mean(jam_loc_errors):.4f} ± {np.std(jam_loc_errors):.4f}")
-
-    print(f"Total Execution Time: {time.time() - start_time:.2f} seconds")
+    

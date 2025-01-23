@@ -1,9 +1,0 @@
-{"time":"2024-11-06T14:00:20.360278-05:00","level":"INFO","msg":"using version","core version":"0.18.5"}
-{"time":"2024-11-06T14:00:20.360303-05:00","level":"INFO","msg":"created symlink","path":"/Users/marionajaramillocivill/Documents/GitHub/jammerLocalization/wandb/run-20241106_140018-2utfj2ie/logs/debug-core.log"}
-{"time":"2024-11-06T14:00:20.468774-05:00","level":"INFO","msg":"created new stream","id":"2utfj2ie"}
-{"time":"2024-11-06T14:00:20.468807-05:00","level":"INFO","msg":"stream: started","id":"2utfj2ie"}
-{"time":"2024-11-06T14:00:20.468823-05:00","level":"INFO","msg":"sender: started","stream_id":"2utfj2ie"}
-{"time":"2024-11-06T14:00:20.468813-05:00","level":"INFO","msg":"handler: started","stream_id":{"value":"2utfj2ie"}}
-{"time":"2024-11-06T14:00:20.468833-05:00","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"2utfj2ie"}}
-{"time":"2024-11-06T14:00:20.682383-05:00","level":"INFO","msg":"Starting system monitor"}
-{"time":"2024-11-06T14:00:20.741264-05:00","level":"INFO","msg":"Pausing system monitor"}
