@@ -1,0 +1,35 @@
+Scenario: pathloss
+Model Type: PL
+Experiment: numNodes
+Value: 1
+Configuration:
+  path: /Users/marionajaramillocivill/Documents/GitHub/GNSS-FL/datasets/dataPLANS/4.definitive/PL2/
+  time_t: 0
+  test_ratio: 0.2
+  data_preprocessing: 1
+  noise: 1
+  meas_noise_var: 1
+  betas: True
+  input_dim: 2
+  layer_wid: [256, 128, 64, 1]
+  nonlinearity: leaky_relu
+  gamma: 2
+  num_nodes: 1
+  local_epochs_nn: 20
+  local_epochs_pl: 20
+  num_rounds_nn: 40
+  num_rounds_pl: 40
+  batch_size: 8
+  lr_optimizer_nn: 0.001
+  lr_optimizer_theta: 0.5
+  lr_optimizer_P0: 0.01
+  lr_optimizer_gamma: 0.01
+  weight_decay_optimizer_nn: 0
+  model_type: PL
+  num_obs: 1000
+Average Global Test Loss: 0.0042 ± 0.0004
+Average Jammer Localization Error: 1.9039 ± 0.9803
+Median Jammer Localization Error: 1.5922
+Interquartile Range of Jammer Localization Error: 1.3924
+Minimum Jammer Localization Error: 0.6850
+Maximum Jammer Localization Error: 3.8143

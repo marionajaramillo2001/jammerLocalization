@@ -4,6 +4,8 @@ import numpy as np
 import copy
 import plotly.graph_objects as go
 from plotly.colors import qualitative
+from sklearn.metrics import root_mean_squared_error
+import os
 
 
 
@@ -83,6 +85,9 @@ class FedAvg(object):
                 weights_nn = weights_nn / weights_nn.sum()  # Normalize weights to sum to 1
             elif self.weights_nn_type == 'min_max':
                 weights_nn = (target - torch.mean(target)).abs() + 1e-6
+            elif self.weights_nn_type == 'uniform':
+                weights_nn = torch.ones_like(target)
+                weights_nn = weights_nn / weights_nn.sum()
                 
             model_nn.train()
             for epoch in range(self.local_epochs_nn):
@@ -132,6 +137,9 @@ class FedAvg(object):
                 weights_pl = weights_pl / weights_pl.sum()  # Normalize weights to sum to 1
             elif self.weights_pl_type == 'min_max':
                 weights_pl = (target - torch.mean(target)).abs() + 1e-6
+            elif self.weights_pl_type == 'uniform':
+                weights_pl = torch.ones_like(target)
+                weights_pl = weights_pl / weights_pl.sum()
             
             model_pl.train()
             for epoch in range(self.local_epochs_pl):
@@ -204,7 +212,7 @@ class FedAvg(object):
             return self.server_model_pl
                 
     
-    def get_theta_init(self, model_nn, train_loader_splitted):
+    def get_theta_init(self, model_nn, train_loader_splitted, real_loc, show_figures=False, folder=None, mc_run=None):
         num_nodes = len(train_loader_splitted)
         points_per_node, measurements_per_node = [], []
         for train_loader in train_loader_splitted:
@@ -256,6 +264,7 @@ class FedAvg(object):
             margin=dict(l=65, r=50, b=65, t=90)
         )
         
+        
         # Add scatter plot of the points and measurements
         discrete_colors = qualitative.Dark24
         
@@ -278,8 +287,6 @@ class FedAvg(object):
             x=0.01
         ))
         
-        fig.show()
-
         # Find local maxima
         Z_np = Z.numpy()  # Convert to NumPy for easier processing
         local_maxima = []
@@ -294,10 +301,36 @@ class FedAvg(object):
             local_maxima = sorted(local_maxima, key=lambda x: x[2], reverse=True)  # Sort by Z value
             max_i, max_j, _ = local_maxima[0]  # Top local maximum
         else:
-            raise ValueError("No local maxima found. Check the input field.")
+            raise ValueError("No local maxima found")
 
         # Retrieve the corresponding x and y coordinates
         max_position = torch.tensor([grid_x[max_i, max_j], grid_y[max_i, max_j]])
+        
+        # Add vertical line for theta_init location
+        fig.add_trace(go.Scatter3d(
+            x=[max_position[0], max_position[0]],  
+            y=[max_position[1], max_position[1]],  
+            z=[Z.min(), Z.max()+10.0],  # Line from ground level to the top of the Z axis
+            mode='lines',
+            line=dict(color='#004D40', width=6, dash='dash'),
+            name='Predicted Jammer Location after NN Initialization'
+        ))
+        
+        # Add vertical line for true jammer location
+        fig.add_trace(go.Scatter3d(
+            x=[real_loc[0], real_loc[0]],  
+            y=[real_loc[1], real_loc[1]],  
+            z=[Z.min(), Z.max()+10.0],  # Line from ground level to the top of the Z axis
+            mode='lines',
+            line=dict(color='#1E88E5', width=6, dash='dash'),
+            name='True Jammer Location'
+        ))
+        
+        if show_figures:
+            #Save the 3D plot as an HTML file
+            output_path = os.path.join(folder, f'3d_surface_init_mc_run_{mc_run}.html')
+
+            fig.write_html(output_path)
         
         return nn.Parameter(max_position)
                 
@@ -318,7 +351,7 @@ class FedAvg(object):
         ws = torch.tensor(ws)
         return ws
     
-    def train_test_pipeline(self, train_loader_splitted, test_loader, real_loc, train_y_mean_splited):  
+    def train_test_pipeline(self, train_loader_splitted, test_loader, real_loc, train_y_mean_splited, show_figures, folder=None, mc_run=None):  
         train_samples = torch.zeros(len(train_loader_splitted))
         for i in range(len(train_loader_splitted)):
             train_samples[i]=len(train_loader_splitted[i].dataset)
@@ -349,10 +382,12 @@ class FedAvg(object):
         print("Train losses per round (NN):", train_losses_nn_per_round)
                 
         # Get theta initialization
-        theta_init = self.get_theta_init(self.server_model_nn, train_loader_splitted)
+        theta_init = self.get_theta_init(self.server_model_nn, train_loader_splitted, real_loc, show_figures, folder, mc_run)
         self.server_model_pl.theta = theta_init
+        
+        jam_init_loc_error, _ = self.test_loc(real_loc)
 
-        print(f"Initial theta: {theta_init}")
+        print(f"Initial theta: {theta_init.detach().numpy()}")
         
         # Train using the PL model
         training_phase = 'PL'
@@ -396,7 +431,7 @@ class FedAvg(object):
         jam_loc_error, predicted_jam_loc = self.test_loc(real_loc)
         learnt_P0, learnt_gamma = self.get_learnt_parameters(self.server_model_pl)
         
-        return train_losses_nn_per_round, train_losses_pl_per_round, test_losses_nn_per_round, test_losses_pl_per_round, jam_loc_error, predicted_jam_loc, learnt_P0, learnt_gamma, self.server_model_nn, self.server_model_pl
+        return train_losses_nn_per_round, train_losses_pl_per_round, test_losses_nn_per_round, test_losses_pl_per_round, jam_init_loc_error, theta_init.detach().numpy(), jam_loc_error, predicted_jam_loc, learnt_P0, learnt_gamma, self.server_model_nn, self.server_model_pl
 
 
     def evaluate(self, model, test_loader, nn_or_pl):
@@ -429,6 +464,9 @@ class FedAvg(object):
                 test_weights = test_weights / test_weights.sum()  # Normalize weights to sum to 1
             elif self.weights_nn_type == 'min_max':
                 test_weights = (test_target - torch.mean(test_target)).abs() + 1e-6
+            elif self.weights_nn_type == 'uniform':
+                test_weights = torch.ones_like(target)
+                test_weights = test_weights / test_weights.sum()
             
             with torch.no_grad():  # Disable gradient computation for testing
                 for data, target in test_loader:
@@ -445,6 +483,10 @@ class FedAvg(object):
                 test_weights = test_weights / test_weights.sum()
             elif self.weights_pl_type == 'min_max':
                 test_weights = (test_target - torch.mean(test_target)).abs() + 1e-6
+            elif self.weights_nn_type == 'uniform':
+                test_weights = torch.ones_like(target)
+                test_weights = test_weights / test_weights.sum()
+            
                 
             with torch.no_grad():  # Disable gradient computation for testing
                 for data, target in test_loader:
@@ -468,7 +510,8 @@ class FedAvg(object):
         - result (float): The computed localization error.
         """
         predicted_jam_loc = self.server_model_pl.get_theta().detach().numpy()
-        jam_loc_error = np.sqrt(np.mean((real_loc - predicted_jam_loc)**2))
+        # Compute the RMSE between the true and predicted jammer locations
+        jam_loc_error = root_mean_squared_error(real_loc, predicted_jam_loc)
         
         return jam_loc_error, predicted_jam_loc
     

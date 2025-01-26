@@ -1,0 +1,235 @@
+Monte Carlo Run 1/1 with Seed: 42
+Configuration:
+path: /Users/marionajaramillocivill/Documents/GitHub/GNSS-FL/datasets/dataPLANS/4.definitive/PL2/
+time_t: 0
+test_ratio: 0.2
+data_preprocessing: 1
+noise: 1
+meas_noise_var: 0.1
+betas: True
+input_dim: 2
+layer_wid: [256, 128, 64, 1]
+nonlinearity: leaky_relu
+gamma: 2
+num_nodes: 10
+local_epochs_nn: 20
+local_epochs_pl: 20
+num_rounds_nn: 50
+num_rounds_pl: 100
+batch_size: 8
+lr_optimizer_nn: 0.001
+lr_optimizer_theta: 0.5
+lr_optimizer_P0: 0.01
+lr_optimizer_gamma: 0.01
+weight_decay_optimizer_nn: 0
+model_type: PL
+num_obs: 1000
+Training the NN model...
+Train losses per round (NN): [array(0.04854313, dtype=float32), array(0.04009172, dtype=float32), array(0.03645287, dtype=float32), array(0.03858532, dtype=float32), array(0.03290941, dtype=float32), array(0.03312301, dtype=float32), array(0.03785672, dtype=float32), array(0.03524301, dtype=float32), array(0.03405237, dtype=float32), array(0.03702844, dtype=float32), array(0.03215142, dtype=float32), array(0.03392859, dtype=float32), array(0.03387904, dtype=float32), array(0.03433302, dtype=float32), array(0.03638049, dtype=float32), array(0.03484858, dtype=float32), array(0.03411524, dtype=float32), array(0.03323093, dtype=float32), array(0.03277079, dtype=float32), array(0.03243925, dtype=float32), array(0.03166696, dtype=float32), array(0.02935464, dtype=float32), array(0.03154957, dtype=float32), array(0.03193499, dtype=float32), array(0.03218879, dtype=float32), array(0.02967838, dtype=float32), array(0.03335725, dtype=float32), array(0.02927154, dtype=float32), array(0.03202011, dtype=float32), array(0.03131499, dtype=float32), array(0.03151434, dtype=float32), array(0.02824162, dtype=float32), array(0.0310877, dtype=float32), array(0.03205488, dtype=float32), array(0.03543105, dtype=float32), array(0.02949663, dtype=float32), array(0.03010049, dtype=float32), array(0.03125426, dtype=float32), array(0.03136048, dtype=float32), array(0.03165686, dtype=float32), array(0.03120996, dtype=float32), array(0.03225856, dtype=float32), array(0.0301427, dtype=float32), array(0.03070029, dtype=float32), array(0.03135293, dtype=float32), array(0.02961622, dtype=float32), array(0.0305977, dtype=float32), array(0.03372432, dtype=float32), array(0.02915684, dtype=float32), array(0.02757187, dtype=float32)]
+Initial theta: Parameter containing:
+tensor([537., 713.], dtype=torch.float64, requires_grad=True)
+Training the PL model...
+Round 0: test_loss = 0.001266
+Round %d: (0, (0.4386521138385636, array([551.31004232, 707.79775943])))
+Round 1: test_loss = 0.001252
+Round %d: (1, (0.7118708752110942, array([551.0328116 , 707.16887521])))
+Round 2: test_loss = 0.001259
+Round %d: (2, (0.7146353345640437, array([551.08212313, 707.17796387])))
+Round 3: test_loss = 0.001249
+Round %d: (3, (0.2318145467812275, array([551.11563958, 708.06708127])))
+Round 4: test_loss = 0.001256
+Round %d: (4, (0.655986340926404, array([551.29149259, 707.36232593])))
+Round 5: test_loss = 0.001248
+Round %d: (5, (0.5883480633818655, array([550.7560368 , 707.31682674])))
+Round 6: test_loss = 0.001269
+Round %d: (6, (0.19784643908005783, array([551.00700875, 707.96191663])))
+Round 7: test_loss = 0.001260
+Round %d: (7, (0.5280628566186896, array([551.31439211, 707.6084347 ])))
+Round 8: test_loss = 0.001252
+Round %d: (8, (0.4837291564237429, array([551.43379587, 707.89557767])))
+Round 9: test_loss = 0.001334
+Round %d: (9, (0.7855059435374095, array([550.49083569, 707.08023229])))
+Round 10: test_loss = 0.001257
+Round %d: (10, (0.3122869106550623, array([551.12005841, 707.84572686])))
+Round 11: test_loss = 0.001259
+Round %d: (11, (0.9696760725308878, array([551.09901443, 706.80996051])))
+Round 12: test_loss = 0.001253
+Round %d: (12, (0.7010396267970251, array([551.23042281, 707.25572432])))
+Round 13: test_loss = 0.001268
+Round %d: (13, (0.6624746392047027, array([550.93586323, 707.22115539])))
+Round 14: test_loss = 0.001254
+Round %d: (14, (0.4642569253262028, array([551.43740701, 707.99915163])))
+Round 15: test_loss = 0.001250
+Round %d: (15, (0.47787245715187715, array([551.28857888, 707.68310665])))
+Round 16: test_loss = 0.001249
+Round %d: (16, (0.48171345230406865, array([551.08955981, 707.53216707])))
+Round 17: test_loss = 0.001255
+Round %d: (17, (0.11443114735838125, array([550.89109639, 708.01552036])))
+Round 18: test_loss = 0.001265
+Round %d: (18, (0.8996283869007748, array([551.60983703, 707.16832024])))
+Round 19: test_loss = 0.001266
+Round %d: (19, (0.8070907586822887, array([551.7521867 , 707.52161754])))
+Round 20: test_loss = 0.001249
+Round %d: (20, (0.6670145769410664, array([551.1606239 , 707.27704703])))
+Round 21: test_loss = 0.001249
+Round %d: (21, (0.33883008725038277, array([551.12472452, 707.79739563])))
+Round 22: test_loss = 0.001262
+Round %d: (22, (0.4620448098726374, array([550.86650132, 707.49800339])))
+Round 23: test_loss = 0.001251
+Round %d: (23, (0.5857390926007864, array([551.30509061, 707.49288685])))
+Round 24: test_loss = 0.001252
+Round %d: (24, (0.61128761545266, array([551.43010501, 707.55819122])))
+Round 25: test_loss = 0.001248
+Round %d: (25, (0.5287109141879262, array([551.23759117, 707.54305457])))
+Round 26: test_loss = 0.001249
+Round %d: (26, (0.6442291477638429, array([551.13710653, 707.30224408])))
+Round 27: test_loss = 0.001253
+Round %d: (27, (0.7393550309566085, array([551.41164412, 707.30129262])))
+Round 28: test_loss = 0.001253
+Round %d: (28, (0.3972427317124684, array([550.89849186, 707.59511531])))
+Round 29: test_loss = 0.001274
+Round %d: (29, (0.4457901578402512, array([551.205806  , 707.66712258])))
+Round 30: test_loss = 0.001252
+Round %d: (30, (0.5515928445367673, array([551.06567218, 707.41515027])))
+Round 31: test_loss = 0.001243
+Round %d: (31, (0.5650476999265298, array([550.53885912, 707.39187666])))
+Round 32: test_loss = 0.001245
+Round %d: (32, (0.703032690617012, array([550.63745701, 707.16661563])))
+Round 33: test_loss = 0.001256
+Round %d: (33, (0.9634420655834336, array([551.39722941, 706.92420153])))
+Round 34: test_loss = 0.001246
+Round %d: (34, (0.6681478781103238, array([550.82976298, 707.20345612])))
+Round 35: test_loss = 0.001259
+Round %d: (35, (0.8053013310277567, array([551.60248056, 707.34179859])))
+Round 36: test_loss = 0.001259
+Round %d: (36, (0.988650910085989, array([551.5661756 , 706.97965405])))
+Round 37: test_loss = 0.001262
+Round %d: (37, (0.4616015776814908, array([550.89251096, 707.50191141])))
+Round 38: test_loss = 0.001390
+Round %d: (38, (0.5891633366761417, array([551.38292652, 707.55454877])))
+Round 39: test_loss = 0.001249
+Round %d: (39, (0.4855702947066127, array([551.39659954, 707.81149099])))
+Round 40: test_loss = 0.001247
+Round %d: (40, (0.7222783946296139, array([550.99153966, 707.1448885 ])))
+Round 41: test_loss = 0.001270
+Round %d: (41, (0.4980907097361094, array([551.05582473, 707.49233435])))
+Round 42: test_loss = 0.001251
+Round %d: (42, (0.4575549409168975, array([551.20114466, 707.64175062])))
+Round 43: test_loss = 0.001245
+Round %d: (43, (0.40682482369810447, array([550.94963178, 707.59285314])))
+Round 44: test_loss = 0.001256
+Round %d: (44, (0.8107097088896764, array([551.695881  , 707.43498659])))
+Round 45: test_loss = 0.001256
+Round %d: (45, (0.6132100605377474, array([550.99406981, 707.30309096])))
+Round 46: test_loss = 0.001247
+Round %d: (46, (0.5122941867499953, array([551.16845589, 707.52526265])))
+Round 47: test_loss = 0.001250
+Round %d: (47, (0.7117218080676954, array([550.79452556, 707.14130165])))
+Round 48: test_loss = 0.001246
+Round %d: (48, (0.5156582766281844, array([551.00847103, 707.44963364])))
+Round 49: test_loss = 0.001280
+Round %d: (49, (0.5487805031224541, array([551.3957117 , 707.65290411])))
+Round 50: test_loss = 0.001267
+Round %d: (50, (0.5056367799496009, array([550.7805669 , 707.43295439])))
+Round 51: test_loss = 0.001279
+Round %d: (51, (0.5508315397078365, array([551.26357802, 707.52334111])))
+Round 52: test_loss = 0.001255
+Round %d: (52, (0.49262979525872796, array([551.01357416, 707.48536206])))
+Round 53: test_loss = 0.001252
+Round %d: (53, (0.7498085808915043, array([551.45517615, 707.31570648])))
+Round 54: test_loss = 0.001254
+Round %d: (54, (0.48917711818721343, array([551.165827  , 707.56197271])))
+Round 55: test_loss = 0.001258
+Round %d: (55, (0.7868800049669891, array([551.23691051, 707.12526097])))
+Round 56: test_loss = 0.001279
+Round %d: (56, (0.47792204582580894, array([550.96108179, 707.49193276])))
+Round 57: test_loss = 0.001247
+Round %d: (57, (0.3677674450914085, array([551.08639042, 707.71506339])))
+Round 58: test_loss = 0.001265
+Round %d: (58, (0.6144634015651691, array([551.1953525 , 707.37505868])))
+Round 59: test_loss = 0.001264
+Round %d: (59, (0.6677347360707111, array([551.56676038, 707.59955531])))
+Round 60: test_loss = 0.001256
+Round %d: (60, (0.24014712515193984, array([551.11757496, 708.03314547])))
+Round 61: test_loss = 0.001251
+Round %d: (61, (0.48796628709712453, array([551.06635477, 707.51209028])))
+Round 62: test_loss = 0.001243
+Round %d: (62, (0.3287481129640617, array([550.59919716, 707.72750512])))
+Round 63: test_loss = 0.001251
+Round %d: (63, (0.7430725484990058, array([550.89491236, 707.10144662])))
+Round 64: test_loss = 0.001256
+Round %d: (64, (0.811615181045411, array([551.37185554, 707.15383248])))
+Round 65: test_loss = 0.001278
+Round %d: (65, (0.35192610802897206, array([551.01354074, 707.69926476])))
+Round 66: test_loss = 0.001270
+Round %d: (66, (0.5272755347305902, array([550.93463576, 707.41478577])))
+Round 67: test_loss = 0.001249
+Round %d: (67, (0.3759658876130047, array([550.57454936, 707.66531455])))
+Round 68: test_loss = 0.001254
+Round %d: (68, (0.7348658576817702, array([551.32964268, 707.2549015 ])))
+Round 69: test_loss = 0.001246
+Round %d: (69, (0.6669605709843415, array([550.96833307, 707.22012318])))
+Round 70: test_loss = 0.001248
+Round %d: (70, (0.48179012151317824, array([551.29578015, 707.68267602])))
+Round 71: test_loss = 0.001264
+Round %d: (71, (0.8311560208357104, array([551.23964895, 707.05855644])))
+Round 72: test_loss = 0.001242
+Round %d: (72, (0.5649619216549332, array([550.74102074, 707.35087318])))
+Round 73: test_loss = 0.001259
+Round %d: (73, (0.45628233147584274, array([551.22888832, 707.66757433])))
+Round 74: test_loss = 0.001261
+Round %d: (74, (0.8111216566136101, array([551.84121242, 707.67101946])))
+Round 75: test_loss = 0.001263
+Round %d: (75, (0.6794913852761914, array([550.99540662, 707.20739227])))
+Round 76: test_loss = 0.001258
+Round %d: (76, (0.49086970469629465, array([550.90724138, 707.46229278])))
+Round 77: test_loss = 0.001260
+Round %d: (77, (0.2863710006747938, array([551.01287858, 707.80459963])))
+Round 78: test_loss = 0.001276
+Round %d: (78, (1.048821090399982, array([551.15960223, 706.70934262])))
+Round 79: test_loss = 0.001253
+Round %d: (79, (0.8444231100921599, array([551.43785275, 707.13957436])))
+Round 80: test_loss = 0.001292
+Round %d: (80, (0.6482666438441405, array([551.09585614, 707.28080304])))
+Round 81: test_loss = 0.001253
+Round %d: (81, (0.5549776004991209, array([550.9065243 , 707.37051856])))
+Round 82: test_loss = 0.001246
+Round %d: (82, (0.3785250435963627, array([550.97623222, 707.64308412])))
+Round 83: test_loss = 0.001245
+Round %d: (83, (0.31388524351321556, array([551.09409814, 707.81719279])))
+Round 84: test_loss = 0.001254
+Round %d: (84, (0.6485743073211997, array([551.09119056, 707.27875448])))
+Round 85: test_loss = 0.001264
+Round %d: (85, (0.6186696319184186, array([551.15757997, 707.35024103])))
+Round 86: test_loss = 0.001249
+Round %d: (86, (0.6105456406891846, array([551.12260983, 707.3477619 ])))
+Round 87: test_loss = 0.001272
+Round %d: (87, (0.6057660740397064, array([551.032852  , 707.32398778])))
+Round 88: test_loss = 0.001310
+Round %d: (88, (0.24940166822846244, array([550.96110382, 707.83514429])))
+Round 89: test_loss = 0.001254
+Round %d: (89, (0.6924639900957065, array([551.66324228, 707.68934693])))
+Round 90: test_loss = 0.001246
+Round %d: (90, (0.4587490404370665, array([551.13043295, 707.59075447])))
+Round 91: test_loss = 0.001249
+Round %d: (91, (0.5241701517654748, array([551.09365255, 707.4680869 ])))
+Round 92: test_loss = 0.001259
+Round %d: (92, (0.8394220773423735, array([551.64304539, 707.31416054])))
+Round 93: test_loss = 0.001255
+Round %d: (93, (0.49706603294280954, array([551.03614043, 707.48646643])))
+Round 94: test_loss = 0.001244
+Round %d: (94, (0.416119678407103, array([550.93396265, 707.57528543])))
+Round 95: test_loss = 0.001247
+Round %d: (95, (0.39274931480112796, array([551.01053615, 707.63470371])))
+Round 96: test_loss = 0.001257
+Round %d: (96, (0.862838185654331, array([550.77692809, 706.92776543])))
+Round 97: test_loss = 0.001255
+Round %d: (97, (0.3666254748368647, array([551.2448312 , 707.88498563])))
+Round 98: test_loss = 0.001278
+Round %d: (98, (1.01976196744548, array([551.66822194, 706.99787778])))
+Round 99: test_loss = 0.001260
+Round %d: (99, (0.4721744954318876, array([551.17181988, 707.59457461])))
+Closest point in the train dataset to the real location: [539.86115 722.8166 ]
+Minimum distance to the real location: 18.297141400038754
+  Global Test Loss: 0.0013
+  Jammer Localization Error: 0.4722

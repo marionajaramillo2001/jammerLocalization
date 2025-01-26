@@ -2,6 +2,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import os
+import pickle
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.colors import qualitative
@@ -11,7 +12,7 @@ import seaborn as sns
 
 
 
-def plot_train_test_loss(train_losses_per_round, test_losses_per_round, pl_or_apbm_or_nn):
+def plot_train_test_loss(train_losses_per_round, test_losses_per_round, pl_or_apbm_or_nn, folder=None, mc_run=None):
     """
     Plots the training losses per round and the global test loss using Plotly.
 
@@ -60,21 +61,14 @@ def plot_train_test_loss(train_losses_per_round, test_losses_per_round, pl_or_ap
         legend_title='Loss Type',
         template='plotly_white'
     )
+    
+    # Save the fig as an HTML file
+    output_path = os.path.join(folder, f'train_test_loss_{pl_or_apbm_or_nn}_mc_run_{mc_run}.html')
 
-    # Ensure the output folder exists; create it if it doesn't
-    output_folder = '/Users/marionajaramillocivill/Documents/GitHub/jammerLocalization/apbm/plots_output'
-    if not os.path.exists(output_folder):
-        os.makedirs(output_folder)
-
-    # Define the output file path and save the plot as an HTML file
-    output_file = os.path.join(output_folder, 'train_test_loss.html')
-    fig.write_html(output_file)
-
-    # Display the plot in the browser
-    fig.show()
+    fig.write_html(output_path)
 
     
-def visualize_3d_model_output(model, train_loader_splitted, test_loader, true_jam_loc, predicted_jam_loc, t, train_or_test, pl_or_apbm_or_nn):
+def visualize_3d_model_output(model, train_loader_splitted, test_loader, theta_init, true_jam_loc, predicted_jam_loc, t, train_or_test, pl_or_apbm_or_nn, folder=None, mc_run=None):
     """
     Visualizes a 3D surface plot of the model's output and adds test points as markers.
 
@@ -192,7 +186,7 @@ def visualize_3d_model_output(model, train_loader_splitted, test_loader, true_ja
         y=[true_jam_loc[1], true_jam_loc[1]],  
         z=[Z.min(), Z.max()+10.0],  # Line from ground level to the top of the Z axis
         mode='lines',
-        line=dict(color='blue', width=6, dash='dash'),
+        line=dict(color='#1E88E5', width=6, dash='dash'),
         name='True Jammer Location'
     ))
 
@@ -202,19 +196,27 @@ def visualize_3d_model_output(model, train_loader_splitted, test_loader, true_ja
         y=[predicted_jam_loc[1], predicted_jam_loc[1]],  
         z=[Z.min(), Z.max()+10.0],  # Line from ground level to the top of the Z axis
         mode='lines',
-        line=dict(color='orange', width=6, dash='dash'),
-        name='Predicted Jammer Location'
+        line=dict(color='#FFC107', width=6, dash='dash'),
+        name='Predicted Jammer Location after Pathloss Training'
     ))
+    
+    
+    # Add vertical line for theta_init location
+    fig.add_trace(go.Scatter3d(
+        x=[theta_init[0], theta_init[0]],  
+        y=[theta_init[1], theta_init[1]],  
+        z=[Z.min(), Z.max()+10.0],  # Line from ground level to the top of the Z axis
+        mode='lines',
+        line=dict(color='#004D40', width=6, dash='dash'),
+        name='Predicted Jammer Location after NN Initialization'
+    ))
+    
 
     # Save the 3D plot as an HTML file
-    output_path = 'figs'
-    if not os.path.exists(output_path):
-        os.makedirs(output_path)
+    output_path = os.path.join(folder, f'3d_surface_{train_or_test}_model_mc_run_{mc_run}.html')
 
-    fig.write_html(f'{output_path}/field_{train_or_test}.html')
-    
-    fig.show()
-    
+    fig.write_html(output_path)
+        
 def plot_ECDF(mc_results, output_dir):
     """
     Plots the empirical cumulative distribution function (ECDF) of the given data.
@@ -227,13 +229,14 @@ def plot_ECDF(mc_results, output_dir):
     ecdf = ECDF(jam_loc_errors)
 
     # Generate the ECDF plot
-    plt.figure(figsize=(8, 6))
+    plt.figure(figsize=(10, 4))
     plt.plot(ecdf.x, ecdf.y, marker='o', linestyle='-', label='Empirical CDF', markersize=4)
 
+    plt.ylim(0, 1)
+
     # Add labels and title
-    plt.title('Empirical Cumulative Distribution Function (CDF) of Jammer Localization Error', fontsize=14)
-    plt.xlabel('Jammer Localization Error [m]', fontsize=12)
-    plt.ylabel('Cumulative Probability', fontsize=12)
+    plt.xlabel(r"RMSE$_{\theta}$ (m)", fontsize=12)
+    plt.ylabel('Empirical CDF', fontsize=12)
     plt.grid(True, linestyle='--', alpha=0.7)
     plt.legend(fontsize=12)
 
@@ -247,35 +250,63 @@ def plot_ECDF(mc_results, output_dir):
     )
     plt.text(0.05, 0.4, textstr, transform=plt.gca().transAxes, fontsize=10, bbox=dict(facecolor='white', alpha=0.5))
 
+    plt.tight_layout()  # Automatically adjusts the spacing to prevent label cutoff
+    
+    # Ensure output directory exists
+    os.makedirs(output_dir, exist_ok=True)
     # Save and display the plot
     output_path = os.path.join(output_dir, "jammer_localization_ecdf.png")
     plt.savefig(output_path)
     
+    output_path_pkl = os.path.join(output_dir, "jammer_localization_ecdf.pkl")
+    with open(output_path_pkl, 'wb') as f:
+        pickle.dump(plt.gcf(), f)
+        
+    # Save the Monte Carlo results as a pickle file
+    output_path_mc_results_pkl = os.path.join(output_dir, "mc_results.pkl")
+    with open(output_path_mc_results_pkl, 'wb') as f:
+        pickle.dump(mc_results, f)
     
-def plot_boxplot(values_to_iterate, aggregate_results, output_dir):
+
+def plot_boxplot(x_axis_values, aggregate_results, output_dir, x_label):
     """
     Plots a boxplot for the given data.
     """
+    # Prepare data for plotting
     plot_data = []
-    for value, mc_results in zip(values_to_iterate, aggregate_results):
+    for value, mc_results in zip(x_axis_values, aggregate_results):
         for result in mc_results:
             # Extract jam_loc_error for each Monte Carlo run
             plot_data.append({"Value": value, "Error": result["jam_loc_error"]})
 
-    # Convert to DataFrame
+    # Convert to a Pandas DataFrame for Seaborn
     df = pd.DataFrame(plot_data)
 
     # Generate the boxplot
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(10, 4))
     sns.boxplot(x="Value", y="Error", data=df, palette="Set2", showmeans=True)
     sns.stripplot(x="Value", y="Error", data=df, color="black", size=4, jitter=True, alpha=0.6)
 
-    # Add labels and title
-    plt.title("Jammer Localization Error Across Monte Carlo Runs", fontsize=14)
-    plt.xlabel("Experiment Values", fontsize=12)
-    plt.ylabel("Localization Error (m)", fontsize=12)
+    # Add labels
+    plt.xlabel(x_label, fontsize=12)
+    plt.ylabel(r"RMSE$_{\theta}$ (m)", fontsize=12)
     plt.grid(axis='y', linestyle='--', alpha=0.7)
 
-    # Save and display the plot
+    plt.tight_layout()
+
+    # Ensure output directory exists
+    os.makedirs(output_dir, exist_ok=True)
+
+    # Save the plot as PNG
     output_path = os.path.join(output_dir, "jammer_localization_boxplot.png")
     plt.savefig(output_path)
+
+    # Save the figure as a pickle file
+    output_path_pkl = os.path.join(output_dir, "jammer_localization_boxplot.pkl")
+    with open(output_path_pkl, 'wb') as f:
+        pickle.dump(plt.gcf(), f)
+        
+    # Save the aggregated results as a pickle file
+    output_path_agg_pkl = os.path.join(output_dir, "aggregated_results.pkl")
+    with open(output_path_agg_pkl, 'wb') as f:
+        pickle.dump(aggregate_results, f)

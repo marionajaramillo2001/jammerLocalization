@@ -1,0 +1,39 @@
+Monte Carlo Run 1/3 with Seed: 42
+Configuration:
+path: /Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT33/obs_time_1/
+time_t: 0
+test_ratio: 0.2
+data_preprocessing: 1
+noise: 1
+meas_noise_var: 1
+betas: True
+input_dim: 2
+layer_wid: [256, 128, 64, 1]
+nonlinearity: leaky_relu
+gamma: 2
+num_nodes: 10
+local_epochs_nn: 20
+local_epochs_pl: 20
+num_rounds_nn: 2
+num_rounds_pl: 2
+batch_size: 8
+lr_optimizer_nn: 0.001
+lr_optimizer_theta: 0.1
+lr_optimizer_P0: 0.01
+lr_optimizer_gamma: 0.01
+weight_decay_optimizer_nn: 0
+model_type: PL
+num_obs: 250
+Training the NN model...
+Train losses per round (NN): [array(0.9288331, dtype=float32), array(0.5585888, dtype=float32)]
+Initial theta: Parameter containing:
+tensor([409., 466.], dtype=torch.float64, requires_grad=True)
+Training the PL model...
+Round 0: test_loss = 0.442148
+Round %d: (0, (68.8750693975532, array([407.0602554 , 464.12642465])))
+Round 1: test_loss = 0.134562
+Round %d: (1, (70.77456134008328, array([404.91875045, 462.22998714])))
+Closest point in the train dataset to the real location: [505.42056 515.6536 ]
+Minimum distance to the real location: 18.037442826307203
+  Global Test Loss: 0.1346
+  Jammer Localization Error: 70.7746

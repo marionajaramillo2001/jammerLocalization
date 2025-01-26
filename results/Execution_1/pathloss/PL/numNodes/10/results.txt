@@ -1,0 +1,35 @@
+Scenario: pathloss
+Model Type: PL
+Experiment: numNodes
+Value: 10
+Configuration:
+  path: /Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT33/obs_time_1/
+  time_t: 0
+  test_ratio: 0.2
+  data_preprocessing: 1
+  noise: 1
+  meas_noise_var: 1
+  betas: True
+  input_dim: 2
+  layer_wid: [256, 128, 64, 1]
+  nonlinearity: leaky_relu
+  gamma: 2
+  num_nodes: 10
+  local_epochs_nn: 20
+  local_epochs_pl: 20
+  num_rounds_nn: 2
+  num_rounds_pl: 2
+  batch_size: 8
+  lr_optimizer_nn: 0.001
+  lr_optimizer_theta: 0.1
+  lr_optimizer_P0: 0.01
+  lr_optimizer_gamma: 0.01
+  weight_decay_optimizer_nn: 0
+  model_type: PL
+  num_obs: 1000
+Average Global Test Loss: 0.0353 ± 0.0010
+Average Jammer Localization Error: 147.4684 ± 13.8267
+Median Jammer Localization Error: 151.3887
+Interquartile Range of Jammer Localization Error: 16.5903
+Minimum Jammer Localization Error: 128.9179
+Maximum Jammer Localization Error: 162.0986

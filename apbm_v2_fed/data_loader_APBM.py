@@ -21,7 +21,7 @@ class data_process:
     - batch_size (int): Batch size for data loaders (default is 16).
     """
 
-    def __init__(self, path, time_t, num_obs, test_ratio, data_preprocessing, noise, measNoiseVar, batch_size, split_method='random'):
+    def __init__(self, path, time_t, num_obs, test_ratio, data_preprocessing, noise, meas_noise_var, batch_size, split_method='random'):
         """
         Initializes the data_process class by loading and preprocessing data.
 
@@ -59,7 +59,7 @@ class data_process:
 
         # Reduce the dataset to num_obs observations
         if len(X_all_obs) >= self.num_obs and len(Y_all_obs) >= self.num_obs:
-            indices = np.random.choice(len(X), self.num_obs, replace=False)
+            indices = np.random.choice(len(X_all_obs), self.num_obs, replace=False)
             X = X_all_obs[indices].copy()
             Y = Y_all_obs[indices].copy()
             
@@ -85,7 +85,7 @@ class data_process:
             Y = Y[valid_indices]
             
         if noise == 1:
-            Y = Y + np.sqrt(measNoiseVar)* torch.randn(Y.shape)
+            Y = Y + np.random.normal(0, np.sqrt(meas_noise_var), Y.shape)
             
         # Expand Y to 2D for compatibility
         Y = np.expand_dims(Y, axis=1)

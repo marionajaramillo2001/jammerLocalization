@@ -1,0 +1,115 @@
+Monte Carlo Run 2/10 with Seed: 43
+Configuration:
+path: /Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT33/obs_time_1/
+time_t: 0
+test_ratio: 0.2
+data_preprocessing: 1
+noise: 1
+meas_noise_var: 3.162277660168379
+betas: True
+input_dim: 2
+layer_wid: [256, 128, 64, 1]
+nonlinearity: leaky_relu
+gamma: 2
+num_nodes: 10
+local_epochs_nn: 20
+local_epochs_pl: 20
+num_rounds_nn: 40
+num_rounds_pl: 40
+batch_size: 8
+lr_optimizer_nn: 0.001
+lr_optimizer_theta: 0.5
+lr_optimizer_P0: 0.01
+lr_optimizer_gamma: 0.01
+weight_decay_optimizer_nn: 0
+model_type: PL
+num_obs: 1000
+Training the NN model...
+Train losses per round (NN): [array(0.09444343, dtype=float32), array(0.06435068, dtype=float32), array(0.05974823, dtype=float32), array(0.06107134, dtype=float32), array(0.06063808, dtype=float32), array(0.05885947, dtype=float32), array(0.05902344, dtype=float32), array(0.05849598, dtype=float32), array(0.05505881, dtype=float32), array(0.05747067, dtype=float32), array(0.05421075, dtype=float32), array(0.06037536, dtype=float32), array(0.05899561, dtype=float32), array(0.06002737, dtype=float32), array(0.06507274, dtype=float32), array(0.06181278, dtype=float32), array(0.05879293, dtype=float32), array(0.05798509, dtype=float32), array(0.05945093, dtype=float32), array(0.05696702, dtype=float32), array(0.05916731, dtype=float32), array(0.05834583, dtype=float32), array(0.05576897, dtype=float32), array(0.05609684, dtype=float32), array(0.05285037, dtype=float32), array(0.05773353, dtype=float32), array(0.05392531, dtype=float32), array(0.05387135, dtype=float32), array(0.05710684, dtype=float32), array(0.05821888, dtype=float32), array(0.05903476, dtype=float32), array(0.05619686, dtype=float32), array(0.05433187, dtype=float32), array(0.054434, dtype=float32), array(0.05754396, dtype=float32), array(0.05521212, dtype=float32), array(0.05235741, dtype=float32), array(0.06664206, dtype=float32), array(0.05883161, dtype=float32), array(0.05349647, dtype=float32)]
+Initial theta: Parameter containing:
+tensor([486., 486.], dtype=torch.float64, requires_grad=True)
+Training the PL model...
+Round 0: test_loss = 0.025710
+Round %d: (0, (13.552746512910685, array([500.77426934, 480.30331705])))
+Round 1: test_loss = 0.025615
+Round %d: (1, (7.188761231074766, array([504.12793883, 491.21168195])))
+Round 2: test_loss = 0.025574
+Round %d: (2, (5.414089418887509, array([505.53511853, 498.56642922])))
+Round 3: test_loss = 0.025573
+Round %d: (3, (5.571582093773211, array([505.44044625, 501.57151462])))
+Round 4: test_loss = 0.025547
+Round %d: (4, (5.981180905616948, array([505.72658839, 502.48571429])))
+Round 5: test_loss = 0.025545
+Round %d: (5, (5.745256225498294, array([504.89028046, 503.41181959])))
+Round 6: test_loss = 0.025574
+Round %d: (6, (5.6985823331761605, array([504.72449081, 503.55592608])))
+Round 7: test_loss = 0.025470
+Round %d: (7, (5.738309959583848, array([505.00816333, 503.18693381])))
+Round 8: test_loss = 0.025341
+Round %d: (8, (5.74825618166823, array([504.97422143, 503.27609985])))
+Round 9: test_loss = 0.025367
+Round %d: (9, (5.488626136751915, array([503.81969207, 504.28624577])))
+Round 10: test_loss = 0.025159
+Round %d: (10, (4.581373330351732, array([502.95309982, 503.32132331])))
+Round 11: test_loss = 0.025112
+Round %d: (11, (4.279608724793667, array([502.5847341 , 503.09785091])))
+Round 12: test_loss = 0.025177
+Round %d: (12, (4.03627545110015, array([502.37757291, 502.80674845])))
+Round 13: test_loss = 0.025112
+Round %d: (13, (4.514757057629845, array([502.94491216, 503.18001682])))
+Round 14: test_loss = 0.024963
+Round %d: (14, (4.66099322589331, array([503.07087939, 503.35435919])))
+Round 15: test_loss = 0.024961
+Round %d: (15, (4.1012749732757126, array([502.17968358, 503.17949258])))
+Round 16: test_loss = 0.024915
+Round %d: (16, (4.108692195205897, array([502.39347075, 502.9498763 ])))
+Round 17: test_loss = 0.024726
+Round %d: (17, (4.126995602743532, array([502.43121116, 502.94467671])))
+Round 18: test_loss = 0.024724
+Round %d: (18, (3.8356446308159833, array([502.45206145, 502.2190563 ])))
+Round 19: test_loss = 0.024695
+Round %d: (19, (3.8057365273118116, array([502.43714284, 502.16428269])))
+Round 20: test_loss = 0.024655
+Round %d: (20, (4.2651440281382405, array([502.37120292, 503.31346519])))
+Round 21: test_loss = 0.024634
+Round %d: (21, (3.875405077794224, array([501.95211066, 502.95504014])))
+Round 22: test_loss = 0.024542
+Round %d: (22, (3.51287912850483, array([501.30210749, 502.88356788])))
+Round 23: test_loss = 0.024481
+Round %d: (23, (3.4681461766844763, array([501.41212671, 502.68771309])))
+Round 24: test_loss = 0.024410
+Round %d: (24, (3.0794488288652206, array([501.11470987, 502.20271651])))
+Round 25: test_loss = 0.024325
+Round %d: (25, (3.5813339702081803, array([501.31691273, 503.00159441])))
+Round 26: test_loss = 0.024181
+Round %d: (26, (2.3980024853706277, array([500.36422817, 501.59429335])))
+Round 27: test_loss = 0.024188
+Round %d: (27, (2.7855696178067717, array([501.53364375, 500.79842735])))
+Round 28: test_loss = 0.024159
+Round %d: (28, (2.803211027026431, array([501.5438635 , 500.83776122])))
+Round 29: test_loss = 0.024099
+Round %d: (29, (3.0428126464150402, array([501.23973353, 501.97962241])))
+Round 30: test_loss = 0.024084
+Round %d: (30, (2.6822747139391208, array([501.0202596 , 501.42515902])))
+Round 31: test_loss = 0.023977
+Round %d: (31, (3.0780389962453314, array([501.769202  , 501.26711581])))
+Round 32: test_loss = 0.023965
+Round %d: (32, (2.1610663439233515, array([500.85956035, 500.05264599])))
+Round 33: test_loss = 0.023855
+Round %d: (33, (2.6441956335708214, array([501.19002238, 501.04924041])))
+Round 34: test_loss = 0.023871
+Round %d: (34, (2.716386901281668, array([501.7039637 , 499.85358911])))
+Round 35: test_loss = 0.023731
+Round %d: (35, (2.458673520400944, array([501.27725557, 500.1192422 ])))
+Round 36: test_loss = 0.023731
+Round %d: (36, (2.54507459396144, array([501.49608334, 499.55553774])))
+Round 37: test_loss = 0.023661
+Round %d: (37, (2.249244242348977, array([501.00798299, 499.97356821])))
+Round 38: test_loss = 0.023545
+Round %d: (38, (2.512148413400041, array([501.43347199, 499.70483199])))
+Round 39: test_loss = 0.023553
+Round %d: (39, (2.095291234595031, array([500.79134437, 499.94367153])))
+Closest point in the train dataset to the real location: [494.59674 515.12537]
+Minimum distance to the real location: 16.212924500850008
+  Global Test Loss: 0.0236
+  Jammer Localization Error: 2.0953

@@ -1,0 +1,39 @@
+Monte Carlo Run 3/3 with Seed: 44
+Configuration:
+path: /Users/marionajaramillocivill/Documents/GitHub/GNSS-FL/datasets/dataPLANS/4.definitive/PL10/
+time_t: 0
+test_ratio: 0.2
+data_preprocessing: 1
+noise: 1
+meas_noise_var: 1
+betas: True
+input_dim: 2
+layer_wid: [256, 128, 64, 1]
+nonlinearity: leaky_relu
+gamma: 2
+num_nodes: 10
+local_epochs_nn: 20
+local_epochs_pl: 20
+num_rounds_nn: 2
+num_rounds_pl: 2
+batch_size: 8
+lr_optimizer_nn: 0.001
+lr_optimizer_theta: 0.1
+lr_optimizer_P0: 0.01
+lr_optimizer_gamma: 0.01
+weight_decay_optimizer_nn: 0
+model_type: PL
+num_obs: 1000
+Training the NN model...
+Train losses per round (NN): [array(0.05167791, dtype=float32), array(0.03864057, dtype=float32)]
+Initial theta: Parameter containing:
+tensor([549., 781.], dtype=torch.float64, requires_grad=True)
+Training the PL model...
+Round 0: test_loss = 0.006625
+Round %d: (0, (42.77729623671322, array([552.13828028, 768.62920433])))
+Round 1: test_loss = 0.006029
+Round %d: (1, (34.41214671811657, array([554.07578937, 756.70343137])))
+Closest point in the train dataset to the real location: [539.446  731.7903]
+Minimum distance to the real location: 26.226551439522982
+  Global Test Loss: 0.0060
+  Jammer Localization Error: 34.4121

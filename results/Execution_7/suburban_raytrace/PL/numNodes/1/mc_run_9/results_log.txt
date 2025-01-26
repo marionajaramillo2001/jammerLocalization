@@ -1,0 +1,3 @@
+Seed: 51
+Final Test Loss (PL): 0.017046798902252136
+Jammer Localization Error: 6.974921951497013
