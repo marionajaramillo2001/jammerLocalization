@@ -1,0 +1,53 @@
+Monte Carlo Run 1/1 with Seed: 42
+Configuration:
+path: /Users/marionajaramillocivill/Documents/GitHub/GNSS-FL/datasets/dataPLANS/4.definitive/PL2/
+time_t: 0
+test_ratio: 0.2
+data_preprocessing: 2
+noise: 1
+meas_noise_var: 1
+betas: True
+input_dim: 2
+layer_wid: [500, 256, 128, 1]
+nonlinearity: leaky_relu
+gamma: 2
+num_nodes: 10
+local_epochs_nn: 20
+local_epochs_pl: 20
+local_epochs_apbm: 20
+num_rounds_nn: 2
+num_rounds_pl: 2
+num_rounds_apbm: 2
+batch_size: 8
+lr_optimizer_nn: 0.001
+lr_optimizer_theta: 0.5
+lr_optimizer_P0: 0.01
+lr_optimizer_gamma: 0.01
+weight_decay_optimizer_nn: 0
+num_obs: 500
+Number of valid samples:  500
+Train X shape:  torch.Size([400, 2])
+Test X shape:  torch.Size([100, 2])
+Training the NN model...
+Train losses per round (NN): [array(0., dtype=float32), array(0., dtype=float32)]
+Initial theta: [502. 526.]
+Training the PL model...
+Round 0: test_loss = 0.000000
+Round %d: (0, 106.03335287459348)
+Round 1: test_loss = 0.000000
+Round %d: (1, 74.51134922436927)
+Closest point in the train dataset to the real location: [557.3674 674.3759]
+Minimum distance to the real location: 34.40493596500253
+Training the APBM model...
+Round 0: test_loss = 0.000000
+Round %d: (0, 119.58885371161027)
+Round 1: test_loss = 0.000000
+Round %d: (1, 102.17390472927316)
+Closest point in the train dataset to the real location: [557.3674 674.3759]
+Minimum distance to the real location: 34.40493596500253
+  Global Test Loss (NN): 0.0000
+  Global Test Loss (PL): 0.0000
+  Global Test Loss (APBM): 0.0000
+  Jammer Initial Localization Error: 133.3399
+  Jammer Localization Error (PL): 74.5113
+  Jammer Localization Error (APBM): 102.1739

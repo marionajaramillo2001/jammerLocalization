@@ -1,0 +1,47 @@
+Scenario: pathloss
+Experiment: num_obs
+Value: 1000
+Configuration:
+  path: /Users/marionajaramillocivill/Documents/GitHub/GNSS-FL/datasets/dataPLANS/4.definitive/PL2/
+  time_t: 0
+  test_ratio: 0.2
+  data_preprocessing: 2
+  noise: 1
+  meas_noise_var: 1
+  betas: True
+  input_dim: 2
+  layer_wid: [500, 256, 128, 1]
+  nonlinearity: leaky_relu
+  gamma: 2
+  num_nodes: 10
+  local_epochs_nn: 20
+  local_epochs_pl: 20
+  local_epochs_apbm: 20
+  num_rounds_nn: 2
+  num_rounds_pl: 2
+  num_rounds_apbm: 2
+  batch_size: 8
+  lr_optimizer_nn: 0.001
+  lr_optimizer_theta: 0.5
+  lr_optimizer_P0: 0.01
+  lr_optimizer_gamma: 0.01
+  weight_decay_optimizer_nn: 0
+  num_obs: 1000
+Average Global Test Loss (NN): 0.0000 ± 0.0000
+Average Global Test Loss (PL): 0.0000 ± 0.0000
+Average Global Test Loss (APBM): 0.0000 ± 0.0000
+Average Jammer Initial Localization Error: 96.2169 ± 0.0000
+Median Jammer Initial Localization Error: 96.2169
+Interquartile Range of Jammer Initial Localization Error: 0.0000
+Minimum Jammer Initial Localization Error: 96.2169
+Maximum Jammer Initial Localization Error: 96.2169
+Average Jammer Localization Error (PL): 10.6276 ± 0.0000
+Median Jammer Localization Error (PL): 10.6276
+Interquartile Range of Jammer Localization Error (PL): 0.0000
+Minimum Jammer Localization Erro (PL): 10.6276
+Maximum Jammer Localization Error (PL): 10.6276
+Average Jammer Localization Error (APBM): 29.5427 ± 0.0000
+Median Jammer Localization Error (APBM): 29.5427
+Interquartile Range of Jammer Localization Error (APBM): 0.0000
+Minimum Jammer Localization Error (APBM): 29.5427
+Maximum Jammer Localization Error (APBM): 29.5427
