@@ -1,0 +1,3 @@
+Seed: 42
+Final Test Loss (Model): 0.6492566928858188
+Jammer Localization Error: 97.78076981358271

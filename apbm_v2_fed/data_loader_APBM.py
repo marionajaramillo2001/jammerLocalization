@@ -83,6 +83,7 @@ class data_process:
             valid_indices = ~(Y < -150.0)
             X = X[valid_indices,:]
             Y = Y[valid_indices]
+            print('Number of valid samples: ', len(Y))
             
         if noise == 1:
             Y = Y + np.random.normal(0, np.sqrt(meas_noise_var), Y.shape)
@@ -98,6 +99,8 @@ class data_process:
         self.train_y_original = torch.from_numpy(np.array(Ytrain)).float()
         self.test_x_original = torch.from_numpy(np.array(Xtest)).float()
         self.test_y_original = torch.from_numpy(np.array(Ytest)).float()
+        print('Train X shape: ', self.train_x_original.shape)
+        print('Test X shape: ', self.test_x_original.shape)
 
         # Find the maximum value in the training labels and its corresponding input
         self.train_y_max = torch.max(self.train_y_original)
@@ -118,7 +121,7 @@ class data_process:
 
         # Create a DataLoader for the test set
         test_dataset = CustomDataset(self.test_x_original, self.test_y_original)
-        test_loader = DataLoader(test_dataset, batch_size=self.batch_size, shuffle=True)
+        test_loader = DataLoader(test_dataset, batch_size=self.batch_size, shuffle=True, drop_last=True)
 
         indices_folds = []
 
@@ -132,7 +135,7 @@ class data_process:
             partitions = random_split(full_dataset, part_sizes)
 
             # Create DataLoader instances
-            train_loader_splited = [DataLoader(partition, batch_size=self.batch_size, shuffle=True) for partition in partitions]
+            train_loader_splited = [DataLoader(partition, batch_size=self.batch_size, shuffle=True, drop_last=True) for partition in partitions]
 
             # Step 3: Get the max y value of each partition, and its corresponding x value  
             max_values_each_partition = []

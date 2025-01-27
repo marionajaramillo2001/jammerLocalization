@@ -254,6 +254,9 @@ class Net_augmented(nn.Module):
                 self.nonlinearity = lambda x: F.leaky_relu(x)
             else:
                 raise ValueError(f"Unsupported nonlinearity: {nonlinearity}")
+            
+            self.w = nn.Parameter(torch.tensor([0.8, 0.2], requires_grad=True))  # Initialize logits for w_PL and w_NN
+
     
             
     def initialize_weights(self):
@@ -273,7 +276,9 @@ class Net_augmented(nn.Module):
         Outputs:
         - (Tensor): Combined output based on the model mode.
         """
-        return self.forward_PL(x)  + self.forward_NN(x)
+        w_PL, w_NN = torch.softmax(self.w, dim=0)
+        
+        return w_PL*self.forward_PL(x) + w_NN*self.forward_NN(x)
     
     def forward_NN(self, x):
         """

@@ -50,11 +50,13 @@ def prepare_data(config):
         'batch_size': config['batch_size'],
         'local_epochs_nn': config['local_epochs_nn'],
         'local_epochs_pl': config['local_epochs_pl'],
+        'local_epochs_apbm': config['local_epochs_apbm'],
         'num_rounds_nn': config['num_rounds_nn'],
         'num_rounds_pl': config['num_rounds_pl'],
+        'num_rounds_apbm': config['num_rounds_apbm'],
     }
     
-    model_nn_args = {
+    model_init_args = {
         'input_dim': config['input_dim'],
         'layer_wid': config['layer_wid'],
         'nonlinearity': config['nonlinearity'],
@@ -63,6 +65,15 @@ def prepare_data(config):
     model_pl_args = {
         'gamma': config['gamma'],
     }
+    
+    model_apbm_args = {
+        'input_dim': config['input_dim'],
+        'layer_wid': config['layer_wid'],
+        'nonlinearity': config['nonlinearity'],
+        'gamma': config['gamma']
+    }
+    
+    model_type = config['model_type']
     
     # Data processing step to load and split the dataset
     d_p = data_process(**data_args)
@@ -74,11 +85,13 @@ def prepare_data(config):
     optimizer_P0 = partial(optim.Adam, lr=config['lr_optimizer_P0'], weight_decay=0.0)
     optimizer_gamma = partial(optim.Adam, lr=config['lr_optimizer_gamma'], weight_decay=0.0)
 
-    model_nn = Net(**model_nn_args)
-    # model_pl = Polynomial3(**model_pl_args)
-    model_pl = Net_augmented(model_nn_args['input_dim'], model_nn_args['layer_wid'], model_nn_args['nonlinearity'], model_pl_args['gamma'])
+    model_init = Net(**model_init_args)
+    if model_type == 'PL':
+        model = Polynomial3(**model_pl_args)
+    elif model_type == 'APBM':
+        model = Net_augmented(**model_apbm_args)
     
-    return model_nn, model_pl, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, d_p.trueJloc, train_loader_splited, test_loader, train_y_mean_splited, alg_args
+    return model_init, model, model_type, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, d_p.trueJloc, train_loader_splited, test_loader, train_y_mean_splited, alg_args
 
 
 def train_test(config, seed, output_dir, show_figures, mc_run=None):
@@ -88,26 +101,26 @@ def train_test(config, seed, output_dir, show_figures, mc_run=None):
     np.random.seed(seed)
     random.seed(seed)
 
-    model_nn, model_pl, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, true_jam_loc, train_loader_splited, test_loader, train_y_mean_splited, alg_args = prepare_data(config)
+    model_init, model, model_type, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, true_jam_loc, train_loader_splited, test_loader, train_y_mean_splited, alg_args = prepare_data(config)
     
     # Create FedAvg instance and train the model
-    train = FedAvg(model_nn, model_pl, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, **alg_args)
-    train_losses_nn_per_round, train_losses_pl_per_round, test_losses_nn_per_round, test_losses_pl_per_round, jam_init_loc_error, theta_init, jam_loc_error, predicted_jam_loc, learnt_P0, learnt_gamma, _, trained_model = train.train_test_pipeline(train_loader_splited, test_loader, true_jam_loc, train_y_mean_splited, show_figures, output_dir, mc_run)
+    train = FedAvg(model_init, model, optimizer_nn, optimizer_theta, optimizer_P0, optimizer_gamma, **alg_args)
+    train_losses_init_per_round, train_losses_model_per_round, test_losses_init_per_round, test_losses_model_per_round, jam_init_loc_error, theta_init, jam_loc_error, predicted_jam_loc, learnt_P0, learnt_gamma, _, trained_model = train.train_test_pipeline(train_loader_splited, test_loader, true_jam_loc, model_type, train_y_mean_splited, show_figures, output_dir, mc_run)
     
     if show_figures:
-        plot_train_test_loss(train_losses_nn_per_round, test_losses_nn_per_round, pl_or_apbm_or_nn='nn', folder=output_dir, mc_run=mc_run)
-        plot_train_test_loss(train_losses_pl_per_round, test_losses_pl_per_round, pl_or_apbm_or_nn='pl', folder=output_dir, mc_run=mc_run)
-        visualize_3d_model_output(trained_model, train_loader_splited, test_loader, theta_init, true_jam_loc, predicted_jam_loc, None, train_or_test='train', pl_or_apbm_or_nn='pl', folder=output_dir, mc_run=mc_run)
-        visualize_3d_model_output(trained_model, train_loader_splited, test_loader, theta_init, true_jam_loc, predicted_jam_loc, None, train_or_test='test', pl_or_apbm_or_nn='pl', folder=output_dir, mc_run=mc_run)
+        plot_train_test_loss(train_losses_init_per_round, test_losses_init_per_round, pl_or_apbm_or_nn='NN', folder=output_dir, mc_run=mc_run)
+        plot_train_test_loss(train_losses_model_per_round, test_losses_model_per_round, pl_or_apbm_or_nn=model_type, folder=output_dir, mc_run=mc_run)
+        visualize_3d_model_output(trained_model, train_loader_splited, test_loader, theta_init, true_jam_loc, predicted_jam_loc, None, train_or_test='train', pl_or_apbm_or_nn=model_type, folder=output_dir, mc_run=mc_run)
+        visualize_3d_model_output(trained_model, train_loader_splited, test_loader, theta_init, true_jam_loc, predicted_jam_loc, None, train_or_test='test', pl_or_apbm_or_nn=model_type, folder=output_dir, mc_run=mc_run)
 
     # Redirect print statements to a file
     log_file = os.path.join(output_dir, "results_log.txt")
     with open(log_file, "w") as f:
         print(f"Seed: {seed}", file=f)
-        print(f"Final Test Loss (PL): {test_losses_pl_per_round[-1]}", file=f)
+        print(f"Final Test Loss (Model): {test_losses_model_per_round[-1]}", file=f)
         print(f"Jammer Localization Error: {jam_loc_error}", file=f)
 
-    return test_losses_pl_per_round[-1], jam_init_loc_error, jam_loc_error, true_jam_loc, predicted_jam_loc, learnt_P0, learnt_gamma
+    return test_losses_model_per_round[-1], jam_init_loc_error, jam_loc_error, true_jam_loc, predicted_jam_loc, learnt_P0, learnt_gamma
 
 
 if __name__ == '__main__':
@@ -128,15 +141,17 @@ if __name__ == '__main__':
         'num_nodes': 10,
         'local_epochs_nn': 20,
         'local_epochs_pl': 20,
+        'local_epochs_apbm': 20,
         'num_rounds_nn': 40,
-        'num_rounds_pl': 50,
+        'num_rounds_pl': 40,
+        'num_rounds_apbm': 40,
         'batch_size': 8,
         'lr_optimizer_nn': 0.001,
         'lr_optimizer_theta': 0.5,
         'lr_optimizer_P0': 0.01,
         'lr_optimizer_gamma': 0.01,
         'weight_decay_optimizer_nn': 0,
-        'model_type': 'PL',
+        'model_type': 'PL', # 'PL' or 'APBM'
         'num_obs': 1000,
     }
 
@@ -162,7 +177,7 @@ if __name__ == '__main__':
         scenarios = ['urban_raytrace']
         model_folder = ['PL']
         experiments = ['show_figures']
-        numNodes = 10
+        numNodes = 15
         posEstVar = 0
         num_obs = 1000
         meas_noise_var = 1
@@ -190,8 +205,8 @@ if __name__ == '__main__':
             path_without_posEstVar = '/Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT33/obs_time_1/'
             path_with_posEstVar = '/Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT34/obs_time_1/'
         elif scenario == 'urban_raytrace':
-            path_without_posEstVar = '/Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT37/obs_time_1/'
-            path_with_posEstVar = '/Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT38/obs_time_1/'
+            path_without_posEstVar = '/Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT35/obs_time_1/'
+            path_with_posEstVar = '/Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT36/obs_time_1/'
         elif scenario == 'pathloss':
             path_without_posEstVar = '/Users/marionajaramillocivill/Documents/GitHub/GNSS-FL/datasets/dataPLANS/4.definitive/PL2/'
             path_with_posEstVar = '/Users/marionajaramillocivill/Documents/GitHub/GNSS-FL/datasets/dataPLANS/4.definitive/PL10/'

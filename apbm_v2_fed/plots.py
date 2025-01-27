@@ -55,7 +55,7 @@ def plot_train_test_loss(train_losses_per_round, test_losses_per_round, pl_or_ap
 
     # Update the layout for better visualization
     fig.update_layout(
-        title=f'Training Loss and Test Loss per round for the {"Pathloss Model" if pl_or_apbm_or_nn == "pl" else "APBM Model" if pl_or_apbm_or_nn == "apbm" else "NN initialization"}',
+        title=f'Training Loss and Test Loss per round for the {"Pathloss Model" if pl_or_apbm_or_nn == "PL" else "APBM Model" if pl_or_apbm_or_nn == "APBM" else "NN initialization"}',
         xaxis_title='Round',
         yaxis_title='Loss',
         legend_title='Loss Type',
@@ -126,12 +126,12 @@ def visualize_3d_model_output(model, train_loader_splitted, test_loader, theta_i
     # Create a 3D plot using Plotly
     fig = go.Figure()
 
-    fig.add_trace(go.Surface(z=Z, x=X, y=Y, name=f'{"Pathloss" if pl_or_apbm_or_nn == "pl" else "APBM" if pl_or_apbm_or_nn == "apbm" else "NN"}'))
+    fig.add_trace(go.Surface(z=Z, x=X, y=Y, name=f'{"Pathloss" if pl_or_apbm_or_nn == "PL" else "APBM" if pl_or_apbm_or_nn == "APBM" else "NN"}'))
     # fig.add_trace(go.Surface(z=Z_nn, x=X, y=Y, colorscale='Oranges', name='NN'))
 
     # Update layout for better visualization
     fig.update_layout(
-        title=f'3D Surface Plot: {"Pathloss Model" if pl_or_apbm_or_nn == "pl" else "APBM Model" if pl_or_apbm_or_nn == "apbm" else "NN initialization"}',
+        title=f'3D Surface Plot: {"Pathloss Model" if pl_or_apbm_or_nn == "PL" else "APBM Model" if pl_or_apbm_or_nn == "APBM" else "NN initialization"}',
         scene=dict(
             xaxis_title='X',
             yaxis_title='Y',
@@ -197,7 +197,7 @@ def visualize_3d_model_output(model, train_loader_splitted, test_loader, theta_i
         z=[Z.min(), Z.max()+10.0],  # Line from ground level to the top of the Z axis
         mode='lines',
         line=dict(color='#FFC107', width=6, dash='dash'),
-        name='Predicted Jammer Location after Pathloss Training'
+        name=f'Predicted Jammer Location after {"Pathloss" if pl_or_apbm_or_nn == "PL" else "APBM"} Training'
     ))
     
     
