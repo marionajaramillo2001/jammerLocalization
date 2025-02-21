@@ -1,0 +1,6 @@
+Seed: 51
+Final Test Loss (NN): 0.0
+Final Test Loss (PL): 0.0
+Final Test Loss (APBM): 0.0
+Jammer Localization Error PL: 6.941529564164131
+Jammer Localization Error APBM: 15.63161785170727

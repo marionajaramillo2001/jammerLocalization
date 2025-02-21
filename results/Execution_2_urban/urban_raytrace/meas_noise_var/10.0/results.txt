@@ -1,0 +1,47 @@
+Scenario: urban_raytrace
+Experiment: meas_noise_var
+Value: 10.0
+Configuration:
+  path: /Users/marionajaramillocivill/Documents/GitHub/GNSSjamLoc/RT35/obs_time_1/
+  time_t: 0
+  test_ratio: 0.2
+  data_preprocessing: 2
+  noise: 1
+  meas_noise_var: 10.0
+  betas: True
+  input_dim: 2
+  layer_wid: [500, 256, 128, 1]
+  nonlinearity: leaky_relu
+  gamma: 2
+  num_nodes: 5
+  local_epochs_nn: 20
+  local_epochs_pl: 20
+  local_epochs_apbm: 20
+  num_rounds_nn: 40
+  num_rounds_pl: 40
+  num_rounds_apbm: 40
+  batch_size: 8
+  lr_optimizer_nn: 0.001
+  lr_optimizer_theta: 0.5
+  lr_optimizer_P0: 0.01
+  lr_optimizer_gamma: 0.01
+  weight_decay_optimizer_nn: 0
+  num_obs: 1000
+Average Global Test Loss (NN): 0.0000 ± 0.0000
+Average Global Test Loss (PL): 0.0000 ± 0.0000
+Average Global Test Loss (APBM): 0.0000 ± 0.0000
+Average Jammer Initial Localization Error: 49.8414 ± 20.6744
+Median Jammer Initial Localization Error: 49.8525
+Interquartile Range of Jammer Initial Localization Error: 34.2214
+Minimum Jammer Initial Localization Error: 19.1072
+Maximum Jammer Initial Localization Error: 82.3624
+Average Jammer Localization Error (PL): 45.3825 ± 104.8961
+Median Jammer Localization Error (PL): 8.7946
+Interquartile Range of Jammer Localization Error (PL): 14.5645
+Minimum Jammer Localization Erro (PL): 2.0300
+Maximum Jammer Localization Error (PL): 359.3827
+Average Jammer Localization Error (APBM): 13.5085 ± 17.4397
+Median Jammer Localization Error (APBM): 5.9356
+Interquartile Range of Jammer Localization Error (APBM): 9.7744
+Minimum Jammer Localization Error (APBM): 1.8969
+Maximum Jammer Localization Error (APBM): 63.4013
