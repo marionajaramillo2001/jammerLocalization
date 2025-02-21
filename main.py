@@ -1,3 +1,57 @@
+"""
+==============================================
+ GNSS Jammer Localization Experiment Pipeline
+==============================================
+
+This script executes a set of experiments to evaluate jammer localization 
+using different models: Neural Network (NN), Pathloss Model (PL), and 
+Augmented Physics-Based Model (APBM). It supports different experimental 
+scenarios and configurations, leveraging federated learning techniques.
+
+PIPELINE STRUCTURE:
+
+1. Dataset Preparation
+   - Load GNSS signal measurement data.
+   - Split data into training and testing sets.
+   - Add noise if required.
+   - Adjust preprocessing according to settings.
+
+2. Model Training
+   - Three models are trained:
+     - NN (Neural Network) for initial approximation of jammer location.
+     - PL (Pathloss Model) using physical equations to refine localization.
+     - APBM (Augmented Physics-Based Model) combining NN and PL for accuracy.
+
+3. Federated Learning (FL)
+   - Each client trains the model on its own dataset.
+   - The server aggregates models using **Federated Averaging (FedAvg)**.
+   - No raw data is shared, preserving privacy.
+
+4. Evaluation and Metrics
+   - Localization error is computed for NN, PL, and APBM models.
+   - Results are stored and visualized.
+
+5. Monte Carlo Simulations
+   - The experiment is repeated N_mc times to reduce variance.
+   - Average and standard deviation of results are computed.
+
+HOW TO MODIFY EXPERIMENTS:
+
+1. Run a Single Experiment:
+   - Set `execution_type = 'one_experiment'`.
+   - Modify `scenarios` and `experiments` lists.
+   - Adjust parameters like `numNodes`, `meas_noise_var`, etc.
+
+2. Run Multiple Experiments:
+   - Set `execution_type = 'all_experiments'`.
+   - Define different values for `numNodes`, `posEstVar`, `num_obs`, etc.
+   - Experiments will loop over the parameter space and execute systematically.
+
+3. Change Model Settings:
+   - Modify `config` to adjust neural network architecture, learning rates, etc.
+   - Tune `num_rounds_*` and `local_epochs_*` for faster or more robust training.
+"""
+
 import os
 from contextlib import redirect_stdout
 import time
@@ -11,6 +65,8 @@ from src.fedavg import FedAvg
 from src.model import Net, Polynomial3, Net_augmented
 from src.plots import plot_train_test_loss, visualize_3d_model_output, plot_grouped_boxplot, plot_horizontal_visualization_boxplots, plot_ECDF
 
+
+
 # Ensure script runs from its own directory
 script_dir = os.path.dirname(os.path.abspath(__file__))  # Get current script directory
 os.chdir(script_dir)  # Change working directory to script's location
@@ -18,7 +74,17 @@ os.chdir(script_dir)  # Change working directory to script's location
 
 def create_directories(execution_folder, scenario, experiment_type, value, mc_run):
     """
-    Create the necessary directory structure for the experiment.
+    Creates the necessary directory structure for storing experiment results.
+
+    Parameters:
+    - execution_folder (str): The root folder where experiments are stored.
+    - scenario (str): The scenario type (e.g., urban_raytrace, suburban_raytrace).
+    - experiment_type (str): The variable being tested (e.g., numNodes, meas_noise_var).
+    - value (any): The specific value of the experiment variable.
+    - mc_run (int): The Monte Carlo run identifier.
+
+    Returns:
+    - tuple: Paths to the experiment folder, value-specific folder, and Monte Carlo run folder.
     """    
     scenario_folder = os.path.join(execution_folder, scenario)
     experiment_folder = os.path.join(scenario_folder, experiment_type)
@@ -35,6 +101,16 @@ def create_directories(execution_folder, scenario, experiment_type, value, mc_ru
 
 
 def prepare_data(config):
+    """
+    Loads and preprocesses the dataset, then splits it into training and test sets.
+
+    Parameters:
+    - config (dict): Dictionary containing experiment configurations.
+
+    Returns:
+    - Various experiment parameters, including model arguments, optimizers, 
+      training and testing datasets, and true jammer locations.
+    """
     data_args = {
         'path': config['path'],
         'test_ratio': config['test_ratio'],
@@ -86,6 +162,19 @@ def prepare_data(config):
 
 
 def train_test(config, seed, output_dir, show_figures, mc_run=None):
+    """
+    Executes a single experiment run with a given configuration.
+
+    Parameters:
+    - config (dict): Dictionary containing experiment configurations.
+    - seed (int): Random seed for reproducibility.
+    - output_dir (str): Directory where results will be stored.
+    - show_figures (bool): Whether to generate and save visualization plots.
+    - mc_run (int, optional): Monte Carlo run identifier.
+
+    Returns:
+    - Various performance metrics including test loss and localization errors.
+    """
     # Set the seed for this Monte Carlo run
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
@@ -137,81 +226,108 @@ def train_test(config, seed, output_dir, show_figures, mc_run=None):
 
 
 if __name__ == '__main__':
-    # Configuration dictionary
+    # ------------------------------ CONFIGURATION SETTINGS ------------------------------
+
+    # Configuration dictionary for the experiments.
     config = {
-        'path': None,
-        'test_ratio': 0.2,
-        'data_preprocessing': 2,
-        'noise': True,
-        'meas_noise_var': 1,
-        'betas': True,
-        'input_dim': 2,
-        'layer_wid': [500, 256, 128, 1],
-        'nonlinearity': 'leaky_relu',
-        'gamma': 2,
-        'num_nodes': 10,
-        'local_epochs_nn': 20,
-        'local_epochs_pl': 20,
-        'local_epochs_apbm': 20,
-        'num_rounds_nn': 40,
-        'num_rounds_pl': 40,
-        'num_rounds_apbm': 40,
-        'batch_size': 8,
-        'lr_optimizer_nn': 0.001,
-        'lr_optimizer_theta': 0.5,
-        'lr_optimizer_P0': 0.01,
-        'lr_optimizer_gamma': 0.01,
-        'weight_decay_optimizer_nn': 0,
-        'num_obs': 1000,
+        'path': None,  # Path to the dataset (set dynamically based on the experiment type)
+        'test_ratio': 0.2,  # Ratio of dataset used for testing (20% test, 80% training)
+        'data_preprocessing': 2,  # Preprocessing type (0 = none, 1 = replace -inf, 2 = remove samples < -150 dB)
+        'noise': True,  # Whether to add noise to measurements
+        'meas_noise_var': 1,  # Measurement noise variance
+        'betas': True,  # Beta coefficients (for training stability, if applicable)
+        
+        # Model parameters
+        'input_dim': 2,  # Input feature dimensions (e.g., x, y coordinates)
+        'layer_wid': [500, 256, 128, 1],  # Width of each layer in the neural network
+        'nonlinearity': 'leaky_relu',  # Activation function used in the neural network
+        'gamma': 2,  # Path loss exponent for PL model
+
+        # Federated Learning settings
+        'num_nodes': 10,  # Number of clients/nodes participating in the federated learning
+        'local_epochs_nn': 20,  # Local training epochs for NN model
+        'local_epochs_pl': 20,  # Local training epochs for PL model
+        'local_epochs_apbm': 20,  # Local training epochs for APBM model
+        'num_rounds_nn': 40,  # Global aggregation rounds for NN model
+        'num_rounds_pl': 40,  # Global aggregation rounds for PL model
+        'num_rounds_apbm': 40,  # Global aggregation rounds for APBM model
+        'batch_size': 8,  # Batch size for training each client
+
+        # Optimizer parameters
+        'lr_optimizer_nn': 0.001,  # Learning rate for NN optimizer
+        'lr_optimizer_theta': 0.5,  # Learning rate for theta optimization
+        'lr_optimizer_P0': 0.01,  # Learning rate for P0 parameter in PL model
+        'lr_optimizer_gamma': 0.01,  # Learning rate for gamma in PL model
+        'weight_decay_optimizer_nn': 0,  # Regularization for NN optimizer
+
+        # Dataset settings
+        'num_obs': 1000,  # Number of observations (samples) used in the dataset
     }
 
-    # Number of Monte Carlo runs
-    N_mc = 10
-    
-    # Execution type
-    execution_type = 'one_experiment' # 'one_experiment' or 'all_experiments'
+    # ------------------------------ MONTE CARLO SIMULATION SETTINGS ------------------------------
 
+    N_mc = 10  # Number of Monte Carlo runs (to average results across multiple simulations)
+
+    # ------------------------------ EXPERIMENT SELECTION ------------------------------
+
+    # Select whether to run a single experiment or multiple experiments
+    execution_type = 'one_experiment'  # Options: 'one_experiment' or 'all_experiments'
+
+    # ------------------------------ FILE SYSTEM SETUP ------------------------------
+
+    # Set up results directory
     base_seed = 42  # Base seed for reproducibility
-    current_path = os.getcwd()
-    base_path = os.path.join(current_path, "results")
-    
+    current_path = os.getcwd()  # Get the current working directory
+    base_path = os.path.join(current_path, "results")  # Path to store results
+
+    # Determine the next available execution ID
     existing_folders = [folder for folder in os.listdir(base_path) if folder.startswith("Execution_")]
     existing_ids = [int(folder.split("_")[1]) for folder in existing_folders if folder.split("_")[1].isdigit()]
     next_id = max(existing_ids, default=0) + 1
     execution_folder = os.path.join(base_path, f"Execution_{next_id}")
-    os.makedirs(execution_folder, exist_ok=True)
+    os.makedirs(execution_folder, exist_ok=True)  # Create directory for storing results
 
-    
+    # ------------------------------ EXPERIMENT CONFIGURATION ------------------------------
     if execution_type == 'one_experiment':
-        # scenarios = ['suburban_raytrace']
-        scenarios = ['urban_raytrace']
-        experiments = ['show_figures']
-        numNodes = 5
-        posEstVar = 0
-        num_obs = 1000
-        meas_noise_var = 1
-        show_figures = True
+        """
+        Run a single experiment with a fixed configuration. Modify the following variables to adjust the experiment settings.
+        """
+        scenarios = ['urban_raytrace']  # Type of dataset used ('suburban_raytrace', 'urban_raytrace', 'pathloss')
+        experiments = ['show_figures']  # Experiment type ('show_figures', 'numNodes', 'posEstVar', 'num_obs', 'meas_noise_var')
+        
+        # Parameters for the single experiment
+        numNodes = 5  # Number of federated clients (nodes)
+        posEstVar = 0  # Position estimation variance (error in receiver location)
+        num_obs = 1000  # Number of observations (data points)
+        meas_noise_var = 1  # Measurement noise variance
+        show_figures = True  # Enable visualization of results
+
     elif execution_type == 'all_experiments':
-        # scenarios = ['suburban_raytrace', 'urban_raytrace', 'pathloss']
-        # scenarios = ['suburban_raytrace', 'pathloss']
-        scenarios = ['suburban_raytrace']
-        # experiments = ['numNodes', 'posEstVar', 'num_obs', 'meas_noise_var']
-        experiments = ['meas_noise_var']
-        numNodes = np.array([1, 5, 10, 25, 50])
+        """
+        Run multiple experiments with different parameter values. 
+        This allows systematic testing of different conditions (e.g., varying noise levels, number of nodes, etc.).
+        """
+        scenarios = ['suburban_raytrace', 'urban_raytrace', 'pathloss']
+        experiments = ['numNodes', 'posEstVar', 'num_obs', 'meas_noise_var']
+        
+        # Parameter sweeps for different experiments
+        numNodes = np.array([1, 5, 10, 25, 50])  # Test different numbers of federated clients
         # numNodes = np.array([1, 3, 5, 10, 15])
-        posEstVar = np.array([0,36])
-        num_obs = np.array([250, 500, 750, 1000])
-        meas_noise_var = np.array([10, 10/np.sqrt(10),  1, 0.1])
-        show_figures = False
-    
-    
+        posEstVar = np.array([0, 36])  # Test with different levels of position estimation error
+        num_obs = np.array([250, 500, 750, 1000])  # Test with different number of observations
+        meas_noise_var = np.array([10, 10/np.sqrt(10), 1, 0.1])  # Test with different levels of noise variance
+        show_figures = False  # Disable visualization for batch experiments
+ 
     # Constants for the datasets used
     area = 1e6
     Ptx = 10
     
-    # Relative Paths for Dataset
-    datasets_dir = os.path.join(script_dir, "datasets")  # Use relative path for dataset directory
+    # ------------------------------ DATASET PATH SETUP ------------------------------
 
+    # Define base dataset directory using relative paths
+    datasets_dir = os.path.join(current_path, "datasets")  # Ensure datasets are inside the "datasets" directory
+
+    # Define paths for different scenarios
     for scenario in scenarios:
         if scenario == 'suburban_raytrace':
             path_without_posEstVar = os.path.join(datasets_dir, "RT33", "obs_time_1")
@@ -222,7 +338,7 @@ if __name__ == '__main__':
         elif scenario == 'pathloss':
             path_without_posEstVar = os.path.join(datasets_dir, "PL2")
             path_with_posEstVar = os.path.join(datasets_dir, "PL10")
-      
+    
         for experiment in experiments:
             if experiment == 'numNodes':
                 values_to_iterate = numNodes
