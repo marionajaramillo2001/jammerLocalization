@@ -9,7 +9,7 @@ from functools import partial
 from apbm_v2_fed_integrated.data_loader_APBM import data_process
 from apbm_v2_fed_integrated.fedavg import FedAvg
 from apbm_v2_fed_integrated.model import Net, Polynomial3, Net_augmented
-from apbm_v2_fed_integrated.plots import plot_train_test_loss, visualize_3d_model_output, plot_ECDF, plot_boxplot, plot_grouped_boxplot
+from apbm_v2_fed_integrated.plots import plot_train_test_loss, visualize_3d_model_output, plot_ECDF, plot_boxplot, plot_grouped_boxplot, plot_horizontal_visualization_with_nodes, plot_horizontal_visualization_with_nodes_v2, plot_horizontal_visualization_with_nodes_v2_matplotlib
 
 # Set the current path as the working directory
 os.chdir(os.getcwd())
@@ -115,6 +115,8 @@ def train_test(config, seed, output_dir, show_figures, mc_run=None):
         plot_train_test_loss(train_losses_pl_per_round, test_losses_pl_per_round, pl_or_apbm_or_nn='PL', folder=output_dir, mc_run=mc_run)
         plot_train_test_loss(train_losses_apbm_per_round, test_losses_apbm_per_round, pl_or_apbm_or_nn='APBM', folder=output_dir, mc_run=mc_run)
 
+        plot_horizontal_visualization_with_nodes_v2_matplotlib(trained_model_NN, trained_model_PL, trained_model_APBM, train_loader_splited, test_loader,true_jam_loc, theta_init, predicted_jam_loc_PL, predicted_jam_loc_APBM, folder=output_dir, mc_run=mc_run)
+        
         visualize_3d_model_output(trained_model_PL, train_loader_splited, test_loader, theta_init, true_jam_loc, predicted_jam_loc_PL, None, train_or_test='train', pl_or_apbm_or_nn='pl', folder=output_dir, mc_run=mc_run)
         visualize_3d_model_output(trained_model_PL, train_loader_splited, test_loader, theta_init, true_jam_loc, predicted_jam_loc_PL, None, train_or_test='test', pl_or_apbm_or_nn='pl', folder=output_dir, mc_run=mc_run)
 
@@ -169,7 +171,7 @@ if __name__ == '__main__':
     N_mc = 10
     
     # Execution type
-    execution_type = 'all_experiments' # 'one_experiment' or 'all_experiments'
+    execution_type = 'one_experiment' # 'one_experiment' or 'all_experiments'
 
     base_seed = 42  # Base seed for reproducibility
     current_path = os.getcwd()
@@ -184,9 +186,9 @@ if __name__ == '__main__':
     
     if execution_type == 'one_experiment':
         # scenarios = ['suburban_raytrace']
-        scenarios = ['suburban_raytrace']
+        scenarios = ['urban_raytrace']
         experiments = ['show_figures']
-        numNodes = 1
+        numNodes = 5
         posEstVar = 0
         num_obs = 1000
         meas_noise_var = 1
@@ -194,9 +196,9 @@ if __name__ == '__main__':
     elif execution_type == 'all_experiments':
         # scenarios = ['suburban_raytrace', 'urban_raytrace', 'pathloss']
         # scenarios = ['suburban_raytrace', 'pathloss']
-        scenarios = ['pathloss']
-        experiments = ['numNodes', 'posEstVar', 'num_obs', 'meas_noise_var']
-        # experiments = ['numNodes', 'posEstVar', 'meas_noise_var']
+        scenarios = ['suburban_raytrace']
+        # experiments = ['numNodes', 'posEstVar', 'num_obs', 'meas_noise_var']
+        experiments = ['meas_noise_var']
         numNodes = np.array([1, 5, 10, 25, 50])
         # numNodes = np.array([1, 3, 5, 10, 15])
         posEstVar = np.array([0,36])

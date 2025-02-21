@@ -1,0 +1,205 @@
+Monte Carlo Run 7/10 with Seed: 48
+Configuration:
+path: /Users/marionajaramillocivill/Documents/GitHub/GNSS-FL/datasets/dataPLANS/4.definitive/PL2/
+time_t: 0
+test_ratio: 0.2
+data_preprocessing: 2
+noise: 1
+meas_noise_var: 1
+betas: True
+input_dim: 2
+layer_wid: [500, 256, 128, 1]
+nonlinearity: leaky_relu
+gamma: 2
+num_nodes: 10
+local_epochs_nn: 20
+local_epochs_pl: 20
+local_epochs_apbm: 20
+num_rounds_nn: 40
+num_rounds_pl: 40
+num_rounds_apbm: 40
+batch_size: 8
+lr_optimizer_nn: 0.001
+lr_optimizer_theta: 0.5
+lr_optimizer_P0: 0.01
+lr_optimizer_gamma: 0.01
+weight_decay_optimizer_nn: 0
+num_obs: 500
+Number of valid samples:  500
+Train X shape:  torch.Size([400, 2])
+Test X shape:  torch.Size([100, 2])
+Training the NN model...
+Train losses per round (NN): [array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32), array(0., dtype=float32)]
+Initial theta: [588. 727.]
+Training the PL model...
+Round 0: test_loss = 0.000000
+Round %d: (0, 6.4709498723187995)
+Round 1: test_loss = 0.000000
+Round %d: (1, 1.8494613821159422)
+Round 2: test_loss = 0.000000
+Round %d: (2, 2.2225976017167035)
+Round 3: test_loss = 0.000000
+Round %d: (3, 2.7288831980893087)
+Round 4: test_loss = 0.000000
+Round %d: (4, 2.9922579831414513)
+Round 5: test_loss = 0.000000
+Round %d: (5, 2.7889148670694963)
+Round 6: test_loss = 0.000000
+Round %d: (6, 2.6877762963643486)
+Round 7: test_loss = 0.000000
+Round %d: (7, 2.6228560690366103)
+Round 8: test_loss = 0.000000
+Round %d: (8, 2.8335813747407372)
+Round 9: test_loss = 0.000000
+Round %d: (9, 2.9579379999428475)
+Round 10: test_loss = 0.000000
+Round %d: (10, 2.7367000432490705)
+Round 11: test_loss = 0.000000
+Round %d: (11, 2.428115396777086)
+Round 12: test_loss = 0.000000
+Round %d: (12, 2.94253789507105)
+Round 13: test_loss = 0.000000
+Round %d: (13, 2.8003281156078224)
+Round 14: test_loss = 0.000000
+Round %d: (14, 2.760831982382306)
+Round 15: test_loss = 0.000000
+Round %d: (15, 2.727759376861513)
+Round 16: test_loss = 0.000000
+Round %d: (16, 2.598002638074831)
+Round 17: test_loss = 0.000000
+Round %d: (17, 2.6643487643728108)
+Round 18: test_loss = 0.000000
+Round %d: (18, 2.5321550956907966)
+Round 19: test_loss = 0.000000
+Round %d: (19, 2.821877269656224)
+Round 20: test_loss = 0.000000
+Round %d: (20, 2.686721646152219)
+Round 21: test_loss = 0.000000
+Round %d: (21, 2.4560909475138115)
+Round 22: test_loss = 0.000000
+Round %d: (22, 3.0176932846900137)
+Round 23: test_loss = 0.000000
+Round %d: (23, 2.787931642122234)
+Round 24: test_loss = 0.000000
+Round %d: (24, 3.2091542565291267)
+Round 25: test_loss = 0.000000
+Round %d: (25, 3.0287486460214192)
+Round 26: test_loss = 0.000000
+Round %d: (26, 2.7531589674663888)
+Round 27: test_loss = 0.000000
+Round %d: (27, 2.830734060380155)
+Round 28: test_loss = 0.000000
+Round %d: (28, 3.1123389305457496)
+Round 29: test_loss = 0.000000
+Round %d: (29, 2.4961116337222444)
+Round 30: test_loss = 0.000000
+Round %d: (30, 2.381206849725156)
+Round 31: test_loss = 0.000000
+Round %d: (31, 2.842180178230405)
+Round 32: test_loss = 0.000000
+Round %d: (32, 3.0735245875602923)
+Round 33: test_loss = 0.000000
+Round %d: (33, 3.2609571690702963)
+Round 34: test_loss = 0.000000
+Round %d: (34, 3.223390531917488)
+Round 35: test_loss = 0.000000
+Round %d: (35, 2.6448537269501573)
+Round 36: test_loss = 0.000000
+Round %d: (36, 2.6394526975576533)
+Round 37: test_loss = 0.000000
+Round %d: (37, 2.721251001596404)
+Round 38: test_loss = 0.000000
+Round %d: (38, 2.5828753613896045)
+Round 39: test_loss = 0.000000
+Round %d: (39, 2.770557863480943)
+Closest point in the train dataset to the real location: [546.3057 719.233 ]
+Minimum distance to the real location: 11.960776620951826
+Training the APBM model...
+Round 0: test_loss = 0.000000
+Round %d: (0, 31.087883674853344)
+Round 1: test_loss = 0.000000
+Round %d: (1, 16.877351793134807)
+Round 2: test_loss = 0.000000
+Round %d: (2, 5.67976527776584)
+Round 3: test_loss = 0.000000
+Round %d: (3, 1.2033062642789794)
+Round 4: test_loss = 0.000000
+Round %d: (4, 2.6582017220072385)
+Round 5: test_loss = 0.000000
+Round %d: (5, 3.8155693035880853)
+Round 6: test_loss = 0.000000
+Round %d: (6, 3.9854877660130397)
+Round 7: test_loss = 0.000000
+Round %d: (7, 4.472431203877288)
+Round 8: test_loss = 0.000000
+Round %d: (8, 4.641966450893104)
+Round 9: test_loss = 0.000000
+Round %d: (9, 3.574901541872406)
+Round 10: test_loss = 0.000000
+Round %d: (10, 3.600295504531492)
+Round 11: test_loss = 0.000000
+Round %d: (11, 4.004643282790074)
+Round 12: test_loss = 0.000000
+Round %d: (12, 3.9571744899940673)
+Round 13: test_loss = 0.000000
+Round %d: (13, 3.2561579028966263)
+Round 14: test_loss = 0.000000
+Round %d: (14, 3.409324450278108)
+Round 15: test_loss = 0.000000
+Round %d: (15, 3.3084044999530855)
+Round 16: test_loss = 0.000000
+Round %d: (16, 2.4258384030942293)
+Round 17: test_loss = 0.000000
+Round %d: (17, 2.7491115083505675)
+Round 18: test_loss = 0.000000
+Round %d: (18, 3.098464927242617)
+Round 19: test_loss = 0.000000
+Round %d: (19, 3.331952760104657)
+Round 20: test_loss = 0.000000
+Round %d: (20, 2.973853961020303)
+Round 21: test_loss = 0.000000
+Round %d: (21, 2.7164747766392168)
+Round 22: test_loss = 0.000000
+Round %d: (22, 2.9979455622212927)
+Round 23: test_loss = 0.000000
+Round %d: (23, 2.9578556401698552)
+Round 24: test_loss = 0.000000
+Round %d: (24, 3.052046118187633)
+Round 25: test_loss = 0.000000
+Round %d: (25, 2.4544260268301175)
+Round 26: test_loss = 0.000000
+Round %d: (26, 2.6739048645757375)
+Round 27: test_loss = 0.000000
+Round %d: (27, 2.5282517043564785)
+Round 28: test_loss = 0.000000
+Round %d: (28, 2.365272138667773)
+Round 29: test_loss = 0.000000
+Round %d: (29, 2.7563018298821054)
+Round 30: test_loss = 0.000000
+Round %d: (30, 2.3295863542265733)
+Round 31: test_loss = 0.000000
+Round %d: (31, 2.369455239926537)
+Round 32: test_loss = 0.000000
+Round %d: (32, 2.527513313845431)
+Round 33: test_loss = 0.000000
+Round %d: (33, 2.908893122298647)
+Round 34: test_loss = 0.000000
+Round %d: (34, 2.2662865131149887)
+Round 35: test_loss = 0.000000
+Round %d: (35, 2.652728896711976)
+Round 36: test_loss = 0.000000
+Round %d: (36, 2.5333611669546197)
+Round 37: test_loss = 0.000000
+Round %d: (37, 2.2006747039552423)
+Round 38: test_loss = 0.000000
+Round %d: (38, 2.926472633027633)
+Round 39: test_loss = 0.000000
+Round %d: (39, 2.3817651606715917)
+Closest point in the train dataset to the real location: [546.3057 719.233 ]
+Minimum distance to the real location: 11.960776620951826
+  Global Test Loss (NN): 0.0000
+  Global Test Loss (PL): 0.0000
+  Global Test Loss (APBM): 0.0000
+  Jammer Initial Localization Error: 29.4907
+  Jammer Localization Error (PL): 2.7706
+  Jammer Localization Error (APBM): 2.3818
