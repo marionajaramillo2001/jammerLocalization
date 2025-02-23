@@ -1,57 +1,91 @@
 % *************************************************************************
-% ************************ GNSSjamLoc v0.1 ******************************** 
-% ************ localization of intentional interfence sources *************
+% ************************ GNSSjamSim v1.0 ******************************** 
+% ****** Simulation of Received Signal Strength in Jammed GNSS Agents *****
+% ************ Modeling Intentional Interference in GNSS Signals **********
 % *************************************************************************
 
-% This file is part of GNSSjamLoc. 
-% 
-% GNSSjamLoc is a localization tool for intentional 
-% interfence sources (jammer), that are potentially disturbing
-% ligitimate signal reception (e.g. GPS). Given a dataset of power
-% field measurement associated with spatial coordinates and
-% distributed over an observation area, GNSSjamLoc can locate the
-% source of interference, even in complex propagation scenarios (e.g. urban).
-% It is based on a path loss physics-based model augmented with 
-% a data-driven component, i.e. a Neural Netrwork.
-% Additional information can be found at https://doi.org/10.48550/arXiv.2212.08097
-% 
-% This program is free software: yrou can redistribute it and/or modify
+% -------------------------------------------------------------------------
+% JAMMED GNSS SIGNAL SIMULATION
+% -------------------------------------------------------------------------
+
+% GNSSjamSim models the impact of jammers on GNSS receivers by
+% simulating received signal strength (RSS) measurements based on
+% different interference conditions and propagation models. This enables
+% realistic testing and development of jammer mitigation strategies.
+%
+% This software extends GNSSjamLoc, which was designed for jammer
+% localization, by creating a realistic dataset of GNSS power 
+% measurements under interference conditions.
+
+% GENERAL ALGORITHM:
+% 1. Agents' State Generation:
+%    - Initial Position: Uniform distribution over a specified area
+%    - Agent Motion: Random position at each instant
+%
+% 2. Jammer Power Measurements:
+%    - Jammer Signal Type: True power computation
+%    - Radio Propagation Models:
+%        * Free space
+%        * Ray tracing
+%        * Log-distance model
+%    - Estimation Method:
+%        * True received signal strength (RSS) + measurement noise
+
+% -------------------------------------------------------------------------
+% LICENSE
+% -------------------------------------------------------------------------
+
+% This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
 % the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
 % 
 % This program is distributed in the hope that it will be useful,
 % but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+% See the GNU General Public License for more details.
 % 
 % You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-% 
-% Copyright (C) 2023 Andrea Nardin <andrea.nardin@polito.it>
-% Navigation, Signal Analysis and Simulation (NavSAS) group,
-% Politecnico di Torino 
-% Copyright (C) 2023 Peng Wu, Tales Imbiriba, Pau Closas
-% Signal Processing Imaging Reasoning and Learning (SPIRAL) Lab
-% Northeastern University
-% 
-% If you use this software, please cite the relative paper as:
-% A. Nardin, T. Imbiriba, P. Closas, "Jamming Source Localization Using Augmented Physics-Based Model",
-% ICASSP 2023 - 2023 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP), 
-% Rhodes, Greece, 2023, pp. -, doi: -.
+% along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-% Jammed GNSS agents simulator
-% Warning: obs_time>1 not compatible with GNSSjamLoc estimator
+% -------------------------------------------------------------------------
+% AUTHORS & CONTRIBUTORS
+% -------------------------------------------------------------------------
+
+% Copyright (C) 2025
+% Mariona Jaramillo-Civill, Peng Wu, Andrea Nardin, Tales Imbiriba, 
+% Luis González, Pau Closas
 %
-% General algorithm
-% 1. Agents' states generation
-%   - initial position: uniform distribution over a specified area
-%   - agents motion: random position at each instant
-% 2. Jammer power measurements
-%   - jammer signal type: true power computation
-%   - radio propagation model: free space, ray tracing, log-distance
-%   - estimation method: true meas. + measurement noise
+% Navigation, Signal Analysis and Simulation (NavSAS) Group, 
+% Politecnico di Torino
 %
+% Signal Processing Imaging Reasoning and Learning (SPIRAL) Lab, 
+% Northeastern University
+%
+% University of Massachusetts Boston
+
+% -------------------------------------------------------------------------
+% CITATION
+% -------------------------------------------------------------------------
+
+% If you use this software, please cite the corresponding papers:
+
+% Mariona Jaramillo-Civill, Peng Wu, Andrea Nardin, Tales Imbiriba, 
+% Pau Closas. "Jammer Source Localization with Federated Learning."
+% IEEE/ION Position, Location and Navigation Symposium (PLANS), 
+% Salt Lake City, UT, USA, April 2025.
+
+% A. Nardin, T. Imbiriba, P. Closas, 
+% "Jamming Source Localization Using Augmented Physics-Based Model."
+% ICASSP 2023 - 2023 IEEE International Conference on Acoustics, 
+% Speech and Signal Processing (ICASSP), Rhodes, Greece, 2023.
+%
+
+% -------------------------------------------------------------------------
+% Choose the name for the dataset
+% -------------------------------------------------------------------------
+dataset_name = "RT41";
+% -------------------------------------------------------------------------
 
 
 close all
@@ -62,13 +96,13 @@ rng(3) % close to edge Jloc
 
 % Get the relative path one folder behind (parent directory) and then into "datasets"
 base_folder = fullfile("..", "datasets"); 
-dataset_name = fullfile(base_folder, "RT41");
-% Ensure the "datasets" and dataset_name folders exist
-if ~exist(dataset_name, 'dir')
-    mkdir(dataset_name);
+dataset_path = fullfile(base_folder, dataset_name);
+% Ensure the "datasets" and dataset_path folders exist
+if ~exist(dataset_path, 'dir')
+    mkdir(dataset_path);
 end
 % Define the observation time folder inside the dataset
-obs_time_folder = fullfile(dataset_name, strcat("obs_time_", num2str(obs_time)));
+obs_time_folder = fullfile(dataset_path, strcat("obs_time_", num2str(obs_time)));
 
 % Ensure the observation time folder exists
 if ~exist(obs_time_folder, 'dir')
@@ -79,7 +113,6 @@ end
 %% Settings
 
 dB_flag         = 1;        % Output measurements in dB
-%N               = 10;      % no. of agents
 N               = 1000;      % no. of agents
 desiredReceivers = N;
 D               = 2;        % spatial coordinates (2 or 3)
@@ -239,7 +272,7 @@ Y = P_jam_rx + sqrt(meas_noise_var)*randn(N,T); % dB
 if ~dB_flag
     Y = db2pow(Y); 
 end
-save(fullfile(dataset_name, strcat('obs_time_', num2str(obs_time)), 'data', 'tmpMeas.mat'));
+save(fullfile(dataset_path, strcat('obs_time_', num2str(obs_time)), 'data', 'tmpMeas.mat'));
 else
     % avoid recomputing raytracing to disrupt data
     load('data/tmpMeas.mat');
